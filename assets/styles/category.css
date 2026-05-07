@@ -1,0 +1,45 @@
+.category-form-add-title-ctn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.category-index-title{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
+.category-index-add-a{
+
+}
+
+.category-list-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.category-index-list-table{
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.category-index-list-a{
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.category-index-actions-td{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

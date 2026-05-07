@@ -1,0 +1,35 @@
+.contact-title-ctn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-title{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.contact-form-submit{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-form-textarea{
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.contact-form-textarea > div > textarea {
+    width: 100%; /* Ou une largeur fixe comme 300px */
+    height: 150px;
+    resize: none; /* Empêche l'utilisateur de changer la taille */
+    box-sizing: border-box; /* Inclut le padding et la bordure dans la hauteur/largeur */
+    padding: 10px;
+    font-family: monospace; /* Police à espacement fixe recommandée */
+}

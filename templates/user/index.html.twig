@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <a href="{{ url('home.index') }}">RETOUR</a>
+    <br/>
+
+    <div class="user-index-title-ctn">
+        <h1 class="user-index-title">Liste de tous les utilisateurs:</h1>
+    </div>
+
+    <div class="btn btn-primary btn-sm user-index-list-table">
+        <a class="user-index-add-a" href="{{ path('user.add') }}">Créer un utilisateur</a>
+    </div>
+
+    <div class="user-list-container">
+        <table class="table user-index-list-table">
+            <thead>
+            <tr>
+                <th>Utilisateur</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ loop.index }} : {{ user.name }}</a>
+                    </td>
+                    <td class="user-index-actions-td">
+                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">Voir</a>
+                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.edit', {id:user.id}) }}">Editer</a>
+                        <form action="{{ path('user.delete', {id:user.id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

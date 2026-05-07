@@ -1,0 +1,30 @@
+ <body>
+        <div class="body">
+            <div style="display:flex;flex-direction:column;">
+                <div class="header text-center">
+                    <img src="{{ email.image('@images/logo_docshare.jpg') }}"
+                         alt="My Logo"
+                         style="margin-top:60px;max-width: 100%;">
+                 </div>
+                <div style="display:grid">
+                    <h2 class="text-center">Nouveau message de Contact</h2>
+                    <ul>
+                        <li>
+                            Destinataire: {{  data.target }}
+                        </li>
+                        <li>
+                            Nom: {{  data.name }}
+                        </li>
+                        <li>
+                            Email: {{  data.email }}
+                        </li>
+                    </ul>
+                    <p class="block">
+                        <strong>MESSAGE:</strong>
+                        {{ data.message | nl2br }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+

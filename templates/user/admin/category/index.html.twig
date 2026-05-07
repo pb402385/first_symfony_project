@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <a href="{{ url('home.index') }}">RETOUR</a>
+    <br/>
+
+    <div class="category-index-title-ctn">
+        <h1 class="category-index-title">Liste de toutes les categories:</h1>
+    </div>
+
+    <div class="btn btn-primary btn-sm category-index-list-table">
+        <a class="category-index-add-a" href="{{ path('admin.category.add') }}">Créer une categorie</a>
+    </div>
+
+    <div class="category-list-container">
+        <table class="table category-index-list-table">
+            <thead>
+            <tr>
+                <th>Catérorie label</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            {% for category in categories %}
+                <tr>
+                    <td>
+                        <a class="category-index-list-a text-indigo-600">{{ loop.index }} : {{ category.label }}</a>
+                    </td>
+                    <td class="category-index-actions-td">
+                        <form action="{{ path('admin.category.delete', {id:category.id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

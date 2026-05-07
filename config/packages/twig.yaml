@@ -1,0 +1,11 @@
+twig:
+    file_name_pattern: '*.twig'
+    form_themes: ['bootstrap_5_layout.html.twig']
+    paths:
+        '%kernel.project_dir%/templates': templates
+        # Add a namespace for email images
+        '%kernel.project_dir%/public/images/email': 'images'
+
+when@test:
+    twig:
+        strict_variables: true

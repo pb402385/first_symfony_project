@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block body %}
+    <a href="{{ url('user.index') }}">RETOUR</a>
+    <br/>
+
+    <div class="user-form-edit-title-ctn">
+        <h1 class="user-form-edit-title">Modification UtilisateurID: {{user.id}}</h1>
+    </div>
+
+    {{ form_start(form) }}
+
+
+        <div class="user-edit-grid-3x3">
+            {{  form_row (form.name) }}
+            {{  form_row (form.email) }}
+            {{  form_row (form.bornAt) }}
+            {{  form_row (form.country) }}
+            {{  form_row (form.city) }}
+            {{  form_row (form.image) }}
+        </div>
+
+        <div class="user-form-edit-b2">
+            {{  form_row (form.about) }}
+        </div>
+
+        <div class="user-form-edit-submit">
+            {{  form_row (form.save) }}
+        </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

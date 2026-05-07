@@ -1,0 +1,24 @@
+.hero-bg {
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://source.unsplash.com/random/1920x1080/?students,school') center/cover no-repeat;
+}
+
+
+.a-nav-active{
+    text-decoration: underline;
+    text-underline-offset: auto;
+    text-underline-position: under;
+}
+
+
+body {
+    background-color: skyblue;
+}
+
+.footer-position{
+    position: relative;
+    top: -20px;
+}
+
+.footer-position:hover{
+    font-weight: bold;
+}

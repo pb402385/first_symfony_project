@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>Liste de tous les utilisateurs:</h1>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Utilisateur</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        {% for user in users %}
+        <tr>
+            <td>
+                <a href="{{ path('user.show', {id:user.id}) }}">{{ loop.index }} : {{ user.name }}</a>
+            </td>
+            <td>
+                <a href="{{ path('user.show', {id:user.id}) }}">Voir</a>
+                <a href="{{ path('user.edit', {id:user.id}) }}">Editer</a>
+                <form action="{{ path('user.delete', {id:user.id}) }}" method="post">Supprimer</form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {# {{dump(users)}} #}
+    <br/><br/>
+    <ul>
+        {% for user in users %}
+        <li>
+            <a href="{{ path('user.show', {id:user.id}) }}">{{ loop.index }} : {{ user.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

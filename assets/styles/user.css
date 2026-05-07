@@ -1,0 +1,210 @@
+/*
+    PART ADD USER
+ */
+.user-form-add-title-ctn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-form-add-title{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.user-add-grid-3x3{
+    display: grid;
+    /* 3 colonnes de largeur égale (1fr chacune) */
+    grid-template-columns: repeat(3, 1fr);
+    /* 2 lignes de hauteur égale (1fr chacune) */
+    grid-template-rows: repeat(2, 1fr);
+    /* Optionnel : espace entre les cellules */
+    gap: 10px;
+}
+
+.user-form-add-b2{
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.user-form-add-b2 > div > textarea {
+    width: 100%; /* Ou une largeur fixe comme 300px */
+    height: 150px;
+    resize: none; /* Empêche l'utilisateur de changer la taille */
+    box-sizing: border-box; /* Inclut le padding et la bordure dans la hauteur/largeur */
+    padding: 10px;
+    font-family: monospace; /* Police à espacement fixe recommandée */
+}
+
+.user-form-add-submit{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*
+    PART INDEX USERS
+ */
+.user-index-title{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.user-list-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+
+a.user-index-list-a{
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.user-index-actions-td{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-index-list-table{
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/**
+    PART SHOW USER
+*/
+.user-show-title{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.user-show-card{
+    display: flex;
+    flex-direction: column;
+    margin: 25px;
+}
+
+.container-user-show{
+    display: flex;
+    flex-direction: column;
+}
+
+.user-show-textarea{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.user-show-textarea > h5 {
+    margin-right: 25px;
+}
+
+.user-show-title-ctn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-show-title, .user-show-goto-edit{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.user-show-goto-edit{
+    padding-left: 20px;
+}
+
+.user-show-img{
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-grid-3x2 {
+    display: grid;
+    /* 3 colonnes de largeur égale (1fr chacune) */
+    grid-template-columns: repeat(3, 1fr);
+    /* 2 lignes de hauteur égale (1fr chacune) */
+    grid-template-rows: repeat(2, 1fr);
+    /* Optionnel : espace entre les cellules */
+    gap: 10px;
+}
+
+/**
+    PART EDIT USER
+*/
+
+.user-form-edit-b1{
+    display: flex;
+    justify-content: space-around;
+}
+
+.user-form-edit-b2{
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.user-form-edit-b2 > div > textarea {
+    width: 100%; /* Ou une largeur fixe comme 300px */
+    height: 150px;
+    resize: none; /* Empêche l'utilisateur de changer la taille */
+    box-sizing: border-box; /* Inclut le padding et la bordure dans la hauteur/largeur */
+    padding: 10px;
+    font-family: monospace; /* Police à espacement fixe recommandée */
+}
+
+.user-form-edit-submit{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-form-edit-title-ctn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-form-edit-title{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.user-edit-grid-3x3 {
+    display: grid;
+    /* 3 colonnes de largeur égale (1fr chacune) */
+    grid-template-columns: repeat(3, 1fr);
+    /* 2 lignes de hauteur égale (1fr chacune) */
+    grid-template-rows: repeat(2, 1fr);
+    /* Optionnel : espace entre les cellules */
+    gap: 10px;
+}

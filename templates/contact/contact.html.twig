@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nous contactter{% endblock %}
+
+{% block body %}
+    <a href="{{ url('home.index') }}">RETOUR</a>
+    <br/>
+
+    <div class="contact-container">
+        <div class="contact-title-ctn">
+            <h1 class="contact-title">Nous contacter:</h1>
+        </div>
+
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-sm"> {{ form_row(form.name) }} </div>
+            <div class="col-sm"> {{ form_row(form.email) }}</div>
+            <div class="col-sm"> {{ form_row(form.target) }}</div>
+        </div>
+
+        <div class="contact-form-textarea">
+            {{  form_row(form.message) }}
+        </div>
+
+        <div class="contact-form-submit">
+            {{  form_row(form.submit) }}
+        </div>
+
+        {{  form_end(form) }}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block body %}
+    <a href="{{ url('admin.category.index') }}">RETOUR</a>
+    <br/>
+
+    <div class="category-form-add-title-ctn">
+        <h1 class="category-form-add-title">Création d'un utilisateur</h1>
+    </div>
+
+    {{ form_start(form) }}
+
+    <div class="category-form-add-b2">
+        {{  form_row (form.label) }}
+    </div>
+
+    <div class="category-form-add-submit">
+        {{  form_row (form.save) }}
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

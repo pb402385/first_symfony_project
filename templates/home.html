@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SchoolShare - Partage de documents scolaires</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+        <style>
+            .hero-bg {
+                background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url('https://source.unsplash.com/random/1920x1080/?students,school') center/cover no-repeat;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50 font-sans">
+
+        <!-- Navbar -->
+        <nav class="bg-white shadow-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-book-open text-3xl text-indigo-600"></i>
+                    <span class="text-2xl font-bold text-gray-800">SchoolShare</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-700 hover:text-indigo-600 font-medium">Cours</a>
+                    <a href="#" class="text-gray-700 hover:text-indigo-600 font-medium">Filières</a>
+                    <a href="#" class="text-gray-700 hover:text-indigo-600 font-medium">Universités</a>
+                    <a href="#" class="text-gray-700 hover:text-indigo-600 font-medium">Communauté</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="window.location.href='/login'" 
+                            class="px-5 py-2 text-indigo-600 hover:bg-indigo-50 rounded-xl font-medium transition">
+                        Connexion
+                    </button>
+                    <button onclick="window.location.href='/register'" 
+                            class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition">
+                        Inscription gratuite
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-bg text-white py-28">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                    Partagez vos cours,<br>
+                    <span class="text-indigo-400">réussissez ensemble</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto text-gray-200">
+                    La plateforme étudiante pour partager, trouver et organiser tous vos documents scolaires.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="window.location.href='/register'" 
+                            class="px-8 py-4 bg-white text-indigo-700 text-lg font-semibold rounded-2xl hover:bg-gray-100 transition shadow-lg">
+                        Commencer gratuitement
+                    </button>
+                    <button onclick="window.location.href='#comment-ca-marche'" 
+                            class="px-8 py-4 border-2 border-white text-lg font-semibold rounded-2xl hover:bg-white/10 transition">
+                        Comment ça marche ?
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-16">Pourquoi choisir SchoolShare ?</h2>
+                
+                <div class="grid md:grid-cols-3 gap-10">
+                    <div class="text-center p-8 rounded-3xl hover:shadow-xl transition">
+                        <div class="w-20 h-20 mx-auto bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-4xl mb-6">
+                            📚
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">Des milliers de cours</h3>
+                        <p class="text-gray-600">Cours, TD, examens, mémoires et résumés de toutes les filières.</p>
+                    </div>
+
+                    <div class="text-center p-8 rounded-3xl hover:shadow-xl transition">
+                        <div class="w-20 h-20 mx-auto bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-4xl mb-6">
+                            🔍
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">Recherche intelligente</h3>
+                        <p class="text-gray-600">Trouvez le document parfait grâce aux filtres par université, matière et année.</p>
+                    </div>
+
+                    <div class="text-center p-8 rounded-3xl hover:shadow-xl transition">
+                        <div class="w-20 h-20 mx-auto bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-4xl mb-6">
+                            👥
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">Communauté étudiante</h3>
+                        <p class="text-gray-600">Partagez vos propres documents et gagnez des points pour télécharger plus.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Final -->
+        <section class="py-24 bg-gray-900 text-white text-center">
+            <div class="max-w-4xl mx-auto px-6">
+                <h2 class="text-4xl font-bold mb-6">Prêt à booster vos études ?</h2>
+                <p class="text-xl mb-10 text-gray-400">Rejoignez des milliers d’étudiants qui réussissent mieux grâce au partage.</p>
+                <button onclick="window.location.href='/register'" 
+                        class="px-10 py-5 bg-indigo-600 hover:bg-indigo-500 text-xl font-semibold rounded-2xl transition">
+                    Créer mon compte gratuit
+                </button>
+           </div>
+        </section>
+
+        <footer class="bg-gray-900 text-gray-400 py-12">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <p>&copy; 2026 SchoolShare - Plateforme de partage de documents scolaires</p>
+            </div>
+        </footer>
+    </body>
+</html>
