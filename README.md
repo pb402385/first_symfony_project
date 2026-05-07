@@ -127,6 +127,10 @@ php bin/console make:migration
  php bin/console migrate
  doctrine:migrations:migrate
 ```
+- pour annuler la dernière migration en cas d'erreur (par exemple dans mon cas j'avais ajouté 2 colonnes à la mauvaise table, par contre attention j'ai du aller corriger l'entité moi même car je n'ai pas supprimé et regénéré l'entité)
+```bash
+symfony console doctrine:migrations:migrate prev --no-interaction
+```
 
  ensuite on rajoute le Repo à notre controller: exemple:
 ```php
