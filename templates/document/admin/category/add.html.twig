@@ -3,11 +3,11 @@
 {% block title %} {{ title }} {% endblock %}
 
 {% block body %}
-    <a href="{{ url('admin.category.index') }}">RETOUR</a>
+    <a class="btn-retour" href="{{ url('admin.category.index') }}">RETOUR</a>
     <br/>
 
     <div class="category-form-add-title-ctn">
-        <h1 class="category-form-add-title">Création d'un utilisateur</h1>
+        <h1 class="category-form-add-title">Création d\\'une catégorie</h1>
     </div>
 
     {{ form_start(form) }}

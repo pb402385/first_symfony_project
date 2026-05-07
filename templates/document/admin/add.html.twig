@@ -3,28 +3,34 @@
 {% block title %} {{ title }} {% endblock %}
 
 {% block body %}
-    <a href="{{ url('user.index') }}">RETOUR</a>
+    <a class="btn-retour" href="{{ url('document.index') }}">RETOUR</a>
     <br/>
 
     <div class="user-form-add-title-ctn">
-        <h1 class="user-form-add-title">Création d'un utilisateur</h1>
+        <h1 class="user-form-add-title">Création d'un document</h1>
     </div>
 
     {{ form_start(form) }}
 
+    <div class="document-add-grid-3x1">
+        {{  form_row (form.title) }}
+        {{  form_row (form.file) }}
 
-    <div class="user-add-grid-3x3">
-        {{  form_row (form.name) }}
-        {{  form_row (form.email) }}
-        {{  form_row (form.bornAt) }}
-        {{  form_row (form.country) }}
-        {{  form_row (form.city) }}
-        {{  form_row (form.image) }}
+        <div class="document-form-edit-category-bloc">
+            <label for="category_select" class="form-label">Catégorie:</label>
+            <select name="category_select">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
 
-    <div class="user-form-add-b2">
-        {{  form_row (form.about) }}
+    <div class="document-form-add-long-text">
+        {{  form_row (form.abstract) }}
     </div>
+
+
 
     <div class="user-form-add-submit">
         {{  form_row (form.save) }}

@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\DocumentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: DocumentRepository::class)]
 class Document
@@ -15,13 +17,20 @@ class Document
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[Assert\Length(min: 3)]
+    #[Assert\NotBlank]
+    #[ASSERT\Type(Types::STRING)]
+    private ?string $title = '';
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $abstract = null;
+    #[Assert\Type(Types::STRING)]
+    #[Assert\Length(max: 1500)]
+    private ?string $abstract = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $file = null;
+    #[Assert\NotBlank]
+    #[ASSERT\Type(Types::STRING)]
+    private ?string $file = '';
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -30,7 +39,8 @@ class Document
     private ?\DateTime $updatedAt = null;
 
     #[ORM\Column]
-    private ?int $userID = null;
+    #[Assert\NotBlank]
+    private ?int $userID = -1;
 
     #[ORM\Column(nullable: true)]
     private ?int $categoryId = null;

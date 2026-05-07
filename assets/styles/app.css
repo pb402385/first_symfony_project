@@ -22,3 +22,30 @@ body {
 .footer-position:hover{
     font-weight: bold;
 }
+
+
+/* Style du bouton du lien RETOUR */
+.btn-retour {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-retour:hover {
+    color: #1e40af;
+    transform: translateX(-4px);
+}
+
+.btn-retour::before {
+    content: "←";
+    font-size: 1.4em;
+    transition: transform 0.3s ease;
+}
+
+.btn-retour:hover::before {
+    transform: translateX(-4px);
+}

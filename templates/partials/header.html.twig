@@ -8,7 +8,7 @@
         </div>
 
         <div class="hidden md:flex items-center space-x-8">
-            <a href="{{ url('home.index') }}" class="text-gray-700 hover:text-indigo-600 font-medium {{ app.current_route starts with 'document' ? 'a-nav-active' : ''}}">Documents</a>
+            <a href="{{ url('document.index') }}" class="text-gray-700 hover:text-indigo-600 font-medium {{ app.current_route starts with 'document' ? 'a-nav-active' : ''}}">Documents</a>
             <a href="{{ url('user.index') }}" class="text-gray-700 hover:text-indigo-600 font-medium {{ app.current_route == 'user.index' ? 'a-nav-active' : ''}}">Utilisateurs</a>
         </div>
 

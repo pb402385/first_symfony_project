@@ -3,7 +3,7 @@
 {% block title %} {{ title }} {% endblock %}
 
 {% block body %}
-    <a href="{{ url('user.index') }}">RETOUR</a>
+    <a class="btn-retour" href="{{ url('user.index') }}">RETOUR</a>
     <br/>
     <div class="user-show-title-ctn">
         <h1 class="user-show-title">UtilisateurID: {{user.id}}</h1>

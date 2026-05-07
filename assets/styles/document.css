@@ -1,0 +1,31 @@
+.document-form-edit-category-bloc{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.document-form-add-long-text{
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.document-form-add-long-text > div > textarea {
+    width: 100%; /* Ou une largeur fixe comme 300px */
+    height: 150px;
+    resize: none; /* Empêche l'utilisateur de changer la taille */
+    box-sizing: border-box; /* Inclut le padding et la bordure dans la hauteur/largeur */
+    padding: 10px;
+    font-family: monospace; /* Police à espacement fixe recommandée */
+}
+
+.document-add-grid-3x1{
+    display: grid;
+    /* 3 colonnes de largeur égale (1fr chacune) */
+    grid-template-columns: repeat(3, 1fr);
+    /* 2 lignes de hauteur égale (1fr chacune) */
+    grid-template-rows: repeat(2, 1fr);
+    /* Optionnel : espace entre les cellules */
+    gap: 10px;
+}
