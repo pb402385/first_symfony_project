@@ -29,6 +29,12 @@ class Document
     #[ORM\Column]
     private ?\DateTime $updatedAt = null;
 
+    #[ORM\Column]
+    private ?int $userID = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $categoryId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +96,30 @@ class Document
     public function setUpdatedAt(\DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUserID(): ?int
+    {
+        return $this->userID;
+    }
+
+    public function setUserID(int $userID): static
+    {
+        $this->userID = $userID;
+
+        return $this;
+    }
+
+    public function getCategoryId(): ?int
+    {
+        return $this->categoryId;
+    }
+
+    public function setCategoryId(?int $categoryId): static
+    {
+        $this->categoryId = $categoryId;
 
         return $this;
     }

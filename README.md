@@ -233,6 +233,11 @@ On peut également créer des Validators personnalisés
 ```
 voir banwordphp et BanWordPhpValidator il permet de banir un terme c'est un exemple de ce que l'on peut faire
 
+Ajout de dépendance avec le composer, par exemple pour ajouter de SMTP de gmail, on rentre ceci dans la console dans powershell (puis on met à jour les conf dans le .env)
+```bash
+ composer require symfony/google-mailer
+```
+
 # NOTES utiles:
 
 - La configuration passe par le Kernel, en cas de changement de dépendances s'assurer que:
@@ -245,13 +250,9 @@ Make sure that your previous configuration files don't have imports declarations
 
 # TODO
 
-Service Auth
-Repo Document (id, titre, abstract, fichier, createdAt, updatedAt,
-                IdCreator, IdCategorie )
-Repo Note ((id, nom, IdUser, IdDocument, createdAt, updatedAt)
-
-Page accueil
-Gerer session
-Deco/reco
-Views user/admin
-Menu latéral si logué
++ Service Auth
++ Page accueil
++ Gerer session
++ Deco/reco
++ Views user/admin
++ Menu latéral si logué

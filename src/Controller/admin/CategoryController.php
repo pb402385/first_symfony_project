@@ -28,7 +28,7 @@ final class CategoryController extends AbstractController
         // = $repository->findAll()
 
 
-        return $this->render('user/admin/category/index.html.twig', [
+        return $this->render('document/admin/category/index.html.twig', [
             'controller_name' => 'CategoryController',
             'title' => 'Listes des categories',
             'categories' => $categories,
@@ -51,7 +51,7 @@ final class CategoryController extends AbstractController
             $this->addFlash('success',"La catégorie  a bien été créée");
             return $this->redirectToRoute('admin.category.index');
         }
-        return $this->render('user/admin/category/add.html.twig', [
+        return $this->render('document/admin/category/add.html.twig', [
             'title' => 'Création d\'une categorie',
             'category' => $category,
             'form' => $form,

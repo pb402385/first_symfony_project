@@ -22,12 +22,6 @@ class Category
     #[ORM\Column]
     private ?\DateTime $updatedAt = null;
 
-    #[ORM\Column]
-    private ?int $IdUser = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $IdCategory = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -69,27 +63,4 @@ class Category
         return $this;
     }
 
-    public function getIdUser(): ?int
-    {
-        return $this->IdUser;
-    }
-
-    public function setIdUser(int $IdUser): static
-    {
-        $this->IdUser = $IdUser;
-
-        return $this;
-    }
-
-    public function getIdCategory(): ?int
-    {
-        return $this->IdCategory;
-    }
-
-    public function setIdCategory(?int $IdCategory): static
-    {
-        $this->IdCategory = $IdCategory;
-
-        return $this;
-    }
 }
