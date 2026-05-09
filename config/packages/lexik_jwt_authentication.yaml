@@ -1,0 +1,10 @@
+lexik_jwt_authentication:
+    secret_key: '%kernel.project_dir%/config/jwt/private.pem'
+    public_key: '%kernel.project_dir%/config/jwt/public.pem'
+    pass_phrase: '%env(passphrase)%'
+
+    # Optionnel : durée de vie du token
+    token_ttl: 3600                  # 1 heure
+
+    # Pour ajouter des claims personnalisés
+    # user_identity_field: email

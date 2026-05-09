@@ -14,8 +14,29 @@ class SignInController extends AbstractController
         return $this->render('index.html.twig', [
             'controller_name' => 'HomeController',
         ]);
-        
+
         // Or return a simple response
         // return new Response('Welcome to the homepage');
+    }
+
+    #[Route('/login', name: 'auth.login')]
+    public function login(): Response
+    {
+        $error = '';
+        return $this->render('security/login.html.twig', [
+            'title' => 'Login:',
+            'error' => $error,
+        ]);
+    }
+
+    // Dans SecurityController.php
+    #[Route('/register', name: 'auth.register')]
+    public function register(): Response
+    {
+        $error = '';
+        return $this->render('security/register.html.twig', [
+            'title' => 'Login:',
+            'error' => $error,
+        ]);
     }
 }

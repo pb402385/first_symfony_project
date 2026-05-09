@@ -49,3 +49,57 @@ body {
 .btn-retour:hover::before {
     transform: translateX(-4px);
 }
+
+
+
+/* On masque les boutons se connecter ou s'inscrire */
+.auth-login-btn-hidden{
+    display: none;
+}
+
+.auth-register-btn-hidden{
+    display: none;
+}
+
+
+
+/*
+    CSS de la page HOME
+ */
+.home-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home-title > h1 {
+    margin-top: 25px;
+    font-weight: bold;
+}
+
+.home-title > p {
+    margin-top: 20px;
+}
+
+.home-new-user {
+    display: flex;
+    flex-direction: column;
+    margin: 50px;
+    padding: 10px;
+}
+
+.home-new-user > h4 {
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px;
+}
+
+.home-new-user > p {
+    margin: 10px;
+}
+
+.home-new-user > p > a {
+    color: blue;
+    font-weight: bold;
+}

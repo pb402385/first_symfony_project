@@ -126,6 +126,9 @@ php bin/console make:migration
 ```bash
  php bin/console migrate
  doctrine:migrations:migrate
+ 
+ # cette commande peut mieux fonctionner
+ php bin/console doctrine:migrations:migrate
 ```
 - pour annuler la dernière migration en cas d'erreur (par exemple dans mon cas j'avais ajouté 2 colonnes à la mauvaise table, par contre attention j'ai du aller corriger l'entité moi même car je n'ai pas supprimé et regénéré l'entité)
 ```bash
@@ -251,6 +254,12 @@ Make sure that your previous configuration files don't have imports declarations
 - on a les fichiers composer et symphony qui servent à gérer les dépendances (ça ressemble à package.json de angular) 
 
 -methode dd utile -> fait un var_dump amélioré avec un die (dump fait de même sans le die)
+
+- généer les clés pour l'auth par token, dans config/jwt
+```bash
+openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096
+openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+```
 
 # TODO
 

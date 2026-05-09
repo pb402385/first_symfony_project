@@ -1,0 +1,32 @@
+<body>
+    <div class="body">
+        <div style="display:flex;flex-direction:column;">
+            <div class="header text-center">
+                <img src="{{ email.image('@images/logo_docshare.jpg') }}"
+                     alt="My Logo"
+                     style="margin-top:60px;max-width: 100%;">
+            </div>
+            <div style="display:grid">
+                <h2 class="text-center">Votre inscription sur DocShare s'est déroulée avec succès</h2>
+                <ul>
+                    <li>
+                        Email: {{  data.email }}
+                    </li>
+                </ul>
+                <p class="block">
+                    <strong>
+                        Bienvenue dans la famille DocShare !
+                    </strong>
+                </p>
+                <p class="block">
+                    Nous sommes ravis que vous ayez choisi de nous rejoindre.  Votre inscription est confirmée et vous faites désormais partie de notre communauté.
+                </p>
+
+                <a href="{{ signedUrl }}">Confirmer mon adresse e-mail</a>
+
+                <p>Ce lien expirera dans {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.</p>
+            </div>
+        </div>
+    </div>
+</body>
+

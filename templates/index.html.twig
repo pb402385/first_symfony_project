@@ -3,7 +3,22 @@
 {% block title %} Accueil {% endblock %}
 
 {% block body %}
-    <h1>Accueil</h1>
+    <div class="home-title">
+        <h1>Accueil</h1>
 
-    <p>Bienvenue sur mon site</p>
+        <p>Bienvenue sur mon site</p>
+    </div>
+
+    {% if message is defined %}
+        <div class="home-new-user card">
+                <h4> {{ message  }}</h4>
+
+
+            {% if email is defined %}
+                <p>Vous allez recevoir un email contenant un lien sur votre email (<strong>{{ email }}</strong>) qui vous permettra d'activer votre compte.
+                    Vous pourrez ensuite vous connecter sur la page de login en cliquant sur ce lien: <a href="{{ path('auth.login') }}">Se connecter</a></p>
+            {% endif %}
+        </div>
+    {% endif %}
+
 {% endblock %}

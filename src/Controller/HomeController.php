@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +16,19 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
 
-        // Or return a simple response
-        // return new Response('Welcome to the homepage');
+    }
+
+    #[Route('/new-user', name: 'home.new-user')]
+    public function newUser(Request $request): Response
+    {
+        //dd($request->query->get('email'));
+        $email = $request->query->get('email');
+        // Render a Twig template
+        return $this->render('index.html.twig', [
+            'controller_name' => 'HomeController',
+            'message' => 'Compte créé avec succès!',
+            'email' => $email,
+        ]);
+
     }
 }

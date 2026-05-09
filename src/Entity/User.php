@@ -7,9 +7,11 @@ use App\Validator\BanWordPhp;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,6 +28,14 @@ class User
     #[Assert\Email]
     #[BanWordPhp()]
     private ?string $email = '';
+
+    #[ORM\Column]
+    private array $roles = ['ROLE_USER'];
+
+    #[ORM\Column]
+    #[Assert\Length(min: 5)]
+    #[Assert\NotBlank]
+    private ?string $password = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     #[Assert\Type(Types::BLOB)]
@@ -51,6 +61,9 @@ class User
     #[Assert\Type(Types::STRING)]
     #[Assert\Length(max: 1500)]
     private ?string $about = null;
+
+    #[ORM\Column]
+    private ?bool $isVerified = null;
 
     public function getId(): ?int
     {
@@ -149,6 +162,49 @@ class User
     public function setAbout(?string $about): static
     {
         $this->about = $about;
+
+        return $this;
+    }
+
+    /* OAUTH UTILS */
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER'; // toujours au minimum
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Si tu stockes des données sensibles temporaires, les effacer ici
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

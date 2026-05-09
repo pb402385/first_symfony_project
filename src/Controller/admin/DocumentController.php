@@ -51,7 +51,7 @@ final class DocumentController extends AbstractController
         if($categoryId !== null){
             $category = $em->getRepository(Category::class)->find($categoryId)->getLabel();
         } else {
-            $category = null;
+            $category = 'Non renseigné';
         }
 
         return $this->render('document/show.html.twig', [
