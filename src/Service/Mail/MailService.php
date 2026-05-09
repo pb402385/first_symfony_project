@@ -1,5 +1,4 @@
 <?php
-// src/Service/TextFormatter.php
 namespace App\Service\Mail;
 
 use App\Entity\User;
@@ -7,28 +6,23 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class MailService
 {
 
-    public function __construct(private VerifyEmailHelperInterface $emailVerifier){
+    public function __construct(
+        private VerifyEmailHelperInterface $verifyEmailHelper,
+        private MailerInterface $mailer,
+    ) {}
 
-    }
-    public function sendMail(User $user, MailerInterface $mailer): Response
+    public function sendMail(TemplatedEmail $email): Response
     {
 
-            $target = 'noreply@docshare.fr';
-            $mail = (new TemplatedEmail())
-                ->from($target)
-                ->to($user->getEmail())
-                ->subject('Titre mail sur DocShare')
-                ->htmlTemplate('mail/mail-page.html.twig')
-                ->context(['user' => $user,
-                ]);
             try {
-                $mailer->send($mail);
+                $this->mailer->send($email);
                 return new Response('SUCCESS: SEND MAIL OK, user:' . $user->getEmail() );
             } catch (\Exception $exception) {
                 return new Response('ERROR: SEND MAIL KO, user:' . $user->getEmail() );
@@ -36,36 +30,34 @@ class MailService
 
     }
 
-    public function sendRegisterMail(User $user, MailerInterface $mailer): Response
+    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
     {
+        $signatureComponents = $this->verifyEmailHelper->generateSignature(
+            $verifyEmailRouteName,
+            (string) $user->getId(),
+            (string) $user->getEmail(),
+            ['id' => $user->getId()] // optionnel
+        );
 
-        $target = 'noreply@docshare.fr';
-        $site = 'https://localhost:8000/';
+        $context = $email->getContext();
+        $context['signedUrl'] = $signatureComponents->getSignedUrl();
+        $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
+        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
 
-        try {
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address($target, 'Mon Site'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Confirmez votre email')
-                    ->htmlTemplate('mail/register.html.twig')
-            );
-            return new Response('SUCCESS: envoit de l\'email d\'inscription OK, user:' . $user->getEmail() );
-        } catch (\Exception $exception) {
-            return new Response('ERROR: envoit de l\'email d\'inscription KO, user:' . $user->getEmail() );
-        }
+        $email->context($context);
 
+        $this->mailer->send($email);
     }
 
-    public function verifyUserEmail(Request $request): Response
+    /**
+     * Valide le lien de confirmation
+     */
+    public function validateEmailConfirmation(Request $request, User $user): void
     {
-
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
-        } catch (VerifyEmailExceptionInterface $exception) {
-            return new Response('KO');
-        }
-        return new Response('OK');
-
+        $this->verifyEmailHelper->validateEmailConfirmation(
+            $request->getUri(),
+            (string) $user->getId(),
+            (string) $user->getEmail()
+        );
     }
 }

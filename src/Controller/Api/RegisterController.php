@@ -3,25 +3,34 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Service\Mail\MailService;
 use App\Security\JwtTokenManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RegisterController extends AbstractController
 {
-#[Route('/api/register', name: 'api_register', methods: ['POST'])]
+
+    public function __construct(private MailService $mailService,){
+
+    }
+
+    #[Route('/api/register', name: 'api_register', methods: ['POST'])]
     public function register(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $em,
         JwtTokenManager $jwtManager,
-        ValidatorInterface $validator
+        MailerInterface $mailer
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -56,6 +65,15 @@ class RegisterController extends AbstractController
         $em->flush();
 
         //On envoit un email au client afin qu'il finalise son inscription
+        $email = (new TemplatedEmail())
+            ->from(new Address('noreply@docshare.fr', 'DocShare'))
+            ->to($user->getEmail())
+            ->subject('Confirmez votre adresse email')
+            ->htmlTemplate('mail/register.html.twig')
+            ->context(['data' => $data,
+            ]);
+
+        $this->mailService->sendEmailConfirmation('app_verify_email', $user, $email);
 
         // Génération du token JWT
         $token = $jwtManager->createToken($user);
