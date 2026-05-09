@@ -33,6 +33,10 @@ class AuthController extends AbstractController
             return $this->json(['message' => 'Identifiants incorrects'], 401);
         }
 
+        if (!$user->isVerified()) {
+            return $this->json(['message' => 'Veuillez vérifier votre adresse email via le lien fournit dans votre boîte de messagerie'], 403);
+        }
+
         $token = $jwtManager->createToken($user);
 
         return $this->json([
@@ -42,6 +46,16 @@ class AuthController extends AbstractController
                 'email' => $user->getEmail(),
                 'roles' => $user->getRoles(),
             ]
+        ]);
+    }
+
+    #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]
+    public function logout(): JsonResponse
+    {
+        // Avec JWT stateless, on ne peut pas invalider côté serveur
+        // Le client doit simplement supprimer le token
+        return $this->json([
+            'message' => 'Déconnexion réussie. Supprimez le token côté client.'
         ]);
     }
 }
