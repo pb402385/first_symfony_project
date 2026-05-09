@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Service\Mail\MailService;
 use App\Security\JwtTokenManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegisterController extends AbstractController
 {
@@ -91,20 +93,38 @@ class RegisterController extends AbstractController
 
 
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager): Response
     {
-        /*
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $id = $request->query->get('id');
+
+        if (null === $id) {
+            throw $this->createNotFoundException('ID utilisateur manquant.');
+        }
+
+        $user = $userRepository->find($id);
+
+        if (null === $user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
+
+        //$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->mailService->validateEmailConfirmation($request, $user);
+
+            // Marquer l'utilisateur comme vérifié
+            $user->setIsVerified(true);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre adresse e-mail a été vérifiée.');
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
             return $this->redirectToRoute('app_register');
         }
 
-        $this->addFlash('success', 'Votre adresse e-mail a été vérifiée.');
-        */
-        return $this->redirectToRoute('app_homepage');
+        return $this->redirectToRoute('auth.login');
     }
 }
