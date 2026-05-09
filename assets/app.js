@@ -13,4 +13,5 @@ import './styles/contact.css';
 import './styles/auth.css';
 import './styles/register.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+
+import './js/ApiClient.js';
