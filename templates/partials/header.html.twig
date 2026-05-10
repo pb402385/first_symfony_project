@@ -21,6 +21,9 @@
                     class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition {{ app.current_route == 'auth.register' ? 'auth-register-btn-hidden' : ''}}">
                 Inscription gratuite
             </button>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <button class="logout-txt-link" onclick="window.auth.logout()">Déconnexion</button>
+            {% endif %}
         </div>
     </div>
 </nav>

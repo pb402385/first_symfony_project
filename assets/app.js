@@ -15,3 +15,4 @@ import './styles/register.css';
 
 
 import './js/ApiClient.js';
+import './js/AuthManager.js'

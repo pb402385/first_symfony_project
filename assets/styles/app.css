@@ -103,3 +103,9 @@ body {
     color: blue;
     font-weight: bold;
 }
+
+
+.logout-txt-link{
+    font-weight: bold;
+    color: darkred;
+}

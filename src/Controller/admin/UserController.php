@@ -80,6 +80,9 @@ final class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(User $user, Request $request, EntityManagerInterface $em): Response
     {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -98,6 +101,9 @@ final class UserController extends AbstractController
     #[Route('/add', name: 'add')]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -118,6 +124,9 @@ final class UserController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(User $user, Request $request, EntityManagerInterface $em): Response
     {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $em->remove($user);
         $em->flush();
         $this->addFlash('success',"L'utilisateur a bien été supprimé");
