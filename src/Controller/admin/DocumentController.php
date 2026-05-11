@@ -26,6 +26,13 @@ final class DocumentController extends AbstractController
     #[Route('', name: 'index')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
+        dump([
+            'Authorization Header' => $request->headers->get('Authorization'),
+            'getUser()' => $this->getUser(),
+        ]);
+
+        //$user = $this->getUser();   // ← Symfony injecte automatiquement l'utilisateur grâce au token
+        //dd($user);
 
         $documents = $this->repository->findAll();
 

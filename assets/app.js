@@ -14,5 +14,4 @@ import './styles/auth.css';
 import './styles/register.css';
 
 
-import './js/ApiClient.js';
 import './js/AuthManager.js'

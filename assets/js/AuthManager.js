@@ -40,41 +40,46 @@ class AuthManager {
         const originalFetch = window.fetch;
 
         window.fetch = async (url, options = {}) => {
-            // === DEBUG : Voir exactement quelles URLs sont appelées ===
-            console.log(`[FETCH] ${options.method || 'GET'} → ${url}`);
-
             const token = localStorage.getItem('jwt_token');
 
+            console.log(`[FETCH] Appel vers : ${url}`);
+
+            // Important : toujours créer un nouvel objet options
+            const fetchOptions = { ...options };
+
+            // Force la création du header Authorization
+            fetchOptions.headers = {
+                ...(options.headers || {}),           // garde les headers existants
+                'Content-Type': 'application/json',
+            };
+
             if (token) {
-                options.headers = options.headers || {};
-                options.headers.Authorization = `Bearer ${token}`;
+                fetchOptions.headers.Authorization = `Bearer ${token}`;
+                console.log('→ Token ajouté au header');
+            } else {
+                console.log('→ Aucun token trouvé');
             }
 
-            try {
-                const response = await originalFetch(url, options);
+            // Appel final
+            const response = await originalFetch(url, fetchOptions);
 
-                // Token expiré ou invalide
-                if (response.status === 401) {
-                    console.warn('[AUTH] Token expiré → déconnexion');
-                    localStorage.removeItem('jwt_token');
-                    this.token = null;
-                    this.updateNavbar();
-                    alert('Votre session a expiré. Veuillez vous reconnecter.');
-                    window.location.href = '/login';
-                } else {
-                    let self = this;
-                    window.setTimeout(function() {
-                        self.updateNavbar();
-                    }, 100);
+            console.log(`[FETCH] Status reçu : ${response.status}`);
 
-                }
-
-                return response;
-
-            } catch (error) {
-                console.error('[FETCH ERROR]', error);
-                throw error;
+            if (response.status === 401) {
+                localStorage.removeItem('jwt_token');
+                this.token = null;
+                this.updateNavbar();
+                alert('Session expirée');
+                window.location.href = '/login';
+            } else {
+                let self = this;
+                window.setTimeout(function() {
+                    self.updateNavbar();
+                }, 100);
+                console.log('FETCH ' + response);
             }
+
+            return response;
         };
     }
 
@@ -94,3 +99,5 @@ class AuthManager {
 
 // Initialisation
 window.auth = new AuthManager();
+
+console.log('AuthManager chargé avec token:', window.auth.isLoggedIn());
