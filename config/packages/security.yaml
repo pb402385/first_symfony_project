@@ -16,10 +16,15 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
-        api_login:
-            pattern: ^/api/login
-            stateless: true
-            security: false
+        main:
+            pattern: ^/
+            stateless: false
+            provider: app_user_provider
+            form_login:
+                login_path: auth.login
+                check_path: auth.login
+            logout:
+                path: app_logout
         api:
             pattern: ^/api
             stateless: true
@@ -41,7 +46,6 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/document, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

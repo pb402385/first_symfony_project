@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\DocumentType;
 use App\Form\UserType;
 use App\Repository\DocumentRepository;
+use App\Security\JwtTokenHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,25 +20,30 @@ use Symfony\Component\Routing\Requirement\Requirement;
 final class DocumentController extends AbstractController
 {
 
-    public function __construct(private DocumentRepository $repository){
+    public function __construct(private DocumentRepository $repository,private JwtTokenHandler $tokenHandler){
 
     }
 
     #[Route('', name: 'index')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        dump([
+        /**
+        $token = ''.$request->headers->get('Authorization');
+        dd([
             'Authorization Header' => $request->headers->get('Authorization'),
             'getUser()' => $this->getUser(),
+            'token' => $token,
+            //'$tokenHandler->getToken()' => $this->tokenHandler->getUserBadgeFrom($token),
         ]);
 
         //$user = $this->getUser();   // ← Symfony injecte automatiquement l'utilisateur grâce au token
         //dd($user);
+         * **/
 
         $documents = $this->repository->findAll();
 
         return $this->render('document/index.html.twig', [
-            'controller_name' => 'UserController',
+            'controller_name' => 'DocumentController',
             'title' => 'Liste des documents',
             'documents' => $documents,
         ]);

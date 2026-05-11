@@ -12,26 +12,29 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 
 class JwtTokenHandler implements AccessTokenHandlerInterface
 {
-    public function __construct(
-        private EntityManagerInterface $em
-    ) {}
+    private string $publicKeyPath;
+
+    public function __construct(private EntityManagerInterface $em)
+    {
+        $this->publicKeyPath = dirname(__DIR__, 2) . '../config/jwt/public.pem';
+    }
 
     public function getUserBadgeFrom(string $accessToken): UserBadge
     {
         try {
+            if (!file_exists($this->publicKeyPath)) {
+                throw new \RuntimeException('Clé publique JWT manquante');
+            }
+
             $decoded = JWT::decode(
                 $accessToken,
-                new Key(file_get_contents('config/jwt/public.pem'), 'RS256')
+                new Key(file_get_contents($this->publicKeyPath), 'RS256')
             );
 
             $user = $this->em->getRepository(User::class)->find($decoded->sub ?? 0);
 
             if (!$user) {
                 throw new BadCredentialsException('Utilisateur non trouvé');
-            }
-
-            if (!$user->isVerified()) {
-                throw new BadCredentialsException('Email non vérifié');
             }
 
             return new UserBadge($user->getUserIdentifier());

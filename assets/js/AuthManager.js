@@ -75,7 +75,7 @@ class AuthManager {
                 let self = this;
                 window.setTimeout(function() {
                     self.updateNavbar();
-                }, 100);
+                }, 1000);
                 console.log('FETCH ' + response);
             }
 
