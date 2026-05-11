@@ -4,7 +4,9 @@ when@dev:
 
     framework:
         profiler:
-            collect_serializer_data: true
+            collect: false
+            collect_parameter: 'profile' # Active le profiler seulement si ?profile=1 est présent
+            collect_serializer_data: false
 
 when@test:
     framework:

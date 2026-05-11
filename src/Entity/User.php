@@ -11,7 +11,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements PasswordAuthenticatedUserInterface
+#[ORM\Table(name: '`user`')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,7 +31,7 @@ class User implements PasswordAuthenticatedUserInterface
     private ?string $email = '';
 
     #[ORM\Column]
-    private array $roles = ['ROLE_USER'];
+    private array $roles = [];
 
     #[ORM\Column]
     #[Assert\Length(min: 5)]
@@ -63,7 +64,7 @@ class User implements PasswordAuthenticatedUserInterface
     private ?string $about = null;
 
     #[ORM\Column]
-    private ?bool $isVerified = null;
+    private ?bool $isVerified = false;
 
     public function getId(): ?int
     {
@@ -192,9 +193,9 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[\Deprecated]
     public function eraseCredentials(): void
     {
-        // Si tu stockes des données sensibles temporaires, les effacer ici
     }
 
     public function isVerified(): ?bool
@@ -208,4 +209,13 @@ class User implements PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * ✅ Méthode OBLIGATOIRE pour Symfony Security
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->id;   // ou $this->username si tu utilises username
+    }
+
 }

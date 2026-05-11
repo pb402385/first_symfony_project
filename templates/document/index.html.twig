@@ -13,6 +13,9 @@
     {% if user_connected is defined %}
         <p>Bienvenue {{ user_connected }}</p>
     {% endif %}
+
+    <a class="btn-retour" href="{{ url('api_me') }}">TEST API/ME</a>
+
     <div class="btn btn-primary btn-sm user-index-list-table">
         <a class="user-index-add-a" href="{{ path('document.add') }}">Créer un document</a>
     </div>

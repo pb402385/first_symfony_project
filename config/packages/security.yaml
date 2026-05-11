@@ -16,6 +16,18 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+        # Firewall API JWT
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: app_user_provider
+            access_token:
+                token_handler: App\Security\JwtTokenHandler
+                token_extractors:
+                    - header                  # Syntaxe correcte (liste de scalaires)
+            # ← LIGNE IMPORTANTE
+            entry_point: App\Security\JwtAuthenticationEntryPoint
+        # Firewall classique (pages Twig)
         main:
             pattern: ^/
             stateless: false
@@ -25,27 +37,13 @@ security:
                 check_path: auth.login
             logout:
                 path: app_logout
-        api:
-            pattern: ^/api
-            stateless: true
-            provider: app_user_provider
-            access_token:
-                token_handler: App\Security\JwtTokenHandler
-                token_extractors:
-                    - header                  # Syntaxe correcte (liste de scalaires)
-                        # query_parameter: token   # si tu veux aussi supporter ?token=xxx
-
-                        # Activate different ways to authenticate:
-                        # https://symfony.com/doc/current/security.html#the-firewall
-
-                        # https://symfony.com/doc/current/security/impersonating_user.html
-                        # switch_user: true
 
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/document, roles: PUBLIC_ACCESS }
 
 when@test:
     security:
