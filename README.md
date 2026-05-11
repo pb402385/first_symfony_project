@@ -245,6 +245,40 @@ Ajout de dépendance avec le composer, par exemple pour ajouter de SMTP de gmail
  composer require symfony/google-mailer
 ```
 
+CSRF Manuel (quand tu n’utilises pas Symfony Forms)
+```twig
+{% for article in articles %}
+    <form method="POST" action="{{ path('article_delete', {id: article.id}) }}" style="display:inline;">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_article_' ~ article.id) }}">
+        <button type="submit" class="btn btn-danger btn-sm"
+            onclick="return confirm('Supprimer cet article ?')">
+            Supprimer
+        </button>
+    </form>
+{% endfor %}
+```
+et on place dans le contrôleur une vérification manuelle
+```php
+#[Route('/article/{id}/delete', name: 'article_delete', methods: ['POST'])]
+public function delete(Request $request, Article $article, CsrfTokenManagerInterface $csrfManager): Response
+{
+
+    // recuperation du token si c'est celui injecté par twig automatiquement (mai normalement twig gère bien cette partie si on utilise le form de symfony 
+    // $token = $request->request->all()['document']['_token'];
+
+    // si c'est nous qui l'ajoutons
+    // $request->request->get('_csrf_token')
+
+    // Validation manuelle du token
+    if (!$this->isCsrfTokenValid('delete_article_' . $article->getId(), $request->request->get('_csrf_token'))) {
+        throw $this->createAccessDeniedException('Token CSRF invalide.');
+    }
+
+    // ... suppression
+}
+
+```
+
 # NOTES utiles:
 
 - La configuration passe par le Kernel, en cas de changement de dépendances s'assurer que:
