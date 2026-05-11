@@ -35,7 +35,7 @@ class SignInController extends AbstractController
     {
         $error = '';
         return $this->render('security/register.html.twig', [
-            'title' => 'Login:',
+            'title' => 'Register:',
             'error' => $error,
         ]);
     }

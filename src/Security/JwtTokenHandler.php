@@ -1,6 +1,5 @@
 <?php
 // src/Security/JwtTokenHandler.php
-// src/Security/JwtTokenHandler.php
 namespace App\Security;
 
 use App\Entity\User;
@@ -14,8 +13,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 class JwtTokenHandler implements AccessTokenHandlerInterface
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private JwtTokenManager $jwtManager
+        private EntityManagerInterface $em
     ) {}
 
     public function getUserBadgeFrom(string $accessToken): UserBadge
@@ -26,20 +24,20 @@ class JwtTokenHandler implements AccessTokenHandlerInterface
                 new Key(file_get_contents('config/jwt/public.pem'), 'RS256')
             );
 
-            $decodedArray = (array) $decoded;
-
-            $userId = (int) $decodedArray['sub'];
-
-            $user = $this->em->getRepository(User::class)->find($userId);
+            $user = $this->em->getRepository(User::class)->find($decoded->sub ?? 0);
 
             if (!$user) {
-                throw new BadCredentialsException('User not found');
+                throw new BadCredentialsException('Utilisateur non trouvé');
+            }
+
+            if (!$user->isVerified()) {
+                throw new BadCredentialsException('Email non vérifié');
             }
 
             return new UserBadge($user->getUserIdentifier());
 
         } catch (\Exception $e) {
-            throw new BadCredentialsException('Invalid JWT token: ' . $e->getMessage());
+            throw new BadCredentialsException('Token invalide : ' . $e->getMessage());
         }
     }
 }
