@@ -20,6 +20,7 @@ security:
         api:
             pattern: ^/api
             stateless: true
+            security: true
             provider: app_user_provider
             access_token:
                 token_handler: App\Security\JwtTokenHandler

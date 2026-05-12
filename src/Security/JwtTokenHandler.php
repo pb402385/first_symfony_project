@@ -21,20 +21,24 @@ class JwtTokenHandler implements AccessTokenHandlerInterface
 
     public function getUserBadgeFrom(string $accessToken): UserBadge
     {
-        dump('=== JWT HANDLER DÉBUT ===');
-        dump('Token reçu (premiers 100 chars) : ' . substr($accessToken, 0, 100) . '...');
+        $text_debug = false;
+
+        if($text_debug){
+            dump('=== JWT HANDLER DÉBUT ===');
+            dump('Token reçu (premiers 100 chars) : ' . substr($accessToken, 0, 100) . '...');
+        }
 
         try {
             if (!file_exists($this->publicKeyPath)) {
-                dump('❌ Clé publique non trouvée : ' . $this->publicKeyPath);
+                if($text_debug) dump('❌ Clé publique non trouvée : ' . $this->publicKeyPath);
                 throw new \RuntimeException('Clé publique introuvable');
             }
 
             $keyContent = file_get_contents($this->publicKeyPath);
-            dump('✅ Clé publique chargée (' . strlen($keyContent) . ' caractères)');
+            if($text_debug) dump('✅ Clé publique chargée (' . strlen($keyContent) . ' caractères)');
 
             $decoded = JWT::decode($accessToken, new Key($keyContent, 'RS256'));
-            dump('✅ Token décodé avec succès', (array)$decoded);
+            if($text_debug) dump('✅ Token décodé avec succès', (array)$decoded);
 
             $userId = $decoded->sub ?? null;
             if (!$userId) {
@@ -44,18 +48,28 @@ class JwtTokenHandler implements AccessTokenHandlerInterface
             $user = $this->em->getRepository(User::class)->find($userId);
 
             if (!$user) {
-                dump('❌ Utilisateur non trouvé en base (ID = ' . $userId . ')');
+                if($text_debug) dump('❌ Utilisateur non trouvé en base (ID = ' . $userId . ')');
                 throw new BadCredentialsException('User not found');
             }
 
-            dump('✅ Utilisateur authentifié : ' . $user->getEmail());
-            dump('=== JWT HANDLER FIN SUCCESS ===');
+            if($text_debug){
+                dump('✅ Utilisateur authentifié : ' . $user->getEmail());
+                dump('=== JWT HANDLER FIN SUCCESS ===');
+            }
 
-            return new UserBadge($user->getUserIdentifier());
+            // Cette partie faisait échouer la création du badge car c'est l'email qui sert de clé pour identifier l'utilisateur
+            //$badge = new UserBadge($user->getUserIdentifier());
+
+            $userIdentifier = $user->getEmail();
+            $badge = new UserBadge($userIdentifier);
+
+            if($text_debug) dump('✅ Utilisateur badge (isResolved): ' . $badge->isResolved());
+
+            return $badge;
 
         } catch (\Exception $e) {
-            dump('💥 ERREUR JWT : ' . $e->getMessage());
-            dump('=== JWT HANDLER FIN ERREUR ===');
+            if($text_debug) dump('💥 ERREUR JWT : ' . $e->getMessage());
+            if($text_debug) dump('=== JWT HANDLER FIN ERREUR ===');
             throw new BadCredentialsException('Token invalide : ' . $e->getMessage());
         }
     }
