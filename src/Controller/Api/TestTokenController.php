@@ -13,7 +13,6 @@ class TestTokenController extends AbstractController
     public function me(Request $request): JsonResponse
     {
 
-
         $user = $this->getUser();
 
         if (!$user) {
@@ -21,7 +20,7 @@ class TestTokenController extends AbstractController
                 'error' => 'Utilisateur non authentifié'
             ], 401);
         }
-        
+
         return $this->json([
             'success' => true,
             'user' => [

@@ -70,17 +70,20 @@
                         }
                     });
 
-                    const data = await response.json();
-
                     if (!response.ok) {
-                        console.error('Erreur:', data);
+                        alert("Erreur, il faut être authentifié pour accéder à l'API response status:"+response?.status);
+                        console.error("Erreur, il faut être authentifié pour accéder à l'API response:", response);
+                        return;
                     }
+
+                    const data = await response.json();
 
                     if(response.ok){
                         alert("Email: "+data?.user?.email+"\n" +"Rôle: "+data?.user?.roles+"\n");
                     }
                 } catch (error) {
                     console.error('Erreur réseau:', error);
+                    alert("Erreur réseau ou autre: erreur->"+error);
                 }
             });
         </script>
