@@ -13,14 +13,15 @@ class TestTokenController extends AbstractController
     public function me(Request $request): JsonResponse
     {
 
+
         $user = $this->getUser();
-        
+
         if (!$user) {
             return $this->json([
                 'error' => 'Utilisateur non authentifié'
             ], 401);
         }
-
+        
         return $this->json([
             'success' => true,
             'user' => [

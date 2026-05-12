@@ -14,7 +14,9 @@
         <p>Bienvenue {{ user_connected }}</p>
     {% endif %}
 
-    <a class="btn-retour" href="{{ url('api_me') }}">TEST API/ME</a>
+    <button class="btn btn-secondary btn-sm" id="test-api-btn">
+        TEST API/ME
+    </button>
 
     <div class="btn btn-primary btn-sm user-index-list-table">
         <a class="user-index-add-a" href="{{ path('document.add') }}">Créer un document</a>
@@ -52,6 +54,37 @@
         </tr>
         {% endif %}
     </table>
+
+
+    {% block javascripts %}
+        <script>
+            document.getElementById('test-api-btn')?.addEventListener('click', async () => {
+                const token = localStorage.getItem('jwt_token'); // ou le nom que tu utilises
+
+                try {
+                    const response = await fetch('{{ url('api_me') }}', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json',
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        console.error('Erreur:', data);
+                    }
+
+                    if(response.ok){
+                        alert("Email: "+data?.user?.email+"\n" +"Rôle: "+data?.user?.roles+"\n");
+                    }
+                } catch (error) {
+                    console.error('Erreur réseau:', error);
+                }
+            });
+        </script>
+    {% endblock %}
 
 
 {% endblock %}

@@ -24,8 +24,7 @@ security:
             provider: app_user_provider
             access_token:
                 token_handler: App\Security\JwtTokenHandler
-                token_extractors:
-                    - header                  # Syntaxe correcte (liste de scalaires)
+                token_extractors: [ 'header' ]
             # ← LIGNE IMPORTANTE
             entry_point: App\Security\JwtAuthenticationEntryPoint
         # Firewall classique (pages Twig)
@@ -43,6 +42,7 @@ security:
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/document, roles: PUBLIC_ACCESS }
 
