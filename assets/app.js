@@ -18,10 +18,17 @@ import './js/AuthManager.js'
 
 //FORCE l'envoit du CSRF TOKEN
 document.addEventListener('turbo:before-fetch-request', (event) => {
-    if (event.detail.url.includes('/login')) {
-        const token = document.querySelector('input[name="_csrf_token"]')?.value;
-        if (token) {
-            event.detail.fetchOptions.headers['X-CSRF-TOKEN'] = token;
+    const url = event.detail.url.toString();
+
+    // Pour le formulaire de login
+    if (url.includes('/login')) {
+        const csrfToken = document.querySelector('input[name="_csrf_token"]')?.value;
+
+        if (csrfToken) {
+            event.detail.fetchOptions.headers['X-CSRF-TOKEN'] = csrfToken;
         }
     }
+
+    // Optionnel : tu peux aussi ajouter d'autres routes plus tard
+    // if (url.includes('/api/')) { ... }
 });

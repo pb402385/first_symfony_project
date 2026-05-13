@@ -11,7 +11,9 @@
             <h1 class="contact-title">Nous contacter:</h1>
         </div>
 
-        {{ form_start(form) }}
+        {{ form_start(form, {
+        'attr': { 'data-turbo': 'false' }
+        }) }}
         <div class="row">
             <div class="col-sm"> {{ form_row(form.name) }} </div>
             <div class="col-sm"> {{ form_row(form.email) }}</div>
