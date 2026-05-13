@@ -19,7 +19,7 @@ class AuthManager {
 
         if (this.isLoggedIn()) {
             navAuth.innerHTML = `
-                <button class="logout-txt-link" onclick="window.auth.logout()">
+                <button class="logout-txt-link" onclick="window.auth.logout();this.logoutApi();">
                     Déconnexion
                 </button>
             `;
@@ -90,10 +90,40 @@ class AuthManager {
     }
 
     logout() {
-        localStorage.removeItem('jwt_token');
-        this.token = null;
-        this.updateNavbar();
-        window.location.href = '/login';
+        this.logoutApi().then(r => {
+            localStorage.removeItem('jwt_token');
+            this.token = null;
+            this.updateNavbar();
+            window.location.href = '/login';
+        });
+    }
+
+    async logoutApi(){
+        console.log("logoutApi exec");
+        try {
+            const response = await fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer '+this.token,
+                    'Accept': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                alert("Erreur, il faut être authentifié pour accéder à l'API response status:"+response?.status);
+                console.error("Erreur, il faut être authentifié pour accéder à l'API response:", response);
+                return;
+            }
+
+            const data = await response.json();
+
+            if(response.ok){
+                alert("Deconnexion réussie: "+data?.message);
+            }
+        } catch (error) {
+            console.error('Erreur réseau:', error);
+            alert("Erreur réseau ou autre: erreur->"+error);
+        }
     }
 }
 
