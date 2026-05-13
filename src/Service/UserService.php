@@ -7,7 +7,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 class UserService
 {
     public function __construct(
-        private Security $security
+        private readonly Security $security
     ) {}
 
     /**

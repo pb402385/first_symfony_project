@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\RevokedTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -14,8 +15,10 @@ class JwtTokenHandler implements AccessTokenHandlerInterface
 {
     private string $publicKeyPath;
 
-    public function __construct(private EntityManagerInterface $em)
-    {
+    public function __construct(
+        private EntityManagerInterface $em,
+        private RevokedTokenRepository $revokedTokenRepository,
+    ){
         $this->publicKeyPath = dirname(__DIR__, 2) . '/config/jwt/public.pem';
     }
 
@@ -26,6 +29,12 @@ class JwtTokenHandler implements AccessTokenHandlerInterface
         if($text_debug){
             dump('=== JWT HANDLER DÉBUT ===');
             dump('Token reçu (premiers 100 chars) : ' . substr($accessToken, 0, 100) . '...');
+        }
+
+        // Vérifier si le token est révoqué
+        if ($this->revokedTokenRepository->isRevoked($accessToken)) {
+            if($text_debug) dump('✅ Le TOKEN a été révoqué !');
+            throw new BadCredentialsException('Token has been revoked');
         }
 
         try {

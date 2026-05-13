@@ -49,13 +49,29 @@ class AuthController extends AbstractController
         ]);
     }
 
+
     #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]
-    public function logout(): JsonResponse
+    public function logout(
+        Request $request,
+        RevokedTokenRepository $revokedTokenRepository
+    ): JsonResponse
     {
-        // Avec JWT stateless, on ne peut pas invalider côté serveur
-        // Le client doit simplement supprimer le token
-        return $this->json([
+        $authHeader = $request->headers->get('Authorization');
+
+        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+            return new JsonResponse(['error' => 'No token provided'], 400);
+        }
+
+        $token = substr($authHeader, 7);
+
+        // Récupérer l'expiration du JWT (ou mettre une durée par défaut)
+        $expiresAt = new \DateTimeImmutable('+1 hour'); // à adapter selon ton JWT
+
+        $revokedTokenRepository->revoke($token, $expiresAt);
+
+        return new JsonResponse([
             'message' => 'Déconnexion réussie. Supprimez le token côté client.'
         ]);
     }
+
 }
