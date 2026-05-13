@@ -2,7 +2,7 @@
 // src/Controller/Api/AuthController.php
 namespace App\Controller\Api;
 
-use App\Enum\Entity\User;
+use App\Entity\User;
 use App\Form\LoginType;
 use App\Repository\RevokedTokenRepository;
 use App\Security\JwtTokenManager;
@@ -54,36 +54,12 @@ class AuthController extends AbstractController
     }
 
 
-    #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]
-    public function logoutApi(
-        Request $request,
-        RevokedTokenRepository $revokedTokenRepository
-    ): JsonResponse
-    {
-        $authHeader = $request->headers->get('Authorization');
-
-        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
-            return new JsonResponse(['error' => 'No token provided'], 400);
-        }
-
-        $token = substr($authHeader, 7);
-
-        // Récupérer l'expiration du JWT (ou mettre une durée par défaut)
-        $expiresAt = new \DateTimeImmutable('+1 hour'); // à adapter selon ton JWT
-
-        $revokedTokenRepository->revoke($token, $expiresAt);
-
-        return new JsonResponse([
-            'message' => 'Déconnexion réussie. Supprimez le token côté client.'
-        ]);
-    }
-
     #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
         // Si déjà connecté → redirection
         if ($this->getUser()) {
-            // return $this->redirectToRoute('home.index');
+            return $this->redirectToRoute('home.index');
         }
 
         $form = $this->createForm(LoginType::class);
@@ -103,9 +79,27 @@ class AuthController extends AbstractController
     }
 
     #[Route('/logout', name: 'app_logout')]
-    public function logout(): void
+    public function logout(
+        Request $request,
+        RevokedTokenRepository $revokedTokenRepository
+    ): void
     {
         // Symfony gère ça automatiquement
+
+        // on revoke le token
+        $authHeader = $request->headers->get('Authorization');
+
+        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+            dump("TOKEN Absent ou érroné");
+        } else {
+            $token = substr($authHeader, 7);
+
+            // Récupérer l'expiration du JWT (ou mettre une durée par défaut)
+            $expiresAt = new \DateTimeImmutable('+1 hour'); // à adapter selon ton JWT
+
+            $revokedTokenRepository->revoke($token, $expiresAt);
+        }
+
     }
 
 }

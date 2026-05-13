@@ -29,7 +29,6 @@ final class DocumentController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em): Response
     {
 
-
         $user = $this->getUser(); // peut être null
         //dd($user);
 
@@ -51,7 +50,6 @@ final class DocumentController extends AbstractController
         //dd($request, $request->attributes->get('id'));
         $document = $this->repository->find($id);
         $title = $document->getTitle();
-
 
         $categoryId = $document->getCategoryId();
         if($categoryId !== null){

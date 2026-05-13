@@ -9,6 +9,22 @@
         <p>Bienvenue sur mon site</p>
     </div>
 
+    {% if token|default %}
+        <input type="hidden" id="token" name="token" value="{{ token }}" />
+        {% block javascripts %}
+            {{ parent() }}
+            <script>
+                // On set le TOKEN
+                setTimeout(() => {
+                    let login_token = document.getElementById("token")?.value;
+                    //console.log('token->'+login_token);
+                    window.auth.setToken(login_token);
+                }, 1000);
+
+            </script>
+        {% endblock %}
+    {% endif %}
+
     {% if message is defined %}
         <div class="home-new-user card">
                 <h4> {{ message  }}</h4>

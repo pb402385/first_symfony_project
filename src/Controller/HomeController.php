@@ -31,4 +31,19 @@ class HomeController extends AbstractController
         ]);
 
     }
+
+    #[Route('/login-ok', name: 'home.login.ok')]
+    public function loginOk(Request $request): Response
+    {
+        //dd($request->query->get('email'));
+        $token = $request->query->get('token');
+        //dd($token);
+        // Render a Twig template
+        return $this->render('index.html.twig', [
+            'controller_name' => 'HomeController',
+            'message' => 'Connexion ok!',
+            'token' => $token,
+        ]);
+
+    }
 }

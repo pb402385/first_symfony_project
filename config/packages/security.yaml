@@ -24,6 +24,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                success_handler: App\Security\LoginSuccessHandler
             logout:
                 path: app_logout
         # Firewall API JWT
@@ -46,7 +47,6 @@ security:
         - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/document, roles: PUBLIC_ACCESS }
 
 when@test:
     security:
