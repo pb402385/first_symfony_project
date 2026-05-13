@@ -306,9 +306,8 @@ php bin/console app:clean-revoked-tokens
 
 # TODO
 
-+ Service Auth
+
 + Page accueil
 + Gerer session
-+ Deco/reco
 + Views user/admin
 + Menu latéral si logué

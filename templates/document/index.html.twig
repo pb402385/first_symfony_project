@@ -61,6 +61,7 @@
 
 
     {% block javascripts %}
+        {{ parent() }}   {# ← Très important #}
         <script>
             document.getElementById('test-api-btn')?.addEventListener('click', async () => {
                 const token = localStorage.getItem('jwt_token'); // ou le nom que tu utilises

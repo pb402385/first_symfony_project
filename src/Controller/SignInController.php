@@ -17,16 +17,6 @@ class SignInController extends AbstractController
     }
 
 
-    #[Route('/loginApi', name: 'auth.login')]
-    public function login(): Response
-    {
-        $error = '';
-        return $this->render('security/login_api.html.twig', [
-            'title' => 'Login:',
-            'error' => $error,
-        ]);
-    }
-
     // Dans SecurityController.php
     #[Route('/register', name: 'auth.register')]
     public function register(): Response

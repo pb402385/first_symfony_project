@@ -41,3 +41,8 @@ button.login:hover { background: #1e40af; }
     position: relative;
     top: -35px;
 }
+
+.logout-txt-link {
+    font-weight: bold;
+    color: darkred;
+}

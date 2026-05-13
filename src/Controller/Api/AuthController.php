@@ -17,42 +17,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthController extends AbstractController
 {
-    #[Route('/api/login', name: 'api_login', methods: ['POST'])]
-    public function loginApi(
-        Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager,
-        JwtTokenManager $jwtManager
-    ): JsonResponse {
-        $data = json_decode($request->getContent(), true);
-
-        if (empty($data['email']) || empty($data['password'])) {
-            return $this->json(['message' => 'Email et mot de passe requis'], 400);
-        }
-
-        $user = $entityManager->getRepository(User::class)
-            ->findOneBy(['email' => $data['email']]);
-
-        if (!$user || !$passwordHasher->isPasswordValid($user, $data['password'])) {
-            return $this->json(['message' => 'Identifiants incorrects'], 401);
-        }
-
-        if (!$user->isVerified()) {
-            return $this->json(['message' => 'Veuillez vérifier votre adresse email via le lien fournit dans votre boîte de messagerie'], 403);
-        }
-
-        $token = $jwtManager->createToken($user);
-
-        return $this->json([
-            'token' => $token,
-            'user' => [
-                'id' => $user->getId(),
-                'email' => $user->getEmail(),
-                'roles' => $user->getRoles(),
-            ]
-        ]);
-    }
-
 
     #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
