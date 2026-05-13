@@ -37,6 +37,16 @@ class RevokedTokenRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function cleanExpired(): int
+    {
+        return $this->createQueryBuilder('r')
+            ->delete()
+            ->where('r.expiresAt < :now')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->getQuery()
+            ->execute();
+    }
+
     //    /**
     //     * @return RevokedToken[] Returns an array of RevokedToken objects
     //     */
