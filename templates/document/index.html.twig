@@ -10,8 +10,12 @@
         <h1 class="user-form-add-title">Liste de tous les documents:</h1>
     </div>
 
-    {% if user_connected is defined %}
-        <p>Bienvenue {{ user_connected }}</p>
+    {% if app.user is not null %}
+        <p>Bonjour, {{ app.user.username }} !</p>
+        <p>ID de l'utilisateur : {{ app.user.id }}</p>
+    {% else %}
+        <p>Uilisateur non authentifié!</p>
+        <p>Veuillez vous connecter.</p>
     {% endif %}
 
     <button class="btn btn-secondary btn-sm" id="test-api-btn">

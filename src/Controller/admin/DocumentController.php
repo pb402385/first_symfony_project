@@ -15,12 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use App\Service\UserService;
 
 #[Route('/document', name: 'document.')]
 final class DocumentController extends AbstractController
 {
 
-    public function __construct(private DocumentRepository $repository,private JwtTokenHandler $tokenHandler){
+    public function __construct(private DocumentRepository $repository, private UserService $userService){
 
     }
 
@@ -28,19 +29,17 @@ final class DocumentController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em): Response
     {
 
-        $token = ''.$request->headers->get('Authorization');
-        /**
-        dd([
-            'Authorization Header' => $request->headers->get('Authorization'),
-            'getUser()' => $this->getUser(),
-            'token' => $token,
-            //'$tokenHandler->getToken()' => $this->tokenHandler->getUserBadgeFrom($token),
-        ]);
-         * **/
+        $token =  $request->headers->get('Authorization');
+        //dd($token);
 
-        //$user = $this->getUser();   // ← Symfony injecte automatiquement l'utilisateur grâce au token
-        //dd($user);
-
+        if($token) {
+            $user = $this->userService->getCurrentUser();
+            dd($this->userService->getCurrentUser());
+        } else {
+            $user = null;
+        }
+        //$user = $this->getUser(); // peut être null
+        dd($user);
 
         $documents = $this->repository->findAll();
 
@@ -48,9 +47,9 @@ final class DocumentController extends AbstractController
             'controller_name' => 'DocumentController',
             'title' => 'Liste des documents',
             'documents' => $documents,
+            'user-connected' => $user,
         ]);
 
-        return $this->redirectToRoute('document.index');
     }
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
