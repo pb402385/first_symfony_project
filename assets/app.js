@@ -28,7 +28,5 @@ document.addEventListener('turbo:before-fetch-request', (event) => {
             event.detail.fetchOptions.headers['X-CSRF-TOKEN'] = csrfToken;
         }
     }
-
-    // Optionnel : tu peux aussi ajouter d'autres routes plus tard
-    // if (url.includes('/api/')) { ... }
+    
 });
