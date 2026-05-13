@@ -16,6 +16,16 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+        main:
+            pattern: ^/
+            security: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+            logout:
+                path: app_logout
         # Firewall API JWT
         api:
             pattern: ^/api
@@ -28,15 +38,6 @@ security:
             # ← LIGNE IMPORTANTE
             entry_point: App\Security\JwtAuthenticationEntryPoint
         # Firewall classique (pages Twig)
-        main:
-            pattern: ^/
-            stateless: false
-            provider: app_user_provider
-            form_login:
-                login_path: auth.login
-                check_path: auth.login
-            logout:
-                path: app_logout
 
     # Note: Only the *first* matching rule is applied
     access_control:

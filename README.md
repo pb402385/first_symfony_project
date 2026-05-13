@@ -295,6 +295,15 @@ openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_b
 openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
 ```
 
+Pour créer un code qui s'execute grâce à une commande
+```bash
+php bin/console make:command CleanRevokedTokensCommand
+```
+Pour executer la commande que l'on vient de créer
+```bash
+php bin/console app:clean-revoked-tokens
+```
+
 # TODO
 
 + Service Auth

@@ -29,17 +29,9 @@ final class DocumentController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em): Response
     {
 
-        $token =  $request->headers->get('Authorization');
-        //dd($token);
 
-        if($token) {
-            $user = $this->userService->getCurrentUser();
-            dd($this->userService->getCurrentUser());
-        } else {
-            $user = null;
-        }
-        //$user = $this->getUser(); // peut être null
-        dd($user);
+        $user = $this->getUser(); // peut être null
+        //dd($user);
 
         $documents = $this->repository->findAll();
 
@@ -47,7 +39,7 @@ final class DocumentController extends AbstractController
             'controller_name' => 'DocumentController',
             'title' => 'Liste des documents',
             'documents' => $documents,
-            'user-connected' => $user,
+            'user' => $user,
         ]);
 
     }

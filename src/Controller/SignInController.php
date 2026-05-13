@@ -17,11 +17,11 @@ class SignInController extends AbstractController
     }
 
 
-    #[Route('/login', name: 'auth.login')]
+    #[Route('/loginApi', name: 'auth.login')]
     public function login(): Response
     {
         $error = '';
-        return $this->render('security/login.html.twig', [
+        return $this->render('security/login_api.html.twig', [
             'title' => 'Login:',
             'error' => $error,
         ]);

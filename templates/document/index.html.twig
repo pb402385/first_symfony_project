@@ -10,9 +10,8 @@
         <h1 class="user-form-add-title">Liste de tous les documents:</h1>
     </div>
 
-    {% if app.user is not null %}
-        <p>Bonjour, {{ app.user.username }} !</p>
-        <p>ID de l'utilisateur : {{ app.user.id }}</p>
+    {% if user is not null %}
+        <p>Bonjour, {{ user.email }} !</p>
     {% else %}
         <p>Uilisateur non authentifié!</p>
         <p>Veuillez vous connecter.</p>

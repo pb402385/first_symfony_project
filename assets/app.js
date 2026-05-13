@@ -15,3 +15,13 @@ import './styles/register.css';
 
 
 import './js/AuthManager.js'
+
+//FORCE l'envoit du CSRF TOKEN
+document.addEventListener('turbo:before-fetch-request', (event) => {
+    if (event.detail.url.includes('/login')) {
+        const token = document.querySelector('input[name="_csrf_token"]')?.value;
+        if (token) {
+            event.detail.fetchOptions.headers['X-CSRF-TOKEN'] = token;
+        }
+    }
+});

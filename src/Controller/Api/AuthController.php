@@ -2,20 +2,23 @@
 // src/Controller/Api/AuthController.php
 namespace App\Controller\Api;
 
-use App\Entity\User;
+use App\Enum\Entity\User;
+use App\Form\LoginType;
 use App\Repository\RevokedTokenRepository;
 use App\Security\JwtTokenManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthController extends AbstractController
 {
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
-    public function login(
+    public function loginApi(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager,
@@ -52,7 +55,7 @@ class AuthController extends AbstractController
 
 
     #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]
-    public function logout(
+    public function logoutApi(
         Request $request,
         RevokedTokenRepository $revokedTokenRepository
     ): JsonResponse
@@ -73,6 +76,36 @@ class AuthController extends AbstractController
         return new JsonResponse([
             'message' => 'Déconnexion réussie. Supprimez le token côté client.'
         ]);
+    }
+
+    #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
+    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    {
+        // Si déjà connecté → redirection
+        if ($this->getUser()) {
+            // return $this->redirectToRoute('home.index');
+        }
+
+        $form = $this->createForm(LoginType::class);
+        $form->handleRequest($request);   // ← Important
+
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        //dd($error);
+
+        // Important : on renvoie du HTML normal (Turbo acceptera car ce n'est pas une réponse de formulaire POST)
+        return $this->render('security/login.html.twig', [
+            'form' => $form->createView(),
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
+    }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+        // Symfony gère ça automatiquement
     }
 
 }
