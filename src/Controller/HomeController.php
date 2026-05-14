@@ -18,6 +18,15 @@ class HomeController extends AbstractController
 
     }
 
+    #[Route('/home', name: 'home.fullpath.index')]
+    public function indexFullPath(): Response
+    {
+        // Render a Twig template
+        return $this->render('index.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
     #[Route('/new-user', name: 'home.new-user')]
     public function newUser(Request $request): Response
     {

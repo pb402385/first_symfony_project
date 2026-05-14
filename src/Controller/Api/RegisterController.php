@@ -26,6 +26,16 @@ class RegisterController extends AbstractController
 
     }
 
+    #[Route('/register', name: 'auth.register')]
+    public function registerBase(): Response
+    {
+        $error = '';
+        return $this->render('security/register.html.twig', [
+            'title' => 'Register:',
+            'error' => $error,
+        ]);
+    }
+
     #[Route('/api/register', name: 'api_register', methods: ['POST'])]
     public function register(
         Request $request,
