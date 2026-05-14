@@ -307,7 +307,10 @@ php bin/console app:clean-revoked-tokens
 # TODO
 
 
-+ Page accueil
-+ Gerer session
-+ Views user/admin
-+ Menu latéral si logué
++ Page accueil à finaliser
++ Gerer session user/admin pour les deux pages user et document
++ créer un file system pour stocker les documents
++ visionneuse pour les documents
++ idéalement pouvoir noter un document
++ idealement pouvoir mettre un document favori
++ avoir un système de pagination + filtre

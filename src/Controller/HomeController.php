@@ -46,4 +46,15 @@ class HomeController extends AbstractController
         ]);
 
     }
+
+    #[Route('/how_it_works', name: 'home.how.it.works')]
+    public function howItworks(): Response
+    {
+        // Render a Twig template
+        return $this->render('home/how_it_works.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+
+    }
+
 }
