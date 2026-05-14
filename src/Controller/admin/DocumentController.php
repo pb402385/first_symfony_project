@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use App\Service\UserService;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 #[Route('/document', name: 'document.')]
 final class DocumentController extends AbstractController
@@ -68,6 +69,15 @@ final class DocumentController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Document $document, Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+        if ($user) {
+            // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
+            if( !$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $document->getUserID()) ) {
+                $this->addFlash('danger',"Vous n'avez pas le droit de modifier ce document!");
+                //throw new AuthenticationException('l\'utilisateur n\a pas le droit de réaliser cette action!');
+                return $this->redirectToRoute('document.index');
+            }
+        }
 
         $form = $this->createForm(DocumentType::class, $document);
         // on recupère les catégories nécessaires à l'affichage du form
@@ -112,7 +122,8 @@ final class DocumentController extends AbstractController
 
             //on recupère la catégorie "category_select"
             $categoryId = $request->request->get('category_select');
-            $document->setCategoryId($categoryId);
+            $document->setCategoryId((int)$categoryId);
+            $document->setUserID((int)$this->getUser()->getUserIdentifier());
             $em->persist($document);
             $em->flush();
             $this->addFlash('success',"Le document a bien été créé");
@@ -129,6 +140,18 @@ final class DocumentController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Document $document, Request $request, EntityManagerInterface $em): Response
     {
+
+        $user = $this->getUser();
+        if ($user) {
+            // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
+
+            if( !$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $document->getUserID()) ) {
+                $this->addFlash('danger',"Vous n'avez pas le droit de supprimer ce document!");
+                //throw new AuthenticationException('l\'utilisateur n\a pas le droit de réaliser cette action!');
+                return $this->redirectToRoute('document.index');
+            }
+        }
+
         $em->remove($document);
         $em->flush();
         $this->addFlash('success',"Le document a bien été supprimé");

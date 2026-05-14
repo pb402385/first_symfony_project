@@ -13,6 +13,12 @@
     {% if user is not null %}
         <p>Bonjour, {{ user.email }} !</p>
         <p>Bonjour, {{ app.user.email }} !</p>
+        {% if is_granted('ROLE_ADMIN') %}
+            votre utilisateur est de type ADMIN
+        {% endif %}
+        {% if is_granted('ROLE_USER') %}
+            votre utilisateur est de type USER
+        {% endif %}
     {% else %}
         <p>Uilisateur non authentifié!</p>
         <p>Veuillez vous connecter.</p>

@@ -42,6 +42,7 @@ Pour stopper:
 ```bash
  symfony server:stop 
 ```
+Ne pas oublier de lancer mailpit.exe qui se situe dans le dossier /bin (cela permet au mails d'être envoyés en local et c'est nécessaire pour le bon déroulement de l'inscription sur l'application, on peut sinon utiliser le SMTP de google en plaçant sa config dans .env exemple: #MAILER_DSN=gmail+smtp://email@gmail.com:APP_ID@default)
 
 
 # DEBUG (utile au début)
@@ -309,6 +310,11 @@ php bin/console app:clean-revoked-tokens
 
 + Page accueil à finaliser
 + Gerer session user/admin pour les deux pages user et document
+  - un user peut visualiser tous les docs, en créer mais éditer que les siens
+  - un user peut juste editer son user et voir les autres users
+  - un admin peut editer tous les docs et tous les users
+  - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
+
 + créer un file system pour stocker les documents
 + visionneuse pour les documents
 + idéalement pouvoir noter un document
