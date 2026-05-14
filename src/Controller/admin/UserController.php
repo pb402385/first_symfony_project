@@ -20,9 +20,11 @@ final class UserController extends AbstractController
 
     }
 
-    #[Route('', name: 'index')]
+    #[Route('', name: 'index', methods: ['POST','GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $users = $this->repository->findAll();
 
@@ -33,9 +35,12 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/users/{country}', name: 'users.country')]
+    #[Route('/users/{country}', name: 'users.country', methods: ['POST','GET'])]
     public function showByCountry(string $country, Request $request): Response
     {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $users = $this->repository->findByCountry($country);
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
@@ -45,9 +50,11 @@ final class UserController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['POST','GET'])]
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->repository->find($id);
 
@@ -58,11 +65,22 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['POST','GET'])]
     public function edit(User $user, Request $request, EntityManagerInterface $em): Response
     {
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $userapp = $this->getUser();
+        if ($userapp) {
+            // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
+
+            if( !$this->isGranted('ROLE_ADMIN') && ((int)$userapp->getUserIdentifier() != $user->getId()) ) {
+                $this->addFlash('danger',"Vous n'avez pas le droit de modifier ce User!");
+                return $this->redirectToRoute('user.index');
+            }
+        }
+
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -79,7 +97,7 @@ final class UserController extends AbstractController
     }
 
 
-    #[Route('/add', name: 'add')]
+    #[Route('/add', name: 'add', methods: ['POST','GET'])]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
@@ -102,11 +120,21 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','PUT'])]
     public function delete(User $user, Request $request, EntityManagerInterface $em): Response
     {
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $userapp = $this->getUser();
+        if ($userapp) {
+            // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
+
+            if( !$this->isGranted('ROLE_ADMIN') && ((int)$userapp->getUserIdentifier() != $user->getId()) ) {
+                $this->addFlash('danger',"Vous n'avez pas le droit de supprimer ce User!");
+                return $this->redirectToRoute('user.index');
+            }
+        }
 
         $em->remove($user);
         $em->flush();

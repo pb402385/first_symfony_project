@@ -29,11 +29,14 @@
                     </td>
                     <td class="user-index-actions-td">
                         <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">Voir</a>
-                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.edit', {id:user.id}) }}">Editer</a>
-                        <form action="{{ path('user.delete', {id:user.id}) }}" method="post">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
+
+                        {% if is_granted('ROLE_ADMIN') or app.user.id == user.id  %}
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.edit', {id:user.id}) }}">Editer</a>
+                            <form action="{{ path('user.delete', {id:user.id}) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

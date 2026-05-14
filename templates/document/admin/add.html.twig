@@ -10,7 +10,7 @@
         <h1 class="user-form-add-title">Création d'un document</h1>
     </div>
 
-    {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+    {{ form_start(form, {'method': 'POST','attr': {'data-turbo': 'false'}}) }}
 
     <div class="document-add-grid-3x1">
         {{  form_row (form.title) }}

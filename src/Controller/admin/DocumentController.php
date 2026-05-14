@@ -26,7 +26,7 @@ final class DocumentController extends AbstractController
 
     }
 
-    #[Route('', name: 'index', methods: ['GET'])]
+    #[Route('', name: 'index', methods: ['POST','GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
 
