@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}404 - Page non trouvée{% endblock %}
+
+{% block body %}
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="text-center">
+            <h1 class="display-1 fw-bold text-danger">404</h1>
+            <h2 class="mb-4">Page non trouvée</h2>
+            <p class="lead mb-5">Désolé, la page que vous recherchez n'existe pas.</p>
+
+            <a href="{{ path('home.index') }}" class="btn btn-primary btn-lg">
+                Retour à l'accueil
+            </a>
+        </div>
+    </div>
+{% endblock %}
