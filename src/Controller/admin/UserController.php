@@ -23,26 +23,8 @@ final class UserController extends AbstractController
     #[Route('', name: 'index')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        //dd($repository->findAll());
 
-        //$dateTest1 = '1985-03-18 00:00:00';
-        //$dateTest2 = '1989-03-18 00:00:00';
-        //dd($repository->findByBirthdateSuperiorAt($dateTest1),$repository->findByBirthdateSuperiorAt($dateTest2));
-
-        /*
-        $users = $repository->findAll();
-        $users[0]->setAbout("Je me présente,
-                                    Je m'appelle Henri,
-                                    Je voudrais bien réussir ma vie,
-                                    Être aimé,
-                                    Être beau, gagner de l'argent,
-                                    Puis surtout être intelligent,
-                                    Et pour tout ca, il faudrait que j'bosse a plein temp");
-        $em->flush();
-        */
         $users = $this->repository->findAll();
-        // $users = $em->getRepository(User::class)->findAll();
-        // = $repository->findAll()
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
@@ -66,9 +48,8 @@ final class UserController extends AbstractController
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
-        //dd($request, $request->attributes->get('id'));
+
         $user = $this->repository->find($id);
-        $email = $user->getEmail();
 
         return $this->render('user/show.html.twig', [
             'controller_name' => 'UserController',

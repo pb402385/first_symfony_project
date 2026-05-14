@@ -30,17 +30,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $id = $userInterface->getUserIdentifier();
         $user = $this->repository->find(intval($id));
 
-        //dd($user, $id, $userInterface);
-
-
-
+        // On crée notre TOKEN JWT ici
         if($user !== null){
             $token = $jwtManager->createToken($user);
             //dd($token);
         }
 
-
-        // On crée notre TOKEN JWT ici
 
         // ========================
         // ICI tu peux faire ce que tu veux après connexion réussie
@@ -49,7 +44,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         // Exemple : Log
         // $this->logger->info('User logged in', ['email' => $user->getEmail()]);
 
-        // Exemple : Message flash
+        // Message flash
         $request->getSession()->getFlashBag()->add('success', 'Connexion réussie (token JWT créé)! ' . $user->getEmail() . ' !');
 
         // Exemple : Redirection personnalisée selon les rôles

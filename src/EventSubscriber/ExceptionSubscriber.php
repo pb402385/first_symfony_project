@@ -36,8 +36,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $showDisconnect = null;
             if( $user !== null ) $showDisconnect = true;
 
-            //dd($showDisconnect, $user);
-
             $html = $this->twig->render('error/404.html.twig', [
                 'exception' => $exception,
                 'show_disconnect'      => $showDisconnect,           // On passe une variable pour détecter quel affichage fournir

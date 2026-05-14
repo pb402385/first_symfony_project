@@ -30,7 +30,6 @@ final class DocumentController extends AbstractController
     {
 
         $user = $this->getUser(); // peut être null
-        //dd($user);
 
         $documents = $this->repository->findAll();
 
@@ -47,7 +46,6 @@ final class DocumentController extends AbstractController
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
 
-        //dd($request, $request->attributes->get('id'));
         $document = $this->repository->find($id);
         $title = $document->getTitle();
 
@@ -76,7 +74,7 @@ final class DocumentController extends AbstractController
         $categoryId = $document->getCategoryId();
         $categories = $em->getRepository(Category::class)->findAll();
         $form->handleRequest($request);
-        //dd($form);
+
         if($form->isSubmitted() && $form->isValid()){
 
             //on recupère la catégorie "category_select"
@@ -108,7 +106,7 @@ final class DocumentController extends AbstractController
         $form = $this->createForm(DocumentType::class, $document);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            //dd($request->request->get('category_select'));
+
             $document->setCreatedAt(new \DateTimeImmutable());
             $document->setUpdatedAt(new \DateTime());
 

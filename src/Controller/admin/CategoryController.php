@@ -24,9 +24,6 @@ final class CategoryController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         $categories = $this->repository->findAll();
-        // $users = $em->getRepository(User::class)->findAll();
-        // = $repository->findAll()
-
 
         return $this->render('document/admin/category/index.html.twig', [
             'controller_name' => 'CategoryController',

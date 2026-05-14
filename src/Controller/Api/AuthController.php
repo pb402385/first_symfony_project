@@ -32,8 +32,6 @@ class AuthController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        //dd($error);
-
         // Important : on renvoie du HTML normal (Turbo acceptera car ce n'est pas une réponse de formulaire POST)
         return $this->render('security/login.html.twig', [
             'form' => $form->createView(),

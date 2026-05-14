@@ -109,3 +109,11 @@ body {
     font-weight: bold;
     color: darkred;
 }
+
+
+.alert {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 15px;
+}

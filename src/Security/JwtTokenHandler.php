@@ -66,9 +66,6 @@ class JwtTokenHandler implements AccessTokenHandlerInterface
                 dump('=== JWT HANDLER FIN SUCCESS ===');
             }
 
-            // Cette partie faisait échouer la création du badge car c'est l'email qui sert de clé pour identifier l'utilisateur
-            //$badge = new UserBadge($user->getUserIdentifier());
-
             $userIdentifier = $user->getEmail();
             $badge = new UserBadge($userIdentifier);
 
