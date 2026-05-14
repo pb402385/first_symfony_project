@@ -47,11 +47,15 @@
             </td>
             <td class="user-index-actions-td">
                 <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">Voir</a>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.edit', {id:document.id}) }}">Editer</a>
-                <form action="{{ path('document.delete', {id:document.id}) }}" method="post">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                </form>
+
+                {% if is_granted('ROLE_ADMIN') or document.userId == user.id  %}
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.edit', {id:document.id}) }}">Editer</a>
+                    <form action="{{ path('document.delete', {id:document.id}) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                {% endif %}
+
             </td>
         </tr>
         {% endfor %}
