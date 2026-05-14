@@ -26,7 +26,7 @@ final class DocumentController extends AbstractController
 
     }
 
-    #[Route('', name: 'index')]
+    #[Route('', name: 'index', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
 
@@ -43,7 +43,7 @@ final class DocumentController extends AbstractController
 
     }
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
 
@@ -66,7 +66,7 @@ final class DocumentController extends AbstractController
 
     }
 
-    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET','POST'])]
     public function edit(Document $document, Request $request, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
@@ -106,7 +106,7 @@ final class DocumentController extends AbstractController
     }
 
 
-    #[Route('/add', name: 'add')]
+    #[Route('/add', name: 'add', methods: ['GET','POST'])]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
 
@@ -115,6 +115,7 @@ final class DocumentController extends AbstractController
         $categories = $em->getRepository(Category::class)->findAll();
         $form = $this->createForm(DocumentType::class, $document);
         $form->handleRequest($request);
+
         if($form->isSubmitted() && $form->isValid()){
 
             $document->setCreatedAt(new \DateTimeImmutable());
@@ -137,7 +138,7 @@ final class DocumentController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','PUT'])]
     public function delete(Document $document, Request $request, EntityManagerInterface $em): Response
     {
 
