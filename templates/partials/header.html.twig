@@ -17,7 +17,32 @@
         <div class="flex items-center gap-4" id="nav-auth">
 
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <button class="logout-txt-link" onclick="window.location.href='{{ path('app_logout') }}';localStorage.removeItem('jwt_token');">Déconnexion</button>
+                <button class="logout-txt-link" id="logout-link" onclick="revokeTokenAndDisconnect()">Déconnexion</button>
+
+                {% block javascripts %}
+                    <script>
+                        // On force l'envoit du JWT token lors de la déconnexion
+                        function revokeTokenAndDisconnect() {
+                            const token = localStorage.getItem('jwt_token'); // ou le nom que tu utilises
+                            debugger;
+                            if (token) {
+                                // Ajoute le token dans le header de la requête de déconnexion
+                                fetch(window.location.origin + '/revokeToken', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': `Bearer ${token}`
+                                    }
+                                }).then(() => {
+                                    // Redirection manuelle après envoi
+                                    debugger;
+                                    localStorage.removeItem('jwt_token');
+                                    window.location.href = window.location.origin + '/logout';
+                                });
+                            }
+                        }
+                    </script>
+                {% endblock %}
+
             {% else %}
                 {% if show_disconnect is defined and show_disconnect is not null %}
                 {% else %}
