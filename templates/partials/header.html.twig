@@ -19,15 +19,18 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <button class="logout-txt-link" onclick="window.location.href='{{ path('app_logout') }}';localStorage.removeItem('jwt_token');">Déconnexion</button>
             {% else %}
-                <button onclick="window.location.href='{{ path('app_login') }}'"
-                        class="px-5 py-2 text-indigo-600 hover:bg-indigo-50 rounded-xl font-medium transition {{ app.current_route == 'app_login' ? 'auth-login-btn-hidden' : ''}}">
-                    Connexion
-                </button>
+                {% if show_disconnect is defined and show_disconnect is not null %}
+                {% else %}
+                    <button onclick="window.location.href='{{ path('app_login') }}'"
+                            class="px-5 py-2 text-indigo-600 hover:bg-indigo-50 rounded-xl font-medium transition {{ app.current_route == 'app_login' ? 'auth-login-btn-hidden' : ''}}">
+                        Connexion
+                    </button>
 
-                <button onclick="window.location.href='{{ path('auth.register') }}'"
-                        class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition {{ app.current_route == 'auth.register' ? 'auth-register-btn-hidden' : ''}}">
-                    Inscription gratuite
-                </button>
+                    <button onclick="window.location.href='{{ path('auth.register') }}'"
+                            class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition {{ app.current_route == 'auth.register' ? 'auth-register-btn-hidden' : ''}}">
+                        Inscription gratuite
+                    </button>
+                {% endif %}
             {% endif %}
         </div>
     </div>

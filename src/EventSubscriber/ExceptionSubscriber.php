@@ -7,11 +7,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private Environment $twig) {}
+    public function __construct(
+        private Environment $twig,
+        private Security $security
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -24,15 +28,22 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
 
-        // On traite uniquement les erreurs 404
         if ($exception instanceof NotFoundHttpException) {
-            $response = new Response(
-                $this->twig->render('error/404.html.twig', [
-                    'exception' => $exception,
-                ]),
-                Response::HTTP_NOT_FOUND
-            );
 
+            $user = $event->getRequest()->getSession()->get('_security_main')
+                ? unserialize($event->getRequest()->getSession()->get('_security_main'))?->getUser()
+                : null;
+            $showDisconnect = null;
+            if( $user !== null ) $showDisconnect = true;
+
+            //dd($showDisconnect, $user);
+
+            $html = $this->twig->render('error/404.html.twig', [
+                'exception' => $exception,
+                'show_disconnect'      => $showDisconnect,           // On passe une variable pour détecter quel affichage fournir
+            ]);
+
+            $response = new Response($html, Response::HTTP_NOT_FOUND);
             $event->setResponse($response);
         }
     }
