@@ -14,13 +14,12 @@
     <div class="user-show-card">
         <div class="container-user-show">
             <div class="user-show-img">
-                {#  <div id="img">{{user.image}}</div> #}
-                {% if user.image %}
-                    <div class="mb-4">
-                        <img src="data:image/jpeg;base64,{{ user.image|base64_encode }}"
-                             alt="user profile picture"
-                             class="img-thumbnail" style="max-width: 300px;">
-                    </div>
+                {% if user.image is not null %}
+                    <img src="data:{{ user.imageMime|default('image/jpeg') }};base64,{{ image|base64_encode }}"
+                         alt="Image de {{ user.name }}"
+                         class="img-fluid" />
+                {% else %}
+                    <p>Aucune image</p>
                 {% endif %}
             </div>
 

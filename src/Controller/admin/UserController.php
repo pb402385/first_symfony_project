@@ -63,6 +63,7 @@ final class UserController extends AbstractController
             'controller_name' => 'UserController',
             'title' => 'Page de '.$user->getName(),
             'user' => $user,
+            'image' => $user->getImage(),
         ]);
     }
 
@@ -90,6 +91,7 @@ final class UserController extends AbstractController
             $this->addFlash('success',"L'utilisateur a bien été modifié");
             return $this->redirectToRoute('user.index');
         }
+
         return $this->render('user/admin/edit.html.twig', [
             'title' => 'Edition de '.$user->getName(),
             'user' => $user,
