@@ -20,6 +20,14 @@
             {{  form_row (form.country) }}
             {{  form_row (form.city) }}
             {{  form_row (form.image) }}
+
+            {% if user.image is not null %}
+                <img src="data:{{ user.imageMime|default('image/jpeg') }};base64,{{ image|base64_encode }}"
+                     alt="Image de {{ user.name }}"
+                     class="img-fluid" />
+            {% else %}
+                <p>Aucune image</p>
+            {% endif %}
         </div>
 
         <div class="user-form-edit-b2">

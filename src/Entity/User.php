@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use App\Validator\BanWordPhp;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,7 +40,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
-    #[Assert\Type(Types::BLOB)]
     private mixed $image = null;
 
     #[ORM\Column(nullable: true)]
@@ -65,6 +65,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $isVerified = false;
+
+
+    private ?UploadedFile $imageFile = null;   // Champ non mappé
 
     public function getId(): ?int
     {
@@ -221,6 +224,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImage($image): self
     {
         $this->image = $image;
+        return $this;
+    }
+
+    public function getImageFile(): ?UploadedFile
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?UploadedFile $imageFile): self
+    {
+        $this->imageFile = $imageFile;
         return $this;
     }
 

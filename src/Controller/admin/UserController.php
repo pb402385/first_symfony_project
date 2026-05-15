@@ -86,16 +86,30 @@ final class UserController extends AbstractController
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $em->flush();
-            $this->addFlash('success',"L'utilisateur a bien été modifié");
-            return $this->redirectToRoute('user.index');
+        if ($form->isSubmitted()) {
+            
+            if ($form->isValid()) {
+
+                $imageFile = $form->get('image')->getData();
+
+                if ($imageFile) {
+                    // Lecture du contenu du fichier en binaire
+                    $imageContent = file_get_contents($imageFile->getPathname());
+                    $user->setImage($imageContent);
+                }
+
+                $em->persist($user);
+                $em->flush();
+                $this->addFlash('success', "L'utilisateur a bien été modifié");
+                return $this->redirectToRoute('user.index');
+            }
         }
 
         return $this->render('user/admin/edit.html.twig', [
             'title' => 'Edition de '.$user->getName(),
-            'user' => $user,
             'form' => $form,
+            'user' => $user,
+            'image' => $user->getImage(),
         ]);
     }
 
