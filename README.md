@@ -310,13 +310,13 @@ php bin/console app:clean-revoked-tokens
 
 + Page accueil à finaliser
 + Gerer session user/admin pour les deux pages user et document
-  - un user peut visualiser tous les docs, en créer mais éditer que les siens
-  - un user peut juste editer son user et voir les autres users
-  - un admin peut editer tous les docs et tous les users
   - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
 
++ joli profil
++ gestion de l'image du profil
 + créer un file system pour stocker les documents
 + visionneuse pour les documents
++ 
 + idéalement pouvoir noter un document
 + idealement pouvoir mettre un document favori
 + avoir un système de pagination + filtre

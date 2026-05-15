@@ -15,7 +15,13 @@
         <div class="container-user-show">
             <div class="user-show-img">
                 {#  <div id="img">{{user.image}}</div> #}
-                <img src="" alt="user profile picture" width="200" height="200">
+                {% if user.image %}
+                    <div class="mb-4">
+                        <img src="data:image/jpeg;base64,{{ user.image|base64_encode }}"
+                             alt="user profile picture"
+                             class="img-thumbnail" style="max-width: 300px;">
+                    </div>
+                {% endif %}
             </div>
 
             <div class="user-grid-3x2">

@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
+
 
 class UserType extends AbstractType
 {
@@ -23,7 +25,24 @@ class UserType extends AbstractType
         $builder
             ->add('name', TextType::class, ['label' => 'Nom'])
             ->add('email', EmailType::class, ['label' => 'Email'])
-            ->add('image', FileType::class, ['label' => 'Image','data_class' => null, 'required' => false])
+            ->add('image', FileType::class, [
+                'label' => 'Image',
+                'data_class' => null,
+                'mapped' => false,           // Important : on gère manuellement
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                            'image/webp'
+                        ],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide',
+                    ])
+                ],
+            ])
             //->add('image', TextType::class, ['label' => 'Image'])
             ->add('bornAt', BirthdayType::class, ['label' => 'Date de naissance'])
             ->add('city', TextType::class, ['label' => 'Ville', 'required' => false])
@@ -48,6 +67,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'validation_groups' => ['Default'], // On ignore le groupe "registration"
         ]);
     }
 }

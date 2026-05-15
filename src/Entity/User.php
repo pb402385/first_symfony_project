@@ -35,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Assert\Length(min: 5)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ['registration'])]   // Uniquement lors de l'inscription
     private ?string $password = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
@@ -91,18 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getImage(): mixed
-    {
-        return $this->image;
-    }
-
-    public function setImage(mixed $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -217,5 +205,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->id;   // ou $this->username si tu utilises username
     }
+
+
+    // ========================
+    // GESTION IMAGE BLOB
+    // ========================
+    public function getImage(): ?string
+    {
+        if (is_resource($this->image)) {
+            return stream_get_contents($this->image);
+        }
+        return $this->image;
+    }
+
+    public function setImage($image): self
+    {
+        $this->image = $image;
+        return $this;
+    }
+
 
 }

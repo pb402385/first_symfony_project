@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
@@ -98,7 +99,11 @@ final class UserController extends AbstractController
 
 
     #[Route('/add', name: 'add', methods: ['POST','GET'])]
-    public function add(Request $request, EntityManagerInterface $em): Response
+    public function add(
+        Request $request,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher,
+    ): Response
     {
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -106,12 +111,44 @@ final class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $user->setCreatedAt(new \DateTimeImmutable());
-            $em->persist($user);
-            $em->flush();
-            $this->addFlash('success',"L'utilisateur a bien été créé");
-            return $this->redirectToRoute('user.index');
+        //dd($form);
+
+        if ($form->isSubmitted()) {
+
+            /**
+            // Utile pour débug quand le form ne passe pas les validateurs
+            dump([
+                'Submitted' => $form->isSubmitted(),
+                'Valid' => $form->isValid(),
+                'Errors' => $form->getErrors(true, true), // Voir toutes les erreurs
+                'Image Data' => $form->get('image')->getData() ? 'Fichier reçu' : 'Aucun fichier',
+            ]);
+            **/
+
+            // La création de compte est normalement interdite, seul l'admin peut en faire
+            // On choisit donc de donner le mot de passe "test" par défaut quand l'admin crée un compte
+            // Hash du mot de passe
+            $hashedPassword = $passwordHasher->hashPassword($user, 'test');
+            $user->setPassword($hashedPassword);
+
+            if ($form->isValid()) {
+
+                $imageFile = $form->get('image')->getData();
+
+                if ($imageFile) {
+                    // Lecture du contenu du fichier en binaire
+                    $imageContent = file_get_contents($imageFile->getPathname());
+
+                    $user->setImage($imageContent);
+                }
+
+                //dd($form->getData(), $user->getImage());
+                $user->setCreatedAt(new \DateTimeImmutable());
+                $em->persist($user);
+                $em->flush();
+                $this->addFlash('success', "L'utilisateur a bien été créé");
+                return $this->redirectToRoute('user.index');
+            }
         }
         return $this->render('user/admin/add.html.twig', [
             'title' => 'Création d\'un utilisateur',
