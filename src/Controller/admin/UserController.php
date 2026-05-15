@@ -87,7 +87,7 @@ final class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            
+
             if ($form->isValid()) {
 
                 $imageFile = $form->get('image')->getData();

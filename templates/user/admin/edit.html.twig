@@ -21,13 +21,15 @@
             {{  form_row (form.city) }}
             {{  form_row (form.image) }}
 
-            {% if user.image is not null %}
-                <img src="data:{{ user.imageMime|default('image/jpeg') }};base64,{{ image|base64_encode }}"
-                     alt="Image de {{ user.name }}"
-                     class="img-fluid" />
-            {% else %}
-                <p>Aucune image</p>
-            {% endif %}
+            {# Zone de prévisualisation #}
+            <div class="image-preview-container mt-3">
+                <p><strong>Prévisualisation :</strong></p>
+                <img id="image-preview"
+                     src="{% if user.image is not null %}data:{{ user.imageMime|default('image/jpeg') }};base64,{{ user.image|base64_encode }}{% endif %}"
+                     alt="Prévisualisation"
+                     class="img-fluid"
+                     style="max-height: 300px; display: {% if user.image is null %}none{% else %}block{% endif %};">
+            </div>
         </div>
 
         <div class="user-form-edit-b2">
@@ -40,4 +42,37 @@
 
     {{ form_end(form) }}
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('{{ form.image.vars.id }}');
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+
+                    if (file) {
+                        let previewImg = document.getElementById('image-preview');
+                        // Vérification que c'est bien une image
+                        if (!file.type.startsWith('image/')) {
+                            alert("Veuillez sélectionner une image valide");
+                            return;
+                        }
+
+                        const reader = new FileReader();
+
+                        reader.onload = function(event) {
+                            previewImg.src = event.target.result;
+                            previewImg.style.display = 'block';
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}
