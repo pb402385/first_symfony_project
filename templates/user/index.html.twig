@@ -10,9 +10,11 @@
         <h1 class="user-index-title">Liste de tous les utilisateurs:</h1>
     </div>
 
-    <div class="btn btn-primary btn-sm user-index-list-table">
-        <a class="user-index-add-a" href="{{ path('user.add') }}">Créer un utilisateur</a>
-    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="btn btn-primary btn-sm user-index-list-table">
+            <a class="user-index-add-a" href="{{ path('user.add') }}">Créer un utilisateur</a>
+        </div>
+    {% endif %}
 
     <div class="user-list-container">
         <table class="table user-index-list-table">

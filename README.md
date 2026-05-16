@@ -312,8 +312,7 @@ php bin/console app:clean-revoked-tokens
 + Gerer session user/admin pour les deux pages user et document
   - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
 
-+ joli profil
-+ gestion de l'image du profil
+    
 + créer un file system pour stocker les documents
 + visionneuse pour les documents
 + 
