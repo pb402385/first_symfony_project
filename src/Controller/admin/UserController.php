@@ -59,7 +59,7 @@ final class UserController extends AbstractController
 
         $user = $this->repository->find($id);
 
-        return $this->render('user/show.html.twig', [
+        return $this->render('user/show_profil.html.twig', [
             'controller_name' => 'UserController',
             'title' => 'Page de '.$user->getName(),
             'user' => $user,
@@ -88,11 +88,13 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
-            if ($form->isValid()) {
+            // dd($form->isValid(), $form->getErrors());
 
+            if ($form->isValid()) {
+                //Si on n'a pas d'image dans le formulaire
                 $imageFile = $form->get('image')->getData();
 
-                if ($imageFile) {
+                if( $imageFile != null ) {
                     // Lecture du contenu du fichier en binaire
                     $imageContent = file_get_contents($imageFile->getPathname());
                     $user->setImage($imageContent);
@@ -105,7 +107,7 @@ final class UserController extends AbstractController
             }
         }
 
-        return $this->render('user/admin/edit.html.twig', [
+        return $this->render('user/admin/edit_profil.html.twig', [
             'title' => 'Edition de '.$user->getName(),
             'form' => $form,
             'user' => $user,

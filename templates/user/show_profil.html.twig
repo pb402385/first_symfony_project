@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ user.name|default(user.email) }}{% endblock %}
+
+{% block body %}
+
+    <a class="btn-retour" href="{{ url('user.index') }}">RETOUR</a>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+
+                        {# En-tête avec image de profil #}
+                        <div class="text-center mb-4">
+                            {% if user.image is not null %}
+                                <img src="data:{{ user.imageMime|default('image/jpeg') }};base64,{{ image|base64_encode }}"
+                                     alt="Photo de {{ user.name }}"
+                                     class="rounded-circle border border-3 border-white shadow-sm"
+                                     style="width: 180px; height: 180px; object-fit: cover; margin: 0 auto;">
+                            {% else %}
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto shadow-sm"
+                                     style="width: 180px; height: 180px; font-size: 4rem;">
+                                    👤
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# Nom et email #}
+                        <h1 class="text-center mb-1">{{ user.name|default('Utilisateur') }}</h1>
+                        <p class="text-center text-muted mb-4">{{ user.email }}</p>
+
+                        <hr class="my-4">
+
+                        <div class="row g-4">
+
+                            {# Informations générales #}
+                            <div class="col-md-6">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-user"></i> Informations
+                                </h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        <strong>Date d'inscription :</strong><br>
+                                        {{ user.createdAt|date("d/m/Y") }}
+                                    </li>
+                                    {% if user.bornAt %}
+                                        <li class="mb-3">
+                                            <strong>Date de naissance :</strong><br>
+                                            {{ user.bornAt|date("d/m/Y") }}
+                                        </li>
+                                    {% endif %}
+                                    {% if user.city or user.country %}
+                                        <li>
+                                            <strong>Localisation :</strong><br>
+                                            {{ user.city }}{% if user.city and user.country %}, {% endif %}{{ user.country }}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+
+                            {# Résumé / Bio #}
+                            <div class="col-md-6">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-info-circle"></i> À propos
+                                </h5>
+                                <p class="text-muted">
+                                    {{ user.about|nl2br|default('<em>Aucune description pour le moment.</em>')|raw }}
+                                </p>
+                            </div>
+                        </div>
+
+                        {% if user.id == app.user.id %}
+                            {# Bouton d'action #}
+                            <div class="text-center mt-5">
+                                <a href="{{ path('user.edit', {id: user.id}) }}" class="btn btn-primary px-4">
+                                    <i class="fas fa-edit"></i> Modifier mon profil
+                                </a>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

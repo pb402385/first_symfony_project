@@ -17,7 +17,9 @@
         <div class="flex items-center gap-4" id="nav-auth">
 
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <button class="logout-txt-link" id="logout-link" onclick="revokeTokenAndDisconnect()">Déconnexion</button>
+                <a href="#" onclick="revokeTokenAndDisconnect()" id="logout-link" class="btn btn-outline-danger px-4 ms-3">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
 
                 {% block javascripts %}
                     <script>
