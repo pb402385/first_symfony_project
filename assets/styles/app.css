@@ -117,3 +117,10 @@ body {
     margin: 0 auto;
     margin-top: 15px;
 }
+
+
+.pagination_container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}

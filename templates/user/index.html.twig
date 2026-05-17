@@ -45,4 +45,18 @@
         </table>
     </div>
 
+    {#
+    <div class="d-flex">
+        {% if page > 1 %}
+            <a href="{{ path('user.index', {page: page - 1}) }}" class="btn btn-secondary">Page Précédante</a>
+        {% endif %}
+        {% if page < maxPage %}
+            <a href="{{ path('user.index', {page: page + 1}) }}" class="btn btn-secondary">Page Suivante</a>
+        {% endif %}
+    </div>
+    #}
+    <div class="pagination_container">
+        {{ knp_pagination_render(users) }}
+    </div>
+
 {% endblock %}

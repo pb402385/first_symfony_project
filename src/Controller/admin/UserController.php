@@ -21,6 +21,7 @@ final class UserController extends AbstractController
 
     }
 
+    /*
     #[Route('', name: 'index', methods: ['POST','GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
@@ -33,6 +34,34 @@ final class UserController extends AbstractController
             'controller_name' => 'UserController',
             'title' => 'Utilisateurs',
             'users' => $users,
+        ]);
+    }
+    */
+
+    #[Route('', name: 'index', methods: ['POST','GET'])]
+    public function index(Request $request, EntityManagerInterface $em): Response
+    {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+
+        $page = $request->query->getInt('page', 1);
+        $limit = 5;
+
+        /* si pas de bundle
+        $users = $this->repository->paginateUsers($page, $limit);
+        $maxPage = ceil($users->count() / $limit);
+        */
+
+        $users = $this->repository->paginateUsers($page, $limit);
+        //dd($users, $users->count());
+
+        return $this->render('user/index.html.twig', [
+            'controller_name' => 'UserController',
+            'title' => 'Utilisateurs',
+            'users' => $users,
+            //'maxPage' => $maxPage,
+            'page' => $page,
         ]);
     }
 
