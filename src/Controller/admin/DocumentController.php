@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use App\Service\UserService;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/document', name: 'document.')]
 final class DocumentController extends AbstractController
@@ -130,6 +131,103 @@ final class DocumentController extends AbstractController
             $this->addFlash('success',"Le document a bien été créé");
             return $this->redirectToRoute('document.index');
         }
+        return $this->render('document/admin/add.html.twig', [
+            'title' => 'Création d\'un document',
+            'document' => $document,
+            'categories' => $categories,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/add_to_fs', name: 'add.to.fs', methods: ['GET','POST'])]
+    public function addToFS(
+        Request $request,
+        EntityManagerInterface $em,
+        SluggerInterface $slugger
+    ): Response
+    {
+
+        $document = new Document();
+        // on recupère les catégories nécessaires à l'affichage du form
+        $categories = $em->getRepository(Category::class)->findAll();
+        $form = $this->createForm(DocumentType::class, $document);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+                $uploadedFile = $form->get('file')->getData();
+
+                if ($uploadedFile) {
+                    $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+
+                    $uploadDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/documents';
+
+                    // Création du dossier si nécessaire
+                    if (!is_dir($uploadDirectory)) {
+                        mkdir($uploadDirectory, 0775, true);
+                    }
+
+                    $destination = $uploadDirectory . '/' . $newFilename;
+
+                    try {
+                        // SOLUTION LA PLUS ROBUSTE : Lecture en mémoire
+                        $fileContent = file_get_contents($uploadedFile->getPathname());
+
+                        if ($fileContent === false) {
+                            throw new \Exception('Impossible de lire le fichier temporaire');
+                        }
+
+                        // Écriture du fichier
+                        if (file_put_contents($destination, $fileContent) === false) {
+                            throw new \Exception('Impossible d\'écrire le fichier sur le disque');
+                        }
+
+                        // Mise à jour de l'entité
+                        $document->setFile($newFilename);
+                        $document->setOriginalName($uploadedFile->getClientOriginalName());
+                        $document->setMimeType($uploadedFile->getMimeType());
+
+                    } catch (\Exception $e) {
+                        $this->addFlash('danger', 'Erreur lors de l\'upload du fichier : ' . $e->getMessage());
+                        return $this->render('document/admin/add.html.twig', [
+                            'form' => $form->createView(),
+                            'title' => 'Création d\'un document',
+                            'document' => $document,
+                            'categories' => $categories,
+                            ]);
+                    }
+                }
+
+                $document->setCreatedAt(new \DateTimeImmutable());
+
+                $document->setUpdatedAt(new \DateTime());
+
+                //on recupère la catégorie "category_select"
+                $categoryId = $request->request->get('category_select');
+                if ($categoryId) {
+                    $document->setCategoryId((int)$categoryId);
+                }
+
+                // Utilisateur connecté
+                if ($this->getUser()) {
+                    $document->setUserID((int)$this->getUser()->getId());   // Utilise getId() de préférence
+                }
+
+                $em->persist($document);
+                $em->flush();
+                $this->addFlash('success', "Le document a bien été créé");
+                return $this->redirectToRoute('document.index');
+
+        }
+
+        // Si le formulaire n'est pas valide
+        if ($form->isSubmitted() && !$form->isValid()) {
+            dump($form->getErrors(true, true)); // Debug
+        }
+
         return $this->render('document/admin/add.html.twig', [
             'title' => 'Création d\'un document',
             'document' => $document,

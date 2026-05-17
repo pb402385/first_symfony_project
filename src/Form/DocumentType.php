@@ -4,11 +4,13 @@ namespace App\Form;
 
 use App\Entity\Document;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class DocumentType extends AbstractType
 {
@@ -17,7 +19,31 @@ class DocumentType extends AbstractType
         $builder
             ->add('title', TextType::class, ['label' => 'Nom'])
             ->add('abstract')
-            ->add('file')
+            //->add('file')
+            ->add('file', FileType::class, [
+                'label' => 'Fichier à uploader',
+                'mapped' => false,           // Très important
+                'required' => true,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '15M',      // Tu peux augmenter si besoin
+                        'mimeTypes' => [
+                            'application/pdf',
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                            'application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.ms-excel',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        ],
+                        'mimeTypesMessage' => 'Format de fichier non autorisé.',
+                    ])
+                ],
+                'attr' => [
+                    'accept' => '.pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx'
+                ]
+            ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder'])
         ;
     }

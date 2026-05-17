@@ -27,10 +27,14 @@ class Document
     #[Assert\Length(max: 1500)]
     private ?string $abstract = '';
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    #[ASSERT\Type(Types::STRING)]
-    private ?string $file = '';
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $file = '';    // Nom du fichier sur le disque
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $originalName = null;    // Nom original du fichier
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $mimeType = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -133,4 +137,10 @@ class Document
 
         return $this;
     }
+
+    public function getOriginalName(): ?string { return $this->originalName; }
+    public function setOriginalName(?string $originalName): self { $this->originalName = $originalName; return $this; }
+
+    public function getMimeType(): ?string { return $this->mimeType; }
+    public function setMimeType(?string $mimeType): self { $this->mimeType = $mimeType; return $this; }
 }
