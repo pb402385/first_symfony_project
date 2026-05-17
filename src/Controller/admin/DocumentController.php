@@ -27,6 +27,7 @@ final class DocumentController extends AbstractController
 
     }
 
+    /*
     #[Route('', name: 'index', methods: ['POST','GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
@@ -42,6 +43,28 @@ final class DocumentController extends AbstractController
             'user' => $user,
         ]);
 
+    }
+    */
+
+    #[Route('', name: 'index', methods: ['POST','GET'])]
+    public function index(Request $request, EntityManagerInterface $em): Response
+    {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser(); // peut être null
+
+        $page = $request->query->getInt('page', 1);
+        $limit = 5;
+
+        $documents = $this->repository->paginateDocuments($page, $limit);
+
+        return $this->render('document/index.html.twig', [
+            'controller_name' => 'DocumentController',
+            'title' => 'documents',
+            'documents' => $documents,
+            'user' => $user,
+        ]);
     }
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]

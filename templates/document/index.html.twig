@@ -35,15 +35,35 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Document</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>{{ knp_pagination_sortable(documents, 'ID', 'd.id') }}</th>
+                {% endif %}
+                <th>{{ knp_pagination_sortable(documents, 'Titre', 'd.title') }}</th>
+                <th>{{ knp_pagination_sortable(documents, 'Categorie', 'd.categoryId') }}</th>
+                <th>{{ knp_pagination_sortable(documents, 'Date Création', 'd.createdAt') }}</th>
+                <th>{{ knp_pagination_sortable(documents, 'Date modification', 'd.updatedAt') }}</th>
                 <th>Action</th>
             </tr>
         </thead>
 
         {% for document in documents %}
         <tr>
+            {% if is_granted('ROLE_ADMIN') %}
+                <td>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}"> {{ document.id }}</a>
+                </td>
+            {% endif %}
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ loop.index }} : {{ document.title }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.title }}</a>
+            </td>
+            <td>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.categoryId }}</a>
+            </td>
+            <td>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.createdAt|date("d/m/Y")  }}</a>
+            </td>
+            <td>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.updatedAt|date("d/m/Y")  }}</a>
             </td>
             <td class="user-index-actions-td">
                 <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">Voir</a>
@@ -68,6 +88,10 @@
         </tr>
         {% endif %}
     </table>
+
+    <div class="pagination_container">
+        {{ knp_pagination_render(documents) }}
+    </div>
 
 
     {% block javascripts %}
