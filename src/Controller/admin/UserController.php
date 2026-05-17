@@ -54,7 +54,6 @@ final class UserController extends AbstractController
         */
 
         $users = $this->repository->paginateUsers($page, $limit);
-        //dd($users, $users->count());
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',

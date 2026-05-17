@@ -20,14 +20,26 @@
         <table class="table user-index-list-table">
             <thead>
             <tr>
-                <th>Utilisateur</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>{{ knp_pagination_sortable(users, 'ID', 'u.id') }}</th>
+                {% endif %}
+                <th>{{ knp_pagination_sortable(users, 'Nom', 'u.name') }}</th>
+                <th>{{ knp_pagination_sortable(users, 'Pays', 'u.country') }}</th>
                 <th>Action</th>
             </tr>
             </thead>
             {% for user in users %}
                 <tr>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}"> {{ user.id }}</a>
+                        </td>
+                    {% endif %}
                     <td>
-                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ loop.index }} : {{ user.name }}</a>
+                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ user.name }}</a>
+                    </td>
+                    <td>
+                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}"> {{ user.country }}</a>
                     </td>
                     <td class="user-index-actions-td">
                         <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">Voir</a>
