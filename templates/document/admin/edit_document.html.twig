@@ -13,9 +13,9 @@
                     <div class="card-body p-5">
 
                         <div class="row">
-
+                            {{ form_start(form, {'method': 'POST','attr': {'data-turbo': 'false'}}) }}
                             {# Colonne gauche : Preview / Affichage du document #}
-                            <div class="col-lg-7">
+                            <div>
                                 {# Titre principal #}
                                 <h1 class="mb-4" style="font-weight: bold; text-align: center">{{ document.title }}</h1>
 
@@ -56,22 +56,33 @@
                                     {% else %}
                                         <p class="text-muted">Aucun fichier associé</p>
                                     {% endif %}
+                                    {{  form_row (form.file) }}
                                 </div>
                             </div>
 
                             {# Colonne droite : Informations #}
-                            <div class="col-lg-5">
+                            <div>
                                 <h5 class="text-primary mb-3" style="font-weight: bold; text-align: center">Informations du document</h5>
 
                                 <table class="table table-borderless">
                                     <tr>
                                         <th width="40%">Titre</th>
-                                        <td><strong>{{ document.title }}</strong></td>
+                                        <td>{{ form_row(form.title, {'label': false}) }}</td>
                                     </tr>
                                     <tr>
                                         <th>Catégorie</th>
                                         <td>
-                                            <span class="badge bg-secondary">{{ category|default('Non classé') }}</span>
+                                            <div>
+                                                <select name="category_select">
+                                                    {% for category in categories %}
+                                                        {% if category.id == categoryId %}
+                                                            <option value="{{ category.id }}" selected>{{ category.label }}</option>
+                                                        {% else %}
+                                                            <option value="{{ category.id }}" >{{ category.label }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -84,35 +95,20 @@
                                             <td>{{ document.userID|default('document.userID') }}</td>
                                         {% endif %}
                                     </tr>
-                                    <tr>
-                                        <th>Date de création</th>
-                                        <td>{{ document.createdAt|date("d/m/Y") }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Dernière modification</th>
-                                        <td>{{ document.updatedAt|date("d/m/Y") }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Nom du fichier</th>
-                                        <td><small class="text-muted">{{ document.file }}</small></td>
-                                    </tr>
                                 </table>
 
                                 {# Résumé / Description #}
                                 {% if document.abstract %}
                                     <h5 class="text-primary mt-4 mb-3" style="font-weight: bold; text-align: center">Résumé</h5>
-                                    <p class="text-muted">{{ document.abstract|nl2br }}</p>
+                                    {{  form_row (form.abstract, {'label': false}) }}
                                 {% endif %}
 
                                 {# Bouton de téléchargement #}
-                                <div class="mt-4">
-                                    <a href="{{ asset('uploads/documents/' ~ document.file) }}"
-                                       class="btn btn-success btn-lg w-100"
-                                       download>
-                                        <i class="fas fa-download"></i> Télécharger le fichier
-                                    </a>
+                                <div class="mt-4" style="text-align: center;">
+                                    {{  form_row (form.save) }}
                                 </div>
                             </div>
+                            {{ form_end(form) }}
                         </div>
                     </div>
                 </div>

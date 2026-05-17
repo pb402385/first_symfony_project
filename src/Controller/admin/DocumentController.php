@@ -58,17 +58,20 @@ final class DocumentController extends AbstractController
             $category = 'Non renseigné';
         }
 
+        $user = $em->getRepository(User::class)->find($document->getUserID());
+
         return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
             'title' => 'Page de '.$title,
             'document' => $document,
             'category' => $category,
+            'user' => $user,
         ]);
 
     }
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET','POST'])]
-    public function edit(Document $document, Request $request, EntityManagerInterface $em): Response
+    public function edit(Document $document, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         $user = $this->getUser();
         if ($user) {
@@ -84,9 +87,59 @@ final class DocumentController extends AbstractController
         // on recupère les catégories nécessaires à l'affichage du form
         $categoryId = $document->getCategoryId();
         $categories = $em->getRepository(Category::class)->findAll();
+
+        $user = $em->getRepository(User::class)->find($document->getUserID());
+
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+
+            $uploadedFile = $form->get('file')->getData();
+
+            if ($uploadedFile) {
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+
+                $uploadDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/documents';
+
+                // Création du dossier si nécessaire
+                if (!is_dir($uploadDirectory)) {
+                    mkdir($uploadDirectory, 0775, true);
+                }
+
+                $destination = $uploadDirectory . '/' . $newFilename;
+
+                try {
+                    // SOLUTION LA PLUS ROBUSTE : Lecture en mémoire
+                    $fileContent = file_get_contents($uploadedFile->getPathname());
+
+                    if ($fileContent === false) {
+                        throw new \Exception('Impossible de lire le fichier temporaire');
+                    }
+
+                    // Écriture du fichier
+                    if (file_put_contents($destination, $fileContent) === false) {
+                        throw new \Exception('Impossible d\'écrire le fichier sur le disque');
+                    }
+
+                    // Mise à jour de l'entité
+                    $document->setFile($newFilename);
+                    $document->setOriginalName($uploadedFile->getClientOriginalName());
+                    $document->setMimeType($uploadedFile->getMimeType());
+
+                } catch (\Exception $e) {
+                    $this->addFlash('danger', 'Erreur lors de l\'upload du fichier : ' . $e->getMessage());
+                    return $this->render('document/admin/edit_document.html.twig', [
+                        'title' => 'Edition de '.$document->getTitle(),
+                        'document' => $document,
+                        'categories' => $categories,
+                        'categoryId' => $categoryId,
+                        'form' => $form->createView(),
+                        'user' => $user,
+                    ]);
+                }
+            }
 
             //on recupère la catégorie "category_select"
             $categoryId = $request->request->get('category_select');
@@ -97,12 +150,13 @@ final class DocumentController extends AbstractController
             $this->addFlash('success',"Le document a bien été modifié");
             return $this->redirectToRoute('document.index');
         }
-        return $this->render('document/admin/edit.html.twig', [
+        return $this->render('document/admin/edit_document.html.twig', [
             'title' => 'Edition de '.$document->getTitle(),
             'document' => $document,
             'categories' => $categories,
             'categoryId' => $categoryId,
             'form' => $form->createView(),
+            'user' => $user,
         ]);
     }
 
