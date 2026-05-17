@@ -26,9 +26,9 @@
                                 </div>
                                 <img src="data:{{ user.imageMime|default('image/jpeg') }};base64,{{ image|base64_encode }}"
                                      id="image-preview"
-                                     alt="Photo de {{ user.name }}"
+                                     alt="Photo de profil"
                                      class="rounded-circle border border-3 border-white shadow-sm"
-                                     style="width: 180px; height: 180px; object-fit: cover; margin: 0 auto; display:none">
+                                     style="width: 180px; height: 180px; object-fit: cover; margin: 0 auto; display:none;">
                             {% endif %}
                             {{  form_row (form.image) }}
                         </div>
@@ -82,18 +82,19 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageInput = document.getElementById('{{ form.image.vars.id }}');
+        setTimeout(() => {
+
+            const imageInput = document.getElementById('user_image');
 
             if (imageInput) {
                 imageInput.addEventListener('change', function(e) {
+                    alert('onchange image');
                     const file = e.target.files[0];
 
                     if (file) {
                         let previewImg = document.getElementById('image-preview');
                         // Vérification que c'est bien une image
                         if (!file.type.startsWith('image/')) {
-                            alert("Veuillez sélectionner une image valide");
                             return;
                         }
 
@@ -110,10 +111,12 @@
                         let noImg = document.getElementById('noImg');
                         if(noImg !== null && noImg !== undefined){
                             noImg.remove();
+                            previewImg.style.display = 'block';
                         }
                     }
                 });
             }
-        });
+
+        }, 1000);
     </script>
 {% endblock %}
