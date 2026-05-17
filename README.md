@@ -313,7 +313,9 @@ php bin/console app:clean-revoked-tokens
   - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
 
     
-+ créer un file system pour stocker les documents
++ page show document stylée
++ idem pour edit avec remplacement du fichier dans le FS
++ liste des documents uploadés sur la partie profil
 + visionneuse pour les documents
 + 
 + idéalement pouvoir noter un document

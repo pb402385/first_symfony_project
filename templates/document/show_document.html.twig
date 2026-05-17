@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ document.title }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <a class="btn-retour" href="{{ url('document.index') }}">RETOUR</a>
+
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+
+                        <div class="row">
+
+                            {# Colonne gauche : Preview / Affichage du document #}
+                            <div class="col-lg-7">
+                                {# Titre principal #}
+                                <h1 class="mb-4" style="font-weight: bold; text-align: center">{{ document.title }}</h1>
+
+                                <div class="document-preview border rounded p-3 bg-light text-center mb-4" style="min-height: 400px; display: flex; align-items: center; justify-content: center;">
+
+                                    {% if document.file is not null %}
+                                        {% set extension = document.file|split('.')|last|lower %}
+
+                                        {# Si c'est une image #}
+                                        {% if extension in ['jpg', 'jpeg', 'png', 'gif', 'webp'] %}
+                                            <img src="{{ asset('uploads/documents/' ~ document.file) }}"
+                                                 alt="{{ document.title }}"
+                                                 class="img-fluid rounded shadow-sm"
+                                                 style="max-height: 500px;">
+
+                                            {# Si c'est un PDF #}
+                                        {% elseif extension == 'pdf' %}
+                                            <div class="text-center">
+                                                <i class="fas fa-file-pdf fa-10x text-danger mb-3"></i>
+                                                <br>
+                                                <a href="{{ asset('uploads/documents/' ~ document.file) }}"
+                                                   class="btn btn-danger" target="_blank">
+                                                    <i class="fas fa-download"></i> Ouvrir le PDF
+                                                </a>
+                                            </div>
+
+                                            {# Autres fichiers #}
+                                        {% else %}
+                                            <div class="text-center">
+                                                <i class="fas fa-file fa-10x text-muted mb-3"></i>
+                                                <br>
+                                                <a href="{{ asset('uploads/documents/' ~ document.file) }}"
+                                                   class="btn btn-primary" download>
+                                                    <i class="fas fa-download"></i> Télécharger le fichier
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="text-muted">Aucun fichier associé</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {# Colonne droite : Informations #}
+                            <div class="col-lg-5">
+                                <h5 class="text-primary mb-3" style="font-weight: bold; text-align: center">Informations du document</h5>
+
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th width="40%">Titre</th>
+                                        <td><strong>{{ document.title }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Catégorie</th>
+                                        <td>
+                                            <span class="badge bg-secondary">{{ category|default('Non classé') }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Créé par</th>
+                                        <td>{{ document.userID|default('document.userID') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date de création</th>
+                                        <td>{{ document.createdAt|date("d/m/Y") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Dernière modification</th>
+                                        <td>{{ document.updatedAt|date("d/m/Y") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Nom du fichier</th>
+                                        <td><small class="text-muted">{{ document.file }}</small></td>
+                                    </tr>
+                                </table>
+
+                                {# Résumé / Description #}
+                                {% if document.abstract %}
+                                    <h5 class="text-primary mt-4 mb-3" style="font-weight: bold; text-align: center">Résumé</h5>
+                                    <p class="text-muted">{{ document.abstract|nl2br }}</p>
+                                {% endif %}
+
+                                {# Bouton de téléchargement #}
+                                <div class="mt-4">
+                                    <a href="{{ asset('uploads/documents/' ~ document.file) }}"
+                                       class="btn btn-success btn-lg w-100"
+                                       download>
+                                        <i class="fas fa-download"></i> Télécharger le fichier
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

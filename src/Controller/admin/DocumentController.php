@@ -58,7 +58,7 @@ final class DocumentController extends AbstractController
             $category = 'Non renseigné';
         }
 
-        return $this->render('document/show.html.twig', [
+        return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
             'title' => 'Page de '.$title,
             'document' => $document,

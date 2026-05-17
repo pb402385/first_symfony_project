@@ -3,13 +3,10 @@
 {% block title %}Profil de {{ user.name|default(user.email) }}{% endblock %}
 
 {% block body %}
-
-    <a class="btn-retour" href="{{ url('user.index') }}">RETOUR</a>
-
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-
+                <a class="btn-retour" href="{{ url('user.index') }}">RETOUR</a>
                 <div class="card shadow-lg border-0">
                     <div class="card-body p-5">
                         {{ form_start(form, {'method': 'POST','attr': {'data-turbo': 'false'}}) }}
