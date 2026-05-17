@@ -20,10 +20,15 @@
                                      class="rounded-circle border border-3 border-white shadow-sm"
                                      style="width: 180px; height: 180px; object-fit: cover; margin: 0 auto;">
                             {% else %}
-                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto shadow-sm"
+                                <div id="noImg" class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto shadow-sm"
                                      style="width: 180px; height: 180px; font-size: 4rem;">
                                     👤
                                 </div>
+                                <img src="data:{{ user.imageMime|default('image/jpeg') }};base64,{{ image|base64_encode }}"
+                                     id="image-preview"
+                                     alt="Photo de {{ user.name }}"
+                                     class="rounded-circle border border-3 border-white shadow-sm"
+                                     style="width: 180px; height: 180px; object-fit: cover; margin: 0 auto; display:none">
                             {% endif %}
                             {{  form_row (form.image) }}
                         </div>
@@ -100,6 +105,12 @@
                         };
 
                         reader.readAsDataURL(file);
+
+                        // On masque l'image par default
+                        let noImg = document.getElementById('noImg');
+                        if(noImg !== null && noImg !== undefined){
+                            noImg.remove();
+                        }
                     }
                 });
             }

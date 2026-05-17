@@ -35,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column]
-    #[Assert\Length(min: 5)]
+    #[Assert\Length(min: 3)]
     #[Assert\NotBlank(groups: ['registration'])]   // Uniquement lors de l'inscription
     private ?string $password = null;
 
