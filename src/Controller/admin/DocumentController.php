@@ -111,6 +111,23 @@ final class DocumentController extends AbstractController
                 $destination = $uploadDirectory . '/' . $newFilename;
 
                 try {
+                    // Suppression de l'ancien fichier
+                    if ($document->getFile()) {
+                        $filePath = $this->getParameter('kernel.project_dir')
+                            . '/public/uploads/documents/'
+                            . $document->getFile();
+
+                        if (file_exists($filePath)) {
+                            try {
+                                unlink($filePath);   // Supprime le fichier
+                            } catch (\Exception $e) {
+                                $this->addFlash('danger', 'Erreur lors de la suppression de l\'ancien fichier : ' . $e->getMessage());
+                                return $this->redirectToRoute('document.index');
+                            }
+                        }
+                    }
+
+
                     // SOLUTION LA PLUS ROBUSTE : Lecture en mémoire
                     $fileContent = file_get_contents($uploadedFile->getPathname());
 
