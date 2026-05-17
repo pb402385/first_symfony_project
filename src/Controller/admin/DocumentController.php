@@ -107,38 +107,6 @@ final class DocumentController extends AbstractController
     }
 
 
-    #[Route('/add', name: 'add', methods: ['GET','POST'])]
-    public function add(Request $request, EntityManagerInterface $em): Response
-    {
-
-        $document = new Document();
-        // on recupère les catégories nécessaires à l'affichage du form
-        $categories = $em->getRepository(Category::class)->findAll();
-        $form = $this->createForm(DocumentType::class, $document);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-
-            $document->setCreatedAt(new \DateTimeImmutable());
-            $document->setUpdatedAt(new \DateTime());
-
-            //on recupère la catégorie "category_select"
-            $categoryId = $request->request->get('category_select');
-            $document->setCategoryId((int)$categoryId);
-            $document->setUserID((int)$this->getUser()->getUserIdentifier());
-            $em->persist($document);
-            $em->flush();
-            $this->addFlash('success',"Le document a bien été créé");
-            return $this->redirectToRoute('document.index');
-        }
-        return $this->render('document/admin/add.html.twig', [
-            'title' => 'Création d\'un document',
-            'document' => $document,
-            'categories' => $categories,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/add_to_fs', name: 'add.to.fs', methods: ['GET','POST'])]
     public function addToFS(
         Request $request,
@@ -248,6 +216,22 @@ final class DocumentController extends AbstractController
                 $this->addFlash('danger',"Vous n'avez pas le droit de supprimer ce document!");
                 //throw new AuthenticationException('l\'utilisateur n\a pas le droit de réaliser cette action!');
                 return $this->redirectToRoute('document.index');
+            }
+        }
+
+        // Suppression du fichier physique
+        if ($document->getFile()) {
+            $filePath = $this->getParameter('kernel.project_dir')
+                . '/public/uploads/documents/'
+                . $document->getFile();
+
+            if (file_exists($filePath)) {
+                try {
+                    unlink($filePath);   // Supprime le fichier
+                } catch (\Exception $e) {
+                    $this->addFlash('danger', 'Erreur lors de la suppression du fichier : ' . $e->getMessage());
+                    return $this->redirectToRoute('document.index');
+                }
             }
         }
 
