@@ -21,23 +21,6 @@ final class UserController extends AbstractController
 
     }
 
-    /*
-    #[Route('', name: 'index', methods: ['POST','GET'])]
-    public function index(Request $request, EntityManagerInterface $em): Response
-    {
-        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $users = $this->repository->findAll();
-
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-            'title' => 'Utilisateurs',
-            'users' => $users,
-        ]);
-    }
-    */
-
     #[Route('', name: 'index', methods: ['POST','GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {

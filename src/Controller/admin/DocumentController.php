@@ -27,24 +27,6 @@ final class DocumentController extends AbstractController
 
     }
 
-    /*
-    #[Route('', name: 'index', methods: ['POST','GET'])]
-    public function index(Request $request, EntityManagerInterface $em): Response
-    {
-
-        $user = $this->getUser(); // peut être null
-
-        $documents = $this->repository->findAll();
-
-        return $this->render('document/index.html.twig', [
-            'controller_name' => 'DocumentController',
-            'title' => 'Liste des documents',
-            'documents' => $documents,
-            'user' => $user,
-        ]);
-
-    }
-    */
 
     #[Route('', name: 'index', methods: ['POST','GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
