@@ -7,10 +7,10 @@
     <br/>
 
     <div class="category-form-add-title-ctn">
-        <h1 class="category-form-add-title">Création d\\'une catégorie</h1>
+        <h1 class="category-form-add-title">Création d'une catégorie</h1>
     </div>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'method': 'POST','attr': {'data-turbo': 'false'}}) }}
 
     <div class="category-form-add-b2">
         {{  form_row (form.label) }}
