@@ -208,3 +208,21 @@ a.user-index-list-a{
     /* Optionnel : espace entre les cellules */
     gap: 10px;
 }
+
+.document-list-grid-3x3 {
+    display: grid;
+    /* 3 colonnes de largeur égale (1fr chacune) */
+    grid-template-columns: repeat(3, 1fr);
+    /* Optionnel : espace entre les cellules */
+    gap: 10px;
+}
+
+.document-list{
+    display: flex;
+    flex-direction: column;
+}
+
+.item-document-list{
+    display: flex;
+    flex-direction: row;
+}
