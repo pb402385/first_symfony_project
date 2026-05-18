@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use App\Validator\BanWordPhp;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -19,6 +21,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Document::class)]
+    private Collection $documents;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 3)]
@@ -68,6 +73,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     private ?UploadedFile $imageFile = null;   // Champ non mappé
+
+
+    public function __construct()
+    {
+        $this->documents = new ArrayCollection();
+    }
+
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
 
     public function getId(): ?int
     {

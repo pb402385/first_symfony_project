@@ -42,12 +42,26 @@ class Document
     #[ORM\Column]
     private ?\DateTime $updatedAt = null;
 
-    #[ORM\Column]
-    #[Assert\NotBlank]
+
+    #[ORM\Column(nullable: true)]
     private ?int $userID = -1;
 
     #[ORM\Column(nullable: true)]
     private ?int $categoryId = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'documents')]
+    private ?User $user = null;
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -125,6 +139,7 @@ class Document
 
         return $this;
     }
+
 
     public function getCategoryId(): ?int
     {
