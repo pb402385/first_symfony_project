@@ -73,15 +73,7 @@
                                         <th>Catégorie</th>
                                         <td>
                                             <div>
-                                                <select name="category_select">
-                                                    {% for category in categories %}
-                                                        {% if category.id == categoryId %}
-                                                            <option value="{{ category.id }}" selected>{{ category.label }}</option>
-                                                        {% else %}
-                                                            <option value="{{ category.id }}" >{{ category.label }}</option>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </select>
+                                                {{ form_row(form.category, {'label': false}) }}
                                             </div>
                                         </td>
                                     </tr>

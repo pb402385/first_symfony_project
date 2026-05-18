@@ -53,24 +53,15 @@ final class DocumentController extends AbstractController
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
 
-        $document = $this->repository->find($id);
+        //$document = $this->repository->find($id);
+        $document = $this->repository->findWithCategory($id);
+        //dd($document);
         $title = $document->getTitle();
-
-        $categoryId = $document->getCategoryId();
-        if($categoryId !== null){
-            $category = $em->getRepository(Category::class)->find($categoryId)->getLabel();
-        } else {
-            $category = 'Non renseigné';
-        }
-
-        //$user = $em->getRepository(User::class)->find($document->getUserID());
-        //$userFromDocument = $document->getUser();
 
         return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
             'title' => 'Page de '.$title,
             'document' => $document,
-            'category' => $category,
         ]);
 
     }
@@ -89,9 +80,6 @@ final class DocumentController extends AbstractController
         }
 
         $form = $this->createForm(DocumentType::class, $document);
-        // on recupère les catégories nécessaires à l'affichage du form
-        $categoryId = $document->getCategoryId();
-        $categories = $em->getRepository(Category::class)->findAll();
 
         $form->handleRequest($request);
 
@@ -153,16 +141,10 @@ final class DocumentController extends AbstractController
                     return $this->render('document/admin/edit_document.html.twig', [
                         'title' => 'Edition de '.$document->getTitle(),
                         'document' => $document,
-                        'categories' => $categories,
-                        'categoryId' => $categoryId,
                         'form' => $form->createView(),
                     ]);
                 }
             }
-
-            //on recupère la catégorie "category_select"
-            $categoryId = $request->request->get('category_select');
-            $document->setCategoryId($categoryId);
 
             //$em->persist($document);
             $em->flush();
@@ -172,8 +154,6 @@ final class DocumentController extends AbstractController
         return $this->render('document/admin/edit_document.html.twig', [
             'title' => 'Edition de '.$document->getTitle(),
             'document' => $document,
-            'categories' => $categories,
-            'categoryId' => $categoryId,
             'form' => $form->createView(),
             'user' => $user,
         ]);
@@ -190,7 +170,6 @@ final class DocumentController extends AbstractController
 
         $document = new Document();
         // on recupère les catégories nécessaires à l'affichage du form
-        $categories = $em->getRepository(Category::class)->findAll();
         $form = $this->createForm(DocumentType::class, $document);
         $form->handleRequest($request);
 
@@ -237,7 +216,6 @@ final class DocumentController extends AbstractController
                             'form' => $form->createView(),
                             'title' => 'Création d\'un document',
                             'document' => $document,
-                            'categories' => $categories,
                             ]);
                     }
                 }
@@ -245,12 +223,6 @@ final class DocumentController extends AbstractController
                 $document->setCreatedAt(new \DateTimeImmutable());
 
                 $document->setUpdatedAt(new \DateTime());
-
-                //on recupère la catégorie "category_select"
-                $categoryId = $request->request->get('category_select');
-                if ($categoryId) {
-                    $document->setCategoryId((int)$categoryId);
-                }
 
                 // Utilisateur connecté
                 //$document->setUserID((int)$this->getUser()->getId());   // Utilise getId() de préférence
@@ -272,7 +244,6 @@ final class DocumentController extends AbstractController
         return $this->render('document/admin/add.html.twig', [
             'title' => 'Création d\'un document',
             'document' => $document,
-            'categories' => $categories,
             'form' => $form,
         ]);
     }

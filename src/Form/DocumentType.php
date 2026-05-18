@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Document;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -19,11 +21,21 @@ class DocumentType extends AbstractType
         $builder
             ->add('title', TextType::class, ['label' => 'Nom'])
             ->add('abstract')
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'label',           // Le champ affiché dans le select
+                'label' => 'Catégorie',
+                'placeholder' => 'Sélectionnez une catégorie',
+                'required' => false,                 // ou true selon ton besoin
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+            ])
             //->add('file')
             ->add('file', FileType::class, [
                 'label' => 'Fichier à uploader',
                 'mapped' => false,           // Très important
-                'required' => true,
+                'required' => false,        // si on a déjà un fichier, pas besoin qu'il soit obligatoire
                 'constraints' => [
                     new File([
                         'maxSize' => '15M',      // Tu peux augmenter si besoin

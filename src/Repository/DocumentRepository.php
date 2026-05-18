@@ -28,4 +28,16 @@ class DocumentRepository extends ServiceEntityRepository
         );
     }
 
+
+    public function findWithCategory(int $id): ?Document
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.category', 'c')
+            ->addSelect('c')
+            ->where('d.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult();
+    }
+
 }

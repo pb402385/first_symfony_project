@@ -58,10 +58,10 @@
                 <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.title }}</a>
             </td>
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.userId }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.user.email }}</a>
             </td>
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.categoryId }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.category.label }}</a>
             </td>
             <td>
                 <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.createdAt|date("d/m/Y")  }}</a>
