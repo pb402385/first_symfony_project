@@ -48,14 +48,6 @@ final class CategoryController extends AbstractController
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
-            // Utile pour débug quand le form ne passe pas les validateurs
-            dump([
-                'Submitted' => $form->isSubmitted(),
-                'Valid' => $form->isValid(),
-                'Errors' => $form->getErrors(true, true), // Voir toutes les erreurs
-            ]);
-        }
         if($form->isSubmitted() && $form->isValid()){
             $category->setCreatedAt(new \DateTimeImmutable());
             $category->setUpdatedAt(new \DateTime());
