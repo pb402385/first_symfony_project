@@ -52,6 +52,9 @@ class Document
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'documents')]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'documents')]
+    private ?Category $category = null;
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -60,6 +63,17 @@ class Document
     public function setUser(?User $user): self
     {
         $this->user = $user;
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
         return $this;
     }
 

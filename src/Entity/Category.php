@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -24,6 +26,14 @@ class Category
 
     #[ORM\Column]
     private ?\DateTime $updatedAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Document::class)]
+    private Collection $documents;
+
+    public function __construct()
+    {
+        $this->documents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -63,6 +73,33 @@ class Category
     {
         $this->updatedAt = $updatedAt;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Document>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): self
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setCategory($this);
+        }
+        return $this;
+    }
+
+    public function removeDocument(Document $document): self
+    {
+        if ($this->documents->removeElement($document)) {
+            if ($document->getCategory() === $this) {
+                $document->setCategory(null);
+            }
+        }
         return $this;
     }
 
