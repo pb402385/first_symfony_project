@@ -63,14 +63,14 @@ final class DocumentController extends AbstractController
             $category = 'Non renseigné';
         }
 
-        $user = $em->getRepository(User::class)->find($document->getUserID());
+        //$user = $em->getRepository(User::class)->find($document->getUserID());
+        //$userFromDocument = $document->getUser();
 
         return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
             'title' => 'Page de '.$title,
             'document' => $document,
             'category' => $category,
-            'user' => $user,
         ]);
 
     }
@@ -92,8 +92,6 @@ final class DocumentController extends AbstractController
         // on recupère les catégories nécessaires à l'affichage du form
         $categoryId = $document->getCategoryId();
         $categories = $em->getRepository(Category::class)->findAll();
-
-        $user = $em->getRepository(User::class)->find($document->getUserID());
 
         $form->handleRequest($request);
 
@@ -158,7 +156,6 @@ final class DocumentController extends AbstractController
                         'categories' => $categories,
                         'categoryId' => $categoryId,
                         'form' => $form->createView(),
-                        'user' => $user,
                     ]);
                 }
             }
@@ -256,9 +253,9 @@ final class DocumentController extends AbstractController
                 }
 
                 // Utilisateur connecté
-                if ($this->getUser()) {
-                    $document->setUserID((int)$this->getUser()->getId());   // Utilise getId() de préférence
-                }
+                //$document->setUserID((int)$this->getUser()->getId());   // Utilise getId() de préférence
+                $document->setUser($this->getUser());
+
 
                 $em->persist($document);
                 $em->flush();

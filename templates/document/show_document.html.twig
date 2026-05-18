@@ -76,13 +76,9 @@
                                     </tr>
                                     <tr>
                                         <th>Créé par</th>
-                                        {% if user %}
-                                            <td>
-                                                <a style="font-weight: bold;font-style: italic;color: blue;" href="{{ path('user.show', {id:user.id}) }}">{{ user.email|default('user.email') }}</a>
-                                            </td>
-                                        {% else %}
-                                            <td>{{ document.userID|default('document.userID') }}</td>
-                                        {% endif %}
+                                        <td>
+                                            <a style="font-weight: bold;font-style: italic;color: blue;" href="{{ path('user.show', {id:document.user.id}) }}">{{ document.user.email|default('non renseigné') }}</a>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Date de création</th>
