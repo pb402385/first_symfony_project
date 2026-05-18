@@ -68,13 +68,21 @@ final class UserController extends AbstractController
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $user = $this->repository->find($id);
+        // On récupère l'user ainsi que tous les documents associé à l'user
+        $userWithDocuments = $this->repository->findUserAndDocumentsByUserID($id);
+
+        $user = $userWithDocuments[0];
+
+        $documents = $user->getDocuments()->toArray();
+
+        //dd($user, $userWithDocuments, $documents);
 
         return $this->render('user/show_profil.html.twig', [
             'controller_name' => 'UserController',
             'title' => 'Page de '.$user->getName(),
             'user' => $user,
             'image' => $user->getImage(),
+            'documents' => $documents,
         ]);
     }
 

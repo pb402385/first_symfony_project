@@ -85,6 +85,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->documents;
     }
 
+    public function addDocument(Document $document): static
+    {
+        if(!$this->documents->contains($document)){
+            $this->documents->add($document);
+            $document->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeDocument(Document $document): static
+    {
+        if($this->documents->removeElement($document)){
+            // set the owning side to null (unless already changed)
+            if($document->getUser() === $this){
+                $document->setUser(null);
+            }
+        }
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

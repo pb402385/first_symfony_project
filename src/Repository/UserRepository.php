@@ -75,4 +75,19 @@ class UserRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return User[] Returns an array of User objects with Collection of all his attached documents
+     */
+    public function findUserAndDocumentsByUserID($value): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.documents', 'd')
+            ->addSelect('d')                    // Fetch Join
+            ->where('u.id = :id')
+            ->setParameter('id', $value)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }
