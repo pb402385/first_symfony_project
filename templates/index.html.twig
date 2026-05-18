@@ -6,7 +6,10 @@
     <div class="home-title">
         <h1>Accueil</h1>
 
-        <p>Bienvenue sur mon site</p>
+        <p class="mb-4">
+            Bienvenue sur DocShare, nous sommes le
+            <strong>{{ "now"|date('l d F Y') }}</strong>
+        </p>
     </div>
 
     {% if token|default %}
