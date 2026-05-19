@@ -314,3 +314,4 @@ php bin/console app:clean-revoked-tokens
 
 + idéalement pouvoir noter un document
 + idealement pouvoir mettre un document favori
++ Recherche intelligente
