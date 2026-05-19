@@ -55,6 +55,8 @@ final class DocumentController extends AbstractController
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
 
+        $user = $this->getUser();
+
         //$document = $this->repository->find($id);
         $document = $this->repository->findWithCategory($id);
         //dd($document);
@@ -65,12 +67,21 @@ final class DocumentController extends AbstractController
         $count_notes   = $stats['total'] ?? 0;
         //dd($stats, $average_notes, $count_notes);
 
+        // Vérifier si l'utilisateur a déjà noté ce document
+        $existingNote = $em->getRepository(Note::class)->findOneBy([
+            'user' => $user,
+            'document' => $document
+        ]);
+
+        //dd($existingNote);
+
         return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
             'title' => 'Page de '.$title,
             'document' => $document,
             'average_notes' => $average_notes,
             'count_notes' => $count_notes,
+            'existing_note' => $existingNote,
         ]);
 
     }
@@ -323,9 +334,14 @@ final class DocumentController extends AbstractController
             $em->persist($note);
             $em->flush();
 
-            $this->addFlash('success', 'Merci pour votre note !');
-            //return $this->redirectToRoute('document.show', ['id' => $document->getId()]);
-            return $this->redirectToRoute('document.index');
+            if( $existingNote ){
+                $this->addFlash('success', 'Merci votre avis a bien été modifié !');
+            } else {
+                $this->addFlash('success', 'Votre avis a bien été enregistré !');
+            }
+
+            return $this->redirectToRoute('document.show', ['id' => $document->getId()]);
+            //return $this->redirectToRoute('document.index');
         }
 
         return $this->render('document/note/add_or_edit.html.twig', [

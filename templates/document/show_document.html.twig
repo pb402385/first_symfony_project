@@ -120,7 +120,12 @@
                                 <div class="mt-4">
                                     <a href="{{ path('document.note', {id:document.id}) }}"
                                        class="btn btn-lg w-100">
-                                        <i class="fa-solid fa-feather"></i> Notez ou commentez le document
+                                        <i class="fa-solid fa-feather"></i>
+                                        {% if existing_note %}
+                                            Modifier votre note ou commentaire
+                                        {% else %}
+                                            Noter ou commenter le document
+                                        {% endif %}
                                     </a>
                                 </div>
                             </div>

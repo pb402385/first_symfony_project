@@ -61,3 +61,15 @@
     flex-direction: column;
 }
 
+#note-text-comment {
+    min-width: 400px;
+}
+
+#block-form-note{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+

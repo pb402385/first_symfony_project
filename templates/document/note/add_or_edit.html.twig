@@ -6,13 +6,9 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-
-                <a href="{{ path('document.show', {id: document.id}) }}" class="btn btn-outline-secondary mb-4">
-                    ← Retour au document
-                </a>
-
+                <a class="btn-retour" href="{{ path('document.show', {id: document.id}) }}">RETOUR</a>
                 <div class="card shadow">
-                    <div class="card-header bg-white">
+                    <div class="card-header bg-white" style="font-weight: bold; text-align: center">
                         <h4 class="mb-0">Noter : {{ document.title }}</h4>
                     </div>
 
@@ -20,25 +16,28 @@
                         {{ form_start(form, {'method': 'POST','attr': {'data-turbo': 'false'}}) }}
 
                         {# Note en étoiles #}
-                        <div class="mb-4">
-                            {{ form_label(form.rating, 'Votre note') }}
-                            <div class="star-rating">
-                                {{ form_widget(form.rating) }}
+                        <div id="block-form-note">
+                            <div class="mb-4" id="note-check-star">
+                                <h5 class="text-primary mb-3" style="font-weight: bold;">Note</h5>
+                                <div class="star-rating">
+                                    {{ form_widget(form.rating) }}
+                                </div>
+                                {{ form_errors(form.rating) }}
                             </div>
-                            {{ form_errors(form.rating) }}
+
+                            {# Commentaire #}
+                            <div class="mb-4" id="note-text-comment">
+                                <h5 class="text-primary mb-3" style="font-weight: bold;">Commentaire (optionnel)</h5>
+                                {{ form_widget(form.comment, {
+                                    'attr': {
+                                        'rows': 5,
+                                        'placeholder': 'Que pensez-vous de ce document ?'
+                                    }
+                                }) }}
+                                {{ form_errors(form.comment) }}
+                            </div>
                         </div>
 
-                        {# Commentaire #}
-                        <div class="mb-4">
-                            {{ form_label(form.comment, 'Commentaire (optionnel)') }}
-                            {{ form_widget(form.comment, {
-                                'attr': {
-                                    'rows': 5,
-                                    'placeholder': 'Que pensez-vous de ce document ?'
-                                }
-                            }) }}
-                            {{ form_errors(form.comment) }}
-                        </div>
 
                         <div class="d-grid">
                             {{ form_widget(form.save, {

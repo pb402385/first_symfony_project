@@ -4,7 +4,7 @@
             {% if i <= rating %}
                 <span class="star full">★</span>
             {% elseif i - rating < 1 and i - rating > 0 %}
-                <span class="star half">★</span>
+                <span class="star half" style="opacity: {{ (i - rating)*100 }};">★</span>
             {% else %}
                 <span class="star empty">★</span>
             {% endif %}
