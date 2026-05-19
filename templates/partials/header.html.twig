@@ -30,7 +30,6 @@
                         // On force l'envoit du JWT token lors de la déconnexion
                         function revokeTokenAndDisconnect() {
                             const token = localStorage.getItem('jwt_token'); // ou le nom que tu utilises
-                            debugger;
                             if (token) {
                                 // Ajoute le token dans le header de la requête de déconnexion
                                 fetch(window.location.origin + '/revokeToken', {
@@ -40,7 +39,6 @@
                                     }
                                 }).then(() => {
                                     // Redirection manuelle après envoi
-                                    debugger;
                                     localStorage.removeItem('jwt_token');
                                     window.location.href = window.location.origin + '/logout';
                                 });
