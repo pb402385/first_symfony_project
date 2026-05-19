@@ -6,6 +6,8 @@ use App\Repository\DocumentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 
 #[ORM\Entity(repositoryClass: DocumentRepository::class)]
@@ -54,6 +56,19 @@ class Document
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'documents')]
     private ?Category $category = null;
+
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: Note::class)]
+    private Collection $notes;
+
+    public function __construct()
+    {
+        $this->notes = new ArrayCollection();
+    }
+
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
 
     public function getUser(): ?User
     {

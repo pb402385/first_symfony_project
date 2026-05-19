@@ -74,10 +74,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?UploadedFile $imageFile = null;   // Champ non mappé
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Note::class)]
+    private Collection $notes;
+
 
     public function __construct()
     {
         $this->documents = new ArrayCollection();
+        $this->notes = new ArrayCollection();
+    }
+
+    // Méthodes helper
+    public function getNotes(): Collection {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): self
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes->add($note);
+            $note->setUser($this);          // Synchronisation du côté inverse
+        }
+        return $this;
+    }
+
+    public function removeNote(Note $note): self
+    {
+        if ($this->notes->removeElement($note)) {
+            // On casse la relation si l'utilisateur est bien celui de la note
+            if ($note->getUser() === $this) {
+                $note->setUser(null);
+            }
+        }
+        return $this;
     }
 
     public function getDocuments(): Collection
