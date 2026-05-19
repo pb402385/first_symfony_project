@@ -4,8 +4,10 @@ namespace App\Controller\admin;
 
 use App\Entity\Category;
 use App\Entity\Document;
+use App\Entity\Note;
 use App\Entity\User;
 use App\Form\DocumentType;
+use App\Form\NoteType;
 use App\Form\UserType;
 use App\Repository\DocumentRepository;
 use App\Security\JwtTokenHandler;
@@ -57,6 +59,9 @@ final class DocumentController extends AbstractController
         $document = $this->repository->findWithCategory($id);
         //dd($document);
         $title = $document->getTitle();
+
+        $notes = $em->getRepository(Note::class)->getRatingStats($document);
+        //dd($notes, $document->getId());
 
         return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
@@ -283,5 +288,45 @@ final class DocumentController extends AbstractController
         $em->flush();
         $this->addFlash('success',"Le document a bien été supprimé");
         return $this->redirectToRoute('document.index');
+    }
+
+
+    #[Route('/{id}/note', name: 'note', requirements: ['id' => Requirement::DIGITS], methods: ['GET','POST'])]
+    public function note(
+        Document $document,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        // Vérifier si l'utilisateur a déjà noté ce document
+        $existingNote = $em->getRepository(Note::class)->findOneBy([
+            'user' => $user,
+            'document' => $document
+        ]);
+
+        $note = $existingNote ?: new Note();
+        $note->setDocument($document);
+        $note->setUser($user);
+
+        $form = $this->createForm(NoteType::class, $note);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($note);
+            $em->flush();
+
+            $this->addFlash('success', 'Merci pour votre note !');
+            //return $this->redirectToRoute('document.show', ['id' => $document->getId()]);
+            return $this->redirectToRoute('document.index');
+        }
+
+        return $this->render('document/note/new.html.twig', [
+            'form' => $form->createView(),
+            'document' => $document,
+        ]);
     }
 }

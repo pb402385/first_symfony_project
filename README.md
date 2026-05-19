@@ -313,5 +313,6 @@ php bin/console app:clean-revoked-tokens
   - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
 
 + idéalement pouvoir noter un document
++ documents sortByNote
 + idealement pouvoir mettre un document favori
 + Recherche intelligente
