@@ -128,6 +128,15 @@
                                         {% endif %}
                                     </a>
                                 </div>
+
+                                {# Bouton pour voir tous les avis #}
+                                <div class="mt-4">
+                                    <a href="{{ path('document.avis', {id:document.id}) }}"
+                                       class="btn btn-lg w-100">
+                                        <i class="fa-solid fa-feather"></i>
+                                        Voir tous les avis
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

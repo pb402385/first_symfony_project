@@ -73,3 +73,9 @@
     flex-wrap: nowrap;
 }
 
+.note-all-container {
+    max-width: 200px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+

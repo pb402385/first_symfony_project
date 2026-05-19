@@ -85,6 +85,7 @@ class NoteRepository extends ServiceEntityRepository
             ->leftJoin('n.user', 'u')
             ->addSelect('u')
             ->where('n.document = :document')
+            ->setParameter('document', $document)
             ->orderBy('n.createdAt', 'DESC')
             ->getQuery()
             ->getResult();

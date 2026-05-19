@@ -25,12 +25,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 final class DocumentController extends AbstractController
 {
 
-    public function __construct(private DocumentRepository $repository, private UserService $userService){
+    public function __construct(private DocumentRepository $repository, private UserService $userService)
+    {
 
     }
 
 
-    #[Route('', name: 'index', methods: ['POST','GET'])]
+    #[Route('', name: 'index', methods: ['POST', 'GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
@@ -64,7 +65,7 @@ final class DocumentController extends AbstractController
 
         $stats = $em->getRepository(Note::class)->getRatingStats($document);
         $average_notes = $stats['average'] ?? 0;
-        $count_notes   = $stats['total'] ?? 0;
+        $count_notes = $stats['total'] ?? 0;
         //dd($stats, $average_notes, $count_notes);
 
         // Vérifier si l'utilisateur a déjà noté ce document
@@ -77,7 +78,7 @@ final class DocumentController extends AbstractController
 
         return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
-            'title' => 'Page de '.$title,
+            'title' => 'Page de ' . $title,
             'document' => $document,
             'average_notes' => $average_notes,
             'count_notes' => $count_notes,
@@ -86,14 +87,14 @@ final class DocumentController extends AbstractController
 
     }
 
-    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET','POST'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
     public function edit(Document $document, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         $user = $this->getUser();
         if ($user) {
             // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
-            if( !$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $document->getUserID()) ) {
-                $this->addFlash('danger',"Vous n'avez pas le droit de modifier ce document!");
+            if (!$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $document->getUserID())) {
+                $this->addFlash('danger', "Vous n'avez pas le droit de modifier ce document!");
                 //throw new AuthenticationException('l\'utilisateur n\a pas le droit de réaliser cette action!');
                 return $this->redirectToRoute('document.index');
             }
@@ -103,7 +104,7 @@ final class DocumentController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $uploadedFile = $form->get('file')->getData();
 
@@ -159,7 +160,7 @@ final class DocumentController extends AbstractController
                 } catch (\Exception $e) {
                     $this->addFlash('danger', 'Erreur lors de l\'upload du fichier : ' . $e->getMessage());
                     return $this->render('document/admin/edit_document.html.twig', [
-                        'title' => 'Edition de '.$document->getTitle(),
+                        'title' => 'Edition de ' . $document->getTitle(),
                         'document' => $document,
                         'form' => $form->createView(),
                     ]);
@@ -168,11 +169,11 @@ final class DocumentController extends AbstractController
 
             //$em->persist($document);
             $em->flush();
-            $this->addFlash('success',"Le document a bien été modifié");
+            $this->addFlash('success', "Le document a bien été modifié");
             return $this->redirectToRoute('document.index');
         }
         return $this->render('document/admin/edit_document.html.twig', [
-            'title' => 'Edition de '.$document->getTitle(),
+            'title' => 'Edition de ' . $document->getTitle(),
             'document' => $document,
             'form' => $form->createView(),
             'user' => $user,
@@ -180,11 +181,11 @@ final class DocumentController extends AbstractController
     }
 
 
-    #[Route('/add_to_fs', name: 'add.to.fs', methods: ['GET','POST'])]
+    #[Route('/add_to_fs', name: 'add.to.fs', methods: ['GET', 'POST'])]
     public function addToFS(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $em,
-        SluggerInterface $slugger
+        SluggerInterface       $slugger
     ): Response
     {
 
@@ -196,63 +197,63 @@ final class DocumentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-                $uploadedFile = $form->get('file')->getData();
+            $uploadedFile = $form->get('file')->getData();
 
-                if ($uploadedFile) {
-                    $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+            if ($uploadedFile) {
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
 
-                    $uploadDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/documents';
+                $uploadDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/documents';
 
-                    // Création du dossier si nécessaire
-                    if (!is_dir($uploadDirectory)) {
-                        mkdir($uploadDirectory, 0775, true);
-                    }
-
-                    $destination = $uploadDirectory . '/' . $newFilename;
-
-                    try {
-                        // SOLUTION LA PLUS ROBUSTE : Lecture en mémoire
-                        $fileContent = file_get_contents($uploadedFile->getPathname());
-
-                        if ($fileContent === false) {
-                            throw new \Exception('Impossible de lire le fichier temporaire');
-                        }
-
-                        // Écriture du fichier
-                        if (file_put_contents($destination, $fileContent) === false) {
-                            throw new \Exception('Impossible d\'écrire le fichier sur le disque');
-                        }
-
-                        // Mise à jour de l'entité
-                        $document->setFile($newFilename);
-                        $document->setOriginalName($uploadedFile->getClientOriginalName());
-                        $document->setMimeType($uploadedFile->getMimeType());
-
-                    } catch (\Exception $e) {
-                        $this->addFlash('danger', 'Erreur lors de l\'upload du fichier : ' . $e->getMessage());
-                        return $this->render('document/admin/add.html.twig', [
-                            'form' => $form->createView(),
-                            'title' => 'Création d\'un document',
-                            'document' => $document,
-                            ]);
-                    }
+                // Création du dossier si nécessaire
+                if (!is_dir($uploadDirectory)) {
+                    mkdir($uploadDirectory, 0775, true);
                 }
 
-                $document->setCreatedAt(new \DateTimeImmutable());
+                $destination = $uploadDirectory . '/' . $newFilename;
 
-                $document->setUpdatedAt(new \DateTime());
+                try {
+                    // SOLUTION LA PLUS ROBUSTE : Lecture en mémoire
+                    $fileContent = file_get_contents($uploadedFile->getPathname());
 
-                // Utilisateur connecté
-                //$document->setUserID((int)$this->getUser()->getId());   // Utilise getId() de préférence
-                $document->setUser($this->getUser());
+                    if ($fileContent === false) {
+                        throw new \Exception('Impossible de lire le fichier temporaire');
+                    }
+
+                    // Écriture du fichier
+                    if (file_put_contents($destination, $fileContent) === false) {
+                        throw new \Exception('Impossible d\'écrire le fichier sur le disque');
+                    }
+
+                    // Mise à jour de l'entité
+                    $document->setFile($newFilename);
+                    $document->setOriginalName($uploadedFile->getClientOriginalName());
+                    $document->setMimeType($uploadedFile->getMimeType());
+
+                } catch (\Exception $e) {
+                    $this->addFlash('danger', 'Erreur lors de l\'upload du fichier : ' . $e->getMessage());
+                    return $this->render('document/admin/add.html.twig', [
+                        'form' => $form->createView(),
+                        'title' => 'Création d\'un document',
+                        'document' => $document,
+                    ]);
+                }
+            }
+
+            $document->setCreatedAt(new \DateTimeImmutable());
+
+            $document->setUpdatedAt(new \DateTime());
+
+            // Utilisateur connecté
+            //$document->setUserID((int)$this->getUser()->getId());   // Utilise getId() de préférence
+            $document->setUser($this->getUser());
 
 
-                $em->persist($document);
-                $em->flush();
-                $this->addFlash('success', "Le document a bien été créé");
-                return $this->redirectToRoute('document.index');
+            $em->persist($document);
+            $em->flush();
+            $this->addFlash('success', "Le document a bien été créé");
+            return $this->redirectToRoute('document.index');
 
         }
 
@@ -268,7 +269,7 @@ final class DocumentController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','PUT'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST', 'PUT'])]
     public function delete(Document $document, Request $request, EntityManagerInterface $em): Response
     {
 
@@ -276,8 +277,8 @@ final class DocumentController extends AbstractController
         if ($user) {
             // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
 
-            if( !$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $document->getUserID()) ) {
-                $this->addFlash('danger',"Vous n'avez pas le droit de supprimer ce document!");
+            if (!$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $document->getUserID())) {
+                $this->addFlash('danger', "Vous n'avez pas le droit de supprimer ce document!");
                 //throw new AuthenticationException('l\'utilisateur n\a pas le droit de réaliser cette action!');
                 return $this->redirectToRoute('document.index');
             }
@@ -301,17 +302,18 @@ final class DocumentController extends AbstractController
 
         $em->remove($document);
         $em->flush();
-        $this->addFlash('success',"Le document a bien été supprimé");
+        $this->addFlash('success', "Le document a bien été supprimé");
         return $this->redirectToRoute('document.index');
     }
 
 
-    #[Route('/{id}/note', name: 'note', requirements: ['id' => Requirement::DIGITS], methods: ['GET','POST'])]
+    #[Route('/{id}/note', name: 'note', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
     public function note(
-        Document $document,
-        Request $request,
+        Document               $document,
+        Request                $request,
         EntityManagerInterface $em
-    ): Response {
+    ): Response
+    {
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -334,7 +336,7 @@ final class DocumentController extends AbstractController
             $em->persist($note);
             $em->flush();
 
-            if( $existingNote ){
+            if ($existingNote) {
                 $this->addFlash('success', 'Merci votre avis a bien été modifié !');
             } else {
                 $this->addFlash('success', 'Votre avis a bien été enregistré !');
@@ -349,4 +351,36 @@ final class DocumentController extends AbstractController
             'document' => $document,
         ]);
     }
+
+    #[Route('/{id}/avis', name: 'avis', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
+    public function avis(
+        Document               $document,
+        Request                $request,
+        EntityManagerInterface $em
+    ): Response
+    {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        $noteRepository = $em->getRepository(Note::class);
+        $stats = $noteRepository->getRatingStats($document);
+
+        $notes = $noteRepository->findByDocumentWithUser($document);
+
+        //dd($notes);
+
+
+        return $this->render('document/note/all_by_document.html.twig', [
+            'document' => $document,
+            'notes' => $notes,
+            'averageRating' => $stats['average'] ?? 0,
+            'totalNotes' => $stats['total'] ?? 0,
+        ]);
+    }
+
 }
+
+
+
