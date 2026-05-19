@@ -60,13 +60,17 @@ final class DocumentController extends AbstractController
         //dd($document);
         $title = $document->getTitle();
 
-        $notes = $em->getRepository(Note::class)->getRatingStats($document);
-        //dd($notes, $document->getId());
+        $stats = $em->getRepository(Note::class)->getRatingStats($document);
+        $average_notes = $stats['average'] ?? 0;
+        $count_notes   = $stats['total'] ?? 0;
+        //dd($stats, $average_notes, $count_notes);
 
         return $this->render('document/show_document.html.twig', [
             'controller_name' => 'DocumentController',
             'title' => 'Page de '.$title,
             'document' => $document,
+            'average_notes' => $average_notes,
+            'count_notes' => $count_notes,
         ]);
 
     }
@@ -324,7 +328,7 @@ final class DocumentController extends AbstractController
             return $this->redirectToRoute('document.index');
         }
 
-        return $this->render('document/note/new.html.twig', [
+        return $this->render('document/note/add_or_edit.html.twig', [
             'form' => $form->createView(),
             'document' => $document,
         ]);

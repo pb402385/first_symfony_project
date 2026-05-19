@@ -1,23 +1,14 @@
-{% macro stars(rating, max = 5, size = 'md') %}
-    {% set fullStars = rating|floor %}
-    {% set decimal = (rating - fullStars) %}
-
-    <div class="rating-stars rating-{{ size }}">
+{% macro stars(rating, max = 5) %}
+    <div class="rating-stars">
         {% for i in 1..max %}
-            {% if i <= fullStars %}
-                {# Étoile pleine #}
+            {% if i <= rating %}
                 <span class="star full">★</span>
-            {% elseif i == fullStars + 1 and decimal > 0 %}
-                {# Étoile partielle #}
-                <span class="star partial" style="background: linear-gradient(to right, #ffc107 {{ decimal*100 }}%, #ddd {{ decimal*100 }}%);">★</span>
+            {% elseif i - rating < 1 and i - rating > 0 %}
+                <span class="star half">★</span>
             {% else %}
-                {# Étoile vide #}
                 <span class="star empty">★</span>
             {% endif %}
         {% endfor %}
-
-        <span class="rating-value ms-2">
-            <strong>{{ rating|number_format(1) }}</strong>/{{ max }}
-        </span>
+        <span class="rating-value">({{ rating|number_format(1) }})</span>
     </div>
 {% endmacro %}

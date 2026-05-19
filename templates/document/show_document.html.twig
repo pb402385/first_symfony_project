@@ -105,16 +105,20 @@
                                     </a>
                                 </div>
                                 {# Note moyenne du document #}
-                                <div class="mb-3">
+
+                                <div class="mb-3 show-note-document">
                                     <strong>Note moyenne :</strong>
-                                    {{ include('components/rating_stars.html.twig', {
-                                        'rating': averageRating|default(0)
-                                    }) }}
-                                    <small class="text-muted">({{ totalNotes }} avis)</small>
+                                    {# 1. Import de la macro #}
+                                    {% import 'component/rating_stars.html.twig' as rating %}
+                                    {{ rating.stars(average_notes) }}
                                 </div>
+                                <div class="mb-3 show-nb-notes-document">
+                                    <strong>Nombre total de votes : {{ count_notes }}</strong>
+                                </div>
+
                                 {# Bouton pour noter un document #}
                                 <div class="mt-4">
-                                    <a href="{{ path('document.note', {id:document.user.id}) }}"
+                                    <a href="{{ path('document.note', {id:document.id}) }}"
                                        class="btn btn-lg w-100">
                                         <i class="fa-solid fa-feather"></i> Notez ou commentez le document
                                     </a>

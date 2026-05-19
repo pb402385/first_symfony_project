@@ -29,3 +29,35 @@
     /* Optionnel : espace entre les cellules */
     gap: 10px;
 }
+
+
+/** CSS notes du document **/
+.rating-stars {
+     color: #ffc107;
+     font-size: 1.5rem;
+ }
+.rating-stars .empty {
+    color: #ddd;
+}
+.rating-stars .half {
+    color: #ffc107;
+    position: relative;
+}
+.rating-value {
+    font-size: 1rem;
+    color: #666;
+    margin-left: 8px;
+}
+
+.show-note-document{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.show-nb-notes-document{
+    display: flex;
+    flex-direction: column;
+}
+
