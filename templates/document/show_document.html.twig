@@ -19,32 +19,28 @@
                                 {# Titre principal #}
                                 <h1 class="mb-4" style="font-weight: bold; text-align: center">{{ document.title }}</h1>
 
-                                <div class="document-preview border rounded p-3 bg-light text-center mb-4" style="min-height: 400px; display: flex; align-items: center; justify-content: center;">
+                                <div class="document-preview border rounded bg-light text-center mb-4" style="min-height: 400px;">
 
                                     {% if document.file is not null %}
                                         {% set extension = document.file|split('.')|last|lower %}
 
                                         {# Si c'est une image #}
                                         {% if extension in ['jpg', 'jpeg', 'png', 'gif', 'webp'] %}
-                                            <img src="{{ asset('uploads/documents/' ~ document.file) }}"
-                                                 alt="{{ document.title }}"
-                                                 class="img-fluid rounded shadow-sm"
-                                                 style="max-height: 500px;">
+                                                <div style="display: flex; align-items: center; justify-content: center;min-height: 400px;">
+                                                <img src="{{ asset('uploads/documents/' ~ document.file) }}"
+                                                     alt="{{ document.title }}"
+                                                     class="img-fluid rounded shadow-sm"
+                                                     style="max-height: 500px;">
+                                            </div>
 
                                             {# Si c'est un PDF #}
                                         {% elseif extension == 'pdf' %}
-                                            <div class="text-center">
-                                                <i class="fas fa-file-pdf fa-10x text-danger mb-3"></i>
-                                                <br>
-                                                <a href="{{ asset('uploads/documents/' ~ document.file) }}"
-                                                   class="btn btn-danger" target="_blank">
-                                                    <i class="fas fa-download"></i> Ouvrir le PDF
-                                                </a>
-                                            </div>
+
+                                            {% include 'component/visio_document.html.twig' %}
 
                                             {# Autres fichiers #}
                                         {% else %}
-                                            <div class="text-center">
+                                            <div class="text-center" style="display: flex; align-items: center; justify-content: center;min-height: 400px; flex-direction: column;">
                                                 <i class="fas fa-file fa-10x text-muted mb-3"></i>
                                                 <br>
                                                 <a href="{{ asset('uploads/documents/' ~ document.file) }}"
@@ -115,4 +111,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}

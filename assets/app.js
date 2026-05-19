@@ -15,7 +15,6 @@ import './styles/register.css';
 
 
 import './js/AuthManager.js'
-import './js/PDFjS.js'
 
 //FORCE l'envoit du CSRF TOKEN
 document.addEventListener('turbo:before-fetch-request', (event) => {

@@ -312,8 +312,5 @@ php bin/console app:clean-revoked-tokens
 + Gerer session user/admin pour les deux pages user et document
   - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
 
-    
-+ visionneuse pour les documents
-+ 
 + idéalement pouvoir noter un document
 + idealement pouvoir mettre un document favori
