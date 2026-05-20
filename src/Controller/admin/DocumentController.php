@@ -40,7 +40,7 @@ final class DocumentController extends AbstractController
         $user = $this->getUser(); // peut être null
 
         $page = $request->query->getInt('page', 1);
-        $limit = 5;
+        $limit = 10;
 
         $documents = $this->repository->paginateDocuments($page, $limit);
 
