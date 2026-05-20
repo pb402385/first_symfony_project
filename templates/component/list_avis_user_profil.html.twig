@@ -7,43 +7,56 @@
         </h1>
     </div>
 </div>
+{% if avis %}
+    {% for avi in avis %}
+        <div class="container mt-5">
 
-{% for avi in avis %}
-    <div class="container mt-5">
+            <h1 class="text-primary mb-3 mt-3" style="font-weight: bold; text-align: center">
+                <a href="{{ path('document.show', {id:avi.document.id}) }}">
+                    Avis sur "{{ avi.document.title }}" -> Voir le document
+                </a>
+            </h1>
 
-        <h1 class="text-primary mb-3 mt-3" style="font-weight: bold; text-align: center">Avis sur "{{ avi.document.title }}"</h1>
 
-        <div class="d-flex justify-content-between align-items-start">
-            <small class="text-muted">
-                {{ avi.createdAt|date('d/m/Y à H:i') }}
-            </small>
-        </div>
-
-        <div class="bloc-user-profile-avis">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body card-user-profil-avis">
-
-                    {# Affichage des étoiles #}
-                    <div class="my-3">
-                        {% for i in 1..5 %}
-                            {% if i <= avi.rating %}
-                                <span class="text-warning">★</span>
-                            {% else %}
-                                <span class="text-muted">★</span>
-                            {% endif %}
-                        {% endfor %}
-                        <span class="ms-2 text-muted">({{ avi.rating }}/5)</span>
-                    </div>
-
-                    {% if avi.comment %}
-                        <p class="mb-0">{{ avi.comment|nl2br }}</p>
-                    {% else %}
-                        <p class="text-muted fst-italic">Aucun commentaire</p>
-                    {% endif %}
-                </div>
+            <div class="d-flex justify-content-between align-items-start">
+                <small class="text-muted">
+                    {{ avi.createdAt|date('d/m/Y à H:i') }}
+                </small>
             </div>
 
+            <div class="bloc-user-profile-avis">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body card-user-profil-avis">
+
+                        {# Affichage des étoiles #}
+                        <div class="my-3">
+                            {% for i in 1..5 %}
+                                {% if i <= avi.rating %}
+                                    <span class="text-warning">★</span>
+                                {% else %}
+                                    <span class="text-muted">★</span>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ms-2 text-muted">({{ avi.rating }}/5)</span>
+                        </div>
+
+                        {% if avi.comment %}
+                            <p class="mb-0">{{ avi.comment|nl2br }}</p>
+                        {% else %}
+                            <p class="text-muted fst-italic">Aucun commentaire</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+
+{% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            Aucun avis disponible pour le moment.
         </div>
     </div>
-{% endfor %}
+{% endif %}
 
