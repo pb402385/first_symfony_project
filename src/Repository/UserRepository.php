@@ -90,4 +90,18 @@ class UserRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findUserAndDocumentsAndNotesByUserID($value): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.documents', 'd')
+            ->leftJoin('d.notes', 'n')           // Jointure sur les notes des documents
+            ->addSelect('d')                     // Charge les documents
+            ->addSelect('n')                     // Charge les notes
+            ->where('u.id = :id')
+            ->setParameter('id', $value)
+            ->orderBy('d.createdAt', 'DESC')     // Optionnel : trier les documents
+            ->getQuery()
+            ->getResult();              // Retourne un seul User (ou null)
+    }
+
 }

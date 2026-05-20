@@ -119,4 +119,21 @@ class NoteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+    * Dernières notes laissées par un utilisateur (utile sur le profil)
+    */
+    public function findDocumentsAndNotesByUserID($value, $limit): array
+    {
+        return $this->createQueryBuilder('n')
+            ->leftJoin('n.user', 'u')
+            ->leftJoin('n.document', 'd')
+            ->addSelect('n', 'd')                    // Fetch Join
+            ->where('u.id = :id')
+            ->setParameter('id', $value)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

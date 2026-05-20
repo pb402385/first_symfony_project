@@ -226,3 +226,10 @@ a.user-index-list-a{
     display: flex;
     flex-direction: row;
 }
+
+.card-user-profil-avis {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

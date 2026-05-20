@@ -315,3 +315,4 @@ php bin/console app:clean-revoked-tokens
 + idealement pouvoir mettre un document favori
 + Recherche intelligente
 + creer un pdf qui résume certifie le dépot d'un document et l'envoyer par email à l'owner
++ + regression sur categorie document (page show)

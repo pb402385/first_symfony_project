@@ -2,6 +2,7 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\Note;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -69,13 +70,16 @@ final class UserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // On récupère l'user ainsi que tous les documents associé à l'user
-        $userWithDocuments = $this->repository->findUserAndDocumentsByUserID($id);
-
-        $user = $userWithDocuments[0];
+        $userWithDocumentsAndNotes = $this->repository->findUserAndDocumentsAndNotesByUserID($id);
+        $user = $userWithDocumentsAndNotes[0];
 
         $documents = $user->getDocuments()->toArray();
 
-        //dd($user, $userWithDocuments, $documents);
+        // On récupère également les réactions de l'utilisateurs par rapport à l'ensemble des documents
+        $limit = 5; //On récupère ses 5 derniers avis, comme ça on peut savoir quels sont les derniers documents qui ont interressé cet utilisateur
+        $avis = $em->getRepository(Note::class)->findDocumentsAndNotesByUserID($id, $limit);
+
+        //dd($userWithDocumentsAndNotes, $user, $documents, $avis);
 
         return $this->render('user/show_profil.html.twig', [
             'controller_name' => 'UserController',
@@ -83,6 +87,7 @@ final class UserController extends AbstractController
             'user' => $user,
             'image' => $user->getImage(),
             'documents' => $documents,
+            'avis' => $avis,
         ]);
     }
 

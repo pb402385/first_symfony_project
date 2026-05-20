@@ -1,1 +1,49 @@
 {# Ce composant sera importé par le profil pour afficher tous les avis et commentaires de l'USER #}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-center align-items-center mb-4">
+        <h1 class="h2 mb-0">
+            <i class="fas fa-clock text-primary"></i>  5 Derniers avis laissés par {{ user.email }}
+        </h1>
+    </div>
+</div>
+
+{% for avi in avis %}
+    <div class="container mt-5">
+
+        <h1 class="text-primary mb-3 mt-3" style="font-weight: bold; text-align: center">Avis sur "{{ avi.document.title }}"</h1>
+
+        <div class="d-flex justify-content-between align-items-start">
+            <small class="text-muted">
+                {{ avi.createdAt|date('d/m/Y à H:i') }}
+            </small>
+        </div>
+
+        <div class="bloc-user-profile-avis">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body card-user-profil-avis">
+
+                    {# Affichage des étoiles #}
+                    <div class="my-3">
+                        {% for i in 1..5 %}
+                            {% if i <= avi.rating %}
+                                <span class="text-warning">★</span>
+                            {% else %}
+                                <span class="text-muted">★</span>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="ms-2 text-muted">({{ avi.rating }}/5)</span>
+                    </div>
+
+                    {% if avi.comment %}
+                        <p class="mb-0">{{ avi.comment|nl2br }}</p>
+                    {% else %}
+                        <p class="text-muted fst-italic">Aucun commentaire</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endfor %}
+
