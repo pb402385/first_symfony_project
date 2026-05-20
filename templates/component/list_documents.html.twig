@@ -1,3 +1,6 @@
+{# 1. Import de la macro #}
+{% import 'component/rating_stars.html.twig' as rating %}
+
 <div class="container mt-5">
     <div class="d-flex justify-content-center align-items-center mb-4">
         <h1 class="h2 mb-0">
@@ -41,6 +44,23 @@
                             </small>
                         </div>
                     </div>
+
+                    {% if document.notes %}
+                        {% set somme = 0 %}
+                        {% set size = document.notes|length %}
+                        {% for note in document.notes %}
+                            {% set somme = somme + note.rating %}
+                        {% endfor %}
+                        {% if size > 0 %}
+                            {% set size = document.notes|length %}
+                            {% set somme = somme / size %}
+                        {% endif %}
+                        {#  Doc::{{ document.id }} a pour somme : {{ somme / size }} #}
+                    <div class="card-body d-flex flex-column text-center">
+                        <strong>Note moyenne :</strong>
+                        {{ rating.stars(somme) }}
+                    </div>
+                    {% endif %}
 
                     <div class="card-footer bg-white border-0">
                         <a href="{{ path('document.show', {id:document.id}) }}"
