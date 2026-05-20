@@ -11,6 +11,7 @@ use App\Form\NoteType;
 use App\Form\UserType;
 use App\Repository\DocumentRepository;
 use App\Security\JwtTokenHandler;
+use App\Service\DocumentReceiptService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -200,7 +201,8 @@ final class DocumentController extends AbstractController
     public function addToFS(
         Request                $request,
         EntityManagerInterface $em,
-        SluggerInterface       $slugger
+        SluggerInterface       $slugger,
+        DocumentReceiptService $receiptService
     ): Response
     {
 
@@ -268,6 +270,17 @@ final class DocumentController extends AbstractController
             $em->persist($document);
             $em->flush();
             $this->addFlash('success', "Le document a bien été créé");
+
+            //On envoit un PDF pour certifier le dépot du fichier
+            // Après avoir persisté le document
+            $result = $receiptService->generateAndSendReceipt($document, $this->getUser());
+
+            if ($result['success']) {
+                $this->addFlash('success', $result['message']);
+            } else {
+                $this->addFlash('warning', $result['message']);
+            }
+
             return $this->redirectToRoute('document.index');
 
         }
