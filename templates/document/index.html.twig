@@ -3,6 +3,10 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
+
+    {# 1. Import de la macro #}
+    {% import 'component/rating_stars.html.twig' as rating %}
+
     <a class="btn-retour" href="{{ url('home.index') }}">RETOUR</a>
     <br/>
 
@@ -41,6 +45,7 @@
                 <th>{{ knp_pagination_sortable(documents, 'Categorie', 'd.categoryId') }}</th>
                 <th>{{ knp_pagination_sortable(documents, 'Date Création', 'd.createdAt') }}</th>
                 <th>{{ knp_pagination_sortable(documents, 'Date modification', 'd.updatedAt') }}</th>
+                <th>{{ knp_pagination_sortable(documents, 'Note', 'avgNote') }}</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -49,30 +54,35 @@
         <tr>
             {% if is_granted('ROLE_ADMIN') %}
                 <td>
-                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}"> {{ document.id }}</a>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}"> {{ document[0].id }}</a>
                 </td>
             {% endif %}
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.title }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].title }}</a>
             </td>
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.user.email }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].user.email }}</a>
             </td>
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.category.label }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].category.label }}</a>
             </td>
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.createdAt|date("d/m/Y")  }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].createdAt|date("d/m/Y")  }}</a>
             </td>
             <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">{{ document.updatedAt|date("d/m/Y")  }}</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].updatedAt|date("d/m/Y")  }}</a>
+            </td>
+            <td>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">
+                    {{ rating.stars(document['avgNote']) }}
+                </a>
             </td>
             <td class="user-index-actions-td">
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document.id}) }}">Voir</a>
+                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">Voir</a>
 
-                {% if is_granted('ROLE_ADMIN') or document.userId == user.id  %}
-                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.edit', {id:document.id}) }}">Editer</a>
-                    <form action="{{ path('document.delete', {id:document.id}) }}" method="post">
+                {% if is_granted('ROLE_ADMIN') or document[0].userId == user.id  %}
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.edit', {id:document[0].id}) }}">Editer</a>
+                    <form action="{{ path('document.delete', {id:document[0].id}) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                     </form>

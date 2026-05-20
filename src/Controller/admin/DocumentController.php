@@ -42,7 +42,8 @@ final class DocumentController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $limit = 10;
 
-        $documents = $this->repository->paginateDocuments($page, $limit);
+        //$documents = $this->repository->paginateDocuments($page, $limit);
+        $documents = $this->repository->paginateDocumentsWithAvgNote($page, $limit);
 
         return $this->render('document/index.html.twig', [
             'controller_name' => 'DocumentController',

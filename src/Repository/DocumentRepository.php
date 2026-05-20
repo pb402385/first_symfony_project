@@ -29,6 +29,30 @@ class DocumentRepository extends ServiceEntityRepository
     }
 
 
+    public function paginateDocumentsWithAvgNote(int $page = 1, int $limit = 10, string $sort = 'd.createdAt', string $direction = 'DESC'): PaginationInterface
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->leftJoin('d.notes', 'n')
+            ->leftJoin('d.category', 'c')
+            ->leftJoin('d.user', 'u')
+            ->addSelect('AVG(n.rating) as avgNote')   // Moyenne des notes
+            ->addSelect('c')
+            ->addSelect('u')
+            ->groupBy('d.id')
+            ->addGroupBy('c.id')
+            ->addGroupBy('u.id');
+
+        // Gestion du tri
+        if ($sort === 'avgNote') {
+            $qb->orderBy('avgNote', $direction);
+        } else {
+            $qb->orderBy($sort, $direction);
+        }
+
+        return $this->paginator->paginate($qb, $page, $limit);
+    }
+
+
     public function findWithCategory(int $id): ?Document
     {
         return $this->createQueryBuilder('d')
