@@ -34,6 +34,27 @@
         <a class="user-index-add-a" href="{{ path('document.add.to.fs') }}">Créer un document</a>
     </div>
 
+
+    {# Input qui permet de faire une recherche sur les documents #}
+    <div class="mb-4">
+        <form method="GET" class="d-flex gap-2">
+            <input type="text"
+                   name="search"
+                   value="{{ search }}"
+                   class="form-control"
+                   placeholder="Rechercher par titre, utilisateur (nom ou email) ou catégorie...">
+
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+
+            {% if search %}
+                <a href="{{ path('document.index') }}" class="btn btn-outline-secondary">
+                    Effacer
+                </a>
+            {% endif %}
+        </form>
+    </div>
+
+    {# Tableau des documents, ALL par défaut mais peut être filtré par la recherche d'au dessus #}
     <table class="table">
         <thead>
             <tr>

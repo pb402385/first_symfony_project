@@ -29,15 +29,24 @@ final class UserController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
 
+        // numéro de la page souhaitée
         $page = $request->query->getInt('page', 1);
-        $limit = 5;
+        // termes recherchés
+        $search = $request->query->get('search');
+        // Tri (par date de création par défaut)
+        $sort = $request->query->get('sort', 'u.createdAt');
+        // odre décroissant
+        $direction = $request->query->get('direction', 'DESC');
+        // nombre de résultats par page
+        $limit = $request->query->getInt('limit', 5);
 
-        /* si pas de bundle
-        $users = $this->repository->paginateUsers($page, $limit);
-        $maxPage = ceil($users->count() / $limit);
-        */
-
-        $users = $this->repository->paginateUsers($page, $limit);
+        $users = $this->repository->paginateUsersWithSearchTerm(
+            $page,
+            $limit,
+            $sort,
+            $direction,
+            $search
+        );
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
@@ -45,6 +54,7 @@ final class UserController extends AbstractController
             'users' => $users,
             //'maxPage' => $maxPage,
             'page' => $page,
+            'search' => $search,
         ]);
     }
 

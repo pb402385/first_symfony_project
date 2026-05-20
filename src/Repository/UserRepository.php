@@ -104,4 +104,36 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();              // Retourne un seul User (ou null)
     }
 
+    public function paginateUsersWithSearchTerm(
+        int $page = 1,
+        int $limit = 10,
+        string $sort = 'u.createdAt',
+        string $direction = 'DESC',
+        ?string $search = null
+    ): PaginationInterface
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->addSelect('u')
+            ->groupBy('u.id');
+
+        // ==================== RECHERCHE TEXTE ====================
+        // 4 champs utiles à rehercher: nom du document, nom de l'user, email de l'user ou la catégorie
+        if ($search) {
+            $search = trim($search);
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('u.email', ':search'),
+                    $qb->expr()->like('u.name', ':search'),
+                    $qb->expr()->like('u.country', ':search')
+                )
+            )
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        // ==================== TRI ====================
+        $qb->orderBy($sort, $direction);
+
+        return $this->paginator->paginate($qb, $page, $limit);
+    }
+
 }

@@ -39,17 +39,31 @@ final class DocumentController extends AbstractController
 
         $user = $this->getUser(); // peut être null
 
+        // numéro de la page souhaitée
         $page = $request->query->getInt('page', 1);
-        $limit = 10;
+        // termes recherchés
+        $search = $request->query->get('search');
+        // Tri (par date de création par défaut)
+        $sort = $request->query->get('sort', 'd.createdAt');
+        // odre décroissant
+        $direction = $request->query->get('direction', 'DESC');
+        // nombre de résultats par page
+        $limit = $request->query->getInt('limit', 10);
 
-        //$documents = $this->repository->paginateDocuments($page, $limit);
-        $documents = $this->repository->paginateDocumentsWithAvgNote($page, $limit);
+        $documents = $this->repository->paginateDocumentsWithAvgNoteAndSearchTerm(
+            $page,
+            $limit,
+            $sort,
+            $direction,
+            $search
+        );
 
         return $this->render('document/index.html.twig', [
             'controller_name' => 'DocumentController',
             'title' => 'documents',
             'documents' => $documents,
             'user' => $user,
+            'search' => $search,
         ]);
     }
 
