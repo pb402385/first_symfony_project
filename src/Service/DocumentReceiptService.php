@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\Document;
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -19,7 +19,6 @@ class DocumentReceiptService
 
     public function __construct(
         private MailerInterface $mailer,
-        private EntityManagerInterface $em,
         private LoggerInterface $logger,
         string $kernelProjectDir
     ) {
@@ -120,15 +119,15 @@ class DocumentReceiptService
 
     private function sendReceiptEmail(Document $document, UserInterface $user, string $pdfPath): void
     {
-        $email = (new Email())
+
+        $mail = (new TemplatedEmail())
             ->from(new Address('noreply@docshare.fr', 'DocShare'))
             ->to($user->getEmail())
             ->subject("Réception de votre document : {$document->getTitle()}")
-            ->text("Bonjour,\n\nVotre document a bien été reçu.\nVous trouverez en pièce jointe le certificat de réception.")
-            ->html("<p>Bonjour {$user->getName()},</p><p>Votre document <strong>{$document->getTitle()}</strong> a bien été reçu.</p>")
-            ;
-            //->attachFromPath($pdfPath, 'Certificat_Reception_' . $document->getTitle() . '.pdf');
+            ->htmlTemplate('mail/confirm-depot.html.twig')
+            ->context(['user' => $user,'document' => $document,])
+            ->attachFromPath($pdfPath, 'Certificat_Reception_' . $document->getTitle() . '.pdf');
 
-        $this->mailer->send($email);
+        $this->mailer->send($mail);
     }
 }

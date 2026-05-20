@@ -1,0 +1,35 @@
+<body>
+<div class="body">
+    <div style="display:flex;flex-direction:column;">
+        <div class="header text-center">
+            <img src="{{ email.image('@images/logo_docshare.jpg') }}"
+                 alt="My Logo"
+                 style="margin-top:60px;max-width: 100%;">
+        </div>
+        <div style="display:grid">
+            <h2 class="text-center">Votre inscription sur DocShare s'est déroulée avec succès</h2>
+            <ul>
+                <li>
+                    Email: {{  user.email }}
+                </li>
+            </ul>
+            <p class="block">
+                <strong>
+                    <p>Bonjour {{ user.name }},</p>
+                    <p>Votre document <strong>{{ document.title }}</strong> a bien été reçu.</p>
+                    <p>Numéro du document: {{ document.id }}</p>
+                </strong>
+            </p>
+            <p class="block">
+                En cas de réclamation, vous pouvez nous contacter en donnant le numéro de votre document à notre service technique.
+
+                <br/><br/>
+                Merci d’avance de faire confiance à notre équipe.
+            </p>
+
+
+
+        </div>
+    </div>
+</div>
+</body>
