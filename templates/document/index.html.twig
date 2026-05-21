@@ -58,6 +58,11 @@
                    class="form-control"
                    placeholder="Rechercher par titre, utilisateur (nom ou email) ou catégorie...">
 
+            {# === Champ caché pour conserver le mode d'affichage === #}
+            <input type="hidden"
+                   name="view_mode"
+                   value="{{ view_mode|default('table') }}">
+
             <button type="submit" class="btn btn-primary">Rechercher</button>
 
             {% if search %}
