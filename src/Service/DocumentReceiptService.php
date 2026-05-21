@@ -12,16 +12,20 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
 class DocumentReceiptService
 {
     private string $uploadDir;
+    private string $projectDir;
 
     public function __construct(
         private MailerInterface $mailer,
         private LoggerInterface $logger,
-        string $kernelProjectDir
+        string $kernelProjectDir,
+        private Environment $twig,
     ) {
+        $this->projectDir = $kernelProjectDir;
         $this->uploadDir = $kernelProjectDir . '/public/uploads/documents';
     }
 
@@ -64,27 +68,32 @@ class DocumentReceiptService
         $options = new Options();
         $options->setDefaultFont('Arial');
         $options->setIsRemoteEnabled(true);
+        $options->setChroot($this->projectDir . '/public');
 
         $dompdf = new Dompdf($options);
 
-        $html = $this->renderReceiptHtml($document, $user);
+        $html = $this->twig->render('pdf/proof-of-receipt.html.twig', [
+            'document' => $document,
+            'user' => $user,
+            'receiptDate' => new \DateTime()
+        ]);
 
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $pdfPath = $this->uploadDir . '/receipts/receipt_' . $document->getId() . '_' . time() . '.pdf';
-
-        // Création du dossier receipts s'il n'existe pas
         $receiptDir = $this->uploadDir . '/receipts';
         if (!is_dir($receiptDir)) {
             mkdir($receiptDir, 0775, true);
         }
 
+        $pdfPath = $receiptDir . '/receipt_' . $document->getId() . '_' . time() . '.pdf';
+
         file_put_contents($pdfPath, $dompdf->output());
 
         return $pdfPath;
     }
+
 
     private function renderReceiptHtml(Document $document, User $user): string
     {
