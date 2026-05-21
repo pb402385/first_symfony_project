@@ -181,6 +181,15 @@
         {% endif %}
     </div>
     #}
+
+    {% if users is empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <strong>Il n'y a aucun utilisateur!</strong>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="pagination_container">
         {{ knp_pagination_render(users) }}
     </div>

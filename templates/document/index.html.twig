@@ -133,14 +133,6 @@
                 </td>
             </tr>
             {% endfor %}
-            {% if documents == null %}
-            <tr>
-                <td>
-                    <p><strong>Il n'y a aucun document!</strong></p>
-                </td>
-                <td></td>
-            </tr>
-            {% endif %}
     </table>
         {% elseif view_mode == 'cards' %}
             {#on ferme notre tableau, puis on affiche nos cards #}
@@ -188,6 +180,14 @@
                 </div>
             </div>
         {% endif %}
+
+    {% if documents is empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <strong>Il n'y a aucun document!</strong>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="pagination_container">
         {{ knp_pagination_render(documents) }}
