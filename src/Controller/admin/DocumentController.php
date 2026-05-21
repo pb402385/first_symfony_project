@@ -2,15 +2,11 @@
 
 namespace App\Controller\admin;
 
-use App\Entity\Category;
 use App\Entity\Document;
 use App\Entity\Note;
-use App\Entity\User;
 use App\Form\DocumentType;
 use App\Form\NoteType;
-use App\Form\UserType;
 use App\Repository\DocumentRepository;
-use App\Security\JwtTokenHandler;
 use App\Service\DocumentReceiptService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use App\Service\UserService;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/document', name: 'document.')]
@@ -85,6 +80,14 @@ final class DocumentController extends AbstractController
 
         //$document = $this->repository->find($id);
         $document = $this->repository->findWithCategory($id);
+
+        //On doit s'assurer que le document existe !
+        if(!$document){
+            $this->addFlash('danger', "Ce document n'existe pas (ou plus) !");
+            return $this->redirectToRoute('document.index');
+        }
+
+
         //dd($document);
         $title = $document->getTitle();
 
@@ -116,6 +119,7 @@ final class DocumentController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
     public function edit(Document $document, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
+
         $user = $this->getUser();
         if ($user) {
             // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
@@ -328,6 +332,7 @@ final class DocumentController extends AbstractController
                 . '/public/uploads/documents/'
                 . $document->getFile();
 
+
             if (file_exists($filePath)) {
                 try {
                     unlink($filePath);   // Supprime le fichier
@@ -338,9 +343,33 @@ final class DocumentController extends AbstractController
             }
         }
 
+        $tmp_ID = $document->getId();
+
         $em->remove($document);
         $em->flush();
         $this->addFlash('success', "Le document a bien été supprimé");
+
+        // Après la suppression du document, on supprime aussi les pdf de certification que l'on a créé lors de la création du fichier
+        // Comme ils sont identifiés par l'ID, on supprime tous les fichier qui ont l'ID du document
+        //$receiptDir = $this->getParameter('kernel.project_dir') . '\public\uploads\documents\receipts';
+        //$receiptFiles = glob($receiptDir . '\receipt_' . $document->getId() . '_*.pdf');
+
+        // Suppression des receipts
+        $receiptDir = $this->getParameter('kernel.project_dir') . '/public/uploads/documents/receipts';
+
+        if (is_dir($receiptDir)) {
+            // Utilise glob avec un pattern plus sûr
+            $pattern = $receiptDir . '/receipt_' . $tmp_ID . '_*.pdf';
+
+            $receiptFiles = glob($pattern);
+
+            foreach ($receiptFiles as $file) {
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+            }
+        }
+
         return $this->redirectToRoute('document.index');
     }
 

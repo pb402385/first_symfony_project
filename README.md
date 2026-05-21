@@ -311,7 +311,6 @@ php bin/console app:clean-revoked-tokens
 
 + Page accueil à finaliser ( si non auth inviter à s'inscrire et résumé de ce que l'on peut faire, si auth, inviter a aller dans document ou user)
 
-+ Cascade delete note si document supprimé
 + Cascade delete note et document supprimés si delete user
 + sur la page ou il y a toutes les notes, si l'user n'a pas deja noté on met un lien pour aller noter
 

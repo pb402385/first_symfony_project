@@ -57,7 +57,7 @@ class Document
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'documents')]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'document', targetEntity: Note::class)]
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: Note::class, cascade: ['persist', 'remove'])]
     private Collection $notes;
 
     public function __construct()

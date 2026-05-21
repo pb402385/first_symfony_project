@@ -107,7 +107,7 @@ class DocumentRepository extends ServiceEntityRepository
             ->where('d.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
     }
 
 }
