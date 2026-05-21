@@ -64,7 +64,7 @@
                         {% endif %}
 
                         <div class="card-footer bg-white border-0">
-                            <a href="{{ path('document.show', {id:document.id}) }}"
+                            <a href="{{ path('document.show', {id:document.id,fromUser:document.user.id}) }}"
                                class="btn btn-sm btn-outline-primary w-100">
                                 Voir le document
                             </a>

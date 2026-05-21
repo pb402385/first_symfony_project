@@ -8,7 +8,12 @@
             <div class="col-lg-10">
 
                 {# on a deux cas, soit on affiche le document depuis l'index des documents, soit depuis le profil d'un utilisateur #}
-                <a class="btn-retour" href="{{ url('document.index') }}">RETOUR TODO</a>
+                {% if from_user %}
+                    <a class="btn-retour" href="{{ url('user.show', {id:from_user})  }}">RETOUR (user) </a>
+                {% else %}
+                    <a class="btn-retour" href="{{ url('document.index') }}">RETOUR (all documents) </a>
+                {% endif %}
+
 
                 <div class="card shadow-lg">
                     <div class="card-body p-5">
@@ -74,7 +79,7 @@
                                     <tr>
                                         <th>Créé par</th>
                                         <td>
-                                            <a style="font-weight: bold;font-style: italic;color: blue;" href="{{ path('user.show', {id:document.user.id}) }}">{{ document.user.email|default('non renseigné') }}</a>
+                                            <a style="font-weight: bold;font-style: italic;color: blue;" href="{{ path('user.show', {id:document.user.id,fromDocument:document.id}) }}">{{ document.user.email|default('non renseigné') }}</a>
                                         </td>
                                     </tr>
                                     <tr>

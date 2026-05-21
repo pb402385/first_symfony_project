@@ -79,6 +79,8 @@ final class DocumentController extends AbstractController
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
 
+        $fromUser = $request->query->get('fromUser','');
+
         $user = $this->getUser();
 
         //$document = $this->repository->find($id);
@@ -94,7 +96,7 @@ final class DocumentController extends AbstractController
         // Vérifier si l'utilisateur a déjà noté ce document
         $existingNote = $em->getRepository(Note::class)->findOneBy([
             'user' => $user,
-            'document' => $document
+            'document' => $document,
         ]);
 
         //dd($existingNote);
@@ -106,6 +108,7 @@ final class DocumentController extends AbstractController
             'average_notes' => $average_notes,
             'count_notes' => $count_notes,
             'existing_note' => $existingNote,
+            'from_user' => $fromUser,
         ]);
 
     }

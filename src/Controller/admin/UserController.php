@@ -83,6 +83,9 @@ final class UserController extends AbstractController
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['POST','GET'])]
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
+
+        $fromDocument = $request->query->get('fromDocument','');
+
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -105,6 +108,7 @@ final class UserController extends AbstractController
             'image' => $user->getImage(),
             'documents' => $documents,
             'avis' => $avis,
+            'from_document' => $fromDocument,
         ]);
     }
 

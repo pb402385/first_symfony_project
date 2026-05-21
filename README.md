@@ -313,8 +313,6 @@ php bin/console app:clean-revoked-tokens
 - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
 + si je delete un document qui a des notes, s'assurer que les notes sont bien delete
 
-+ Revoir les route, si on vient d'un profil pour consulter un document, en faisant retour il faut idéalement revenir sur le profil sur lequel on était
-
 + Faire une mode responsive pour que le site soit utilisable même sur des petites résolution, le mode card va nous simplifier la vie est sera le seul mode autorisé pour les petites résolutions
 
 + Maintenant qu'on arrive sur la fin, faire des tests plus robustes de création/modification/suppression sur document/user

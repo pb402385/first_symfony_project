@@ -9,7 +9,11 @@
             <div class="col-lg-8">
 
                 {# on a deux cas, soit on affiche l'user depuis l'index des users, soit depuis le document d'un utilisateur #}
-                <a class="btn-retour" href="{{ url('user.index') }}">RETOUR TODO</a>
+                {% if from_document %}
+                    <a class="btn-retour" href="{{ url('document.show', {id:from_document})  }}">RETOUR (document) </a>
+                {% else %}
+                    <a class="btn-retour" href="{{ url('user.index') }}">RETOUR (all users) </a>
+                {% endif %}
 
                 <div class="card shadow-lg border-0">
                     <div class="card-body p-5">
