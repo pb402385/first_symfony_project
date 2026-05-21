@@ -53,7 +53,20 @@
                                     {% if user.city or user.country %}
                                         <li>
                                             <strong>Localisation :</strong><br>
-                                            {{ user.city }}{% if user.city and user.country %}, {% endif %}{{ user.country }}
+                                            {# Affichage du pays avec extension drapeau + nom complet du pays #}
+                                            <div class="d-flex align-items-center gap-2">
+                                                {% if user.country %}
+                                                    <img src="https://flagcdn.com/w40/{{ user.country|lower }}.png"
+                                                         alt="{{ user.country }}"
+                                                         style="height: 20px; border-radius: 3px;">
+                                                    <span>
+                                                {{ user.country|countryName }}
+                                                <small class="text-muted">({{ user.country }}) {{ user.city }}</small>
+                                            </span>
+                                                {% else %}
+                                                    <span class="text-muted">Pays non renseigné</span>
+                                                {% endif %}
+                                            </div>
                                         </li>
                                     {% endif %}
                                 </ul>

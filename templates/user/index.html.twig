@@ -127,6 +127,7 @@
                             <div class="card-body">
                                 <h6 class="card-title text-center"><strong>{{ user.name }}</strong></h6>
                                 <div class="d-flex align-items-center flex-column">
+                                    {# Affichage du pays avec extension drapeau + nom complet du pays #}
                                     <div class="d-flex align-items-center gap-2">
                                         {% if user.country %}
                                             <img src="https://flagcdn.com/w40/{{ user.country|lower }}.png"
