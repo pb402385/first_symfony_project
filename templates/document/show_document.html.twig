@@ -140,6 +140,25 @@
                             </div>
                         </div>
                     </div>
+                    {% if document.user.id == app.user.id %}
+                        {# Bouton d'action #}
+                        <div class="d-flex justify-content-evenly mb-4">
+                            <div class="text-center mt-5">
+                                <a href="{{ path('document.edit', {id: document.id}) }}" class="btn btn-primary px-4">
+                                    <i class="fas fa-edit"></i> Modifier mon document
+                                </a>
+                            </div>
+                            <div class="text-center mt-5">
+                                <form action="{{ path('document.delete', {id:document.id}) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-danger px-4">
+                                        <i class="fas fa-trash"></i>
+                                        Supprimer mon document
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
