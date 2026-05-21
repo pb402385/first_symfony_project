@@ -6,7 +6,7 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <a class="btn-retour" href="{{ url('user.index') }}">RETOUR</a>
+                <a class="btn-retour" href="{{ url('user.show', {id: user.id})  }}">RETOUR (user)</a>
                 <div class="card shadow-lg border-0">
                     <div class="card-body p-5">
                         {{ form_start(form, {'method': 'POST','attr': {'data-turbo': 'false'}}) }}

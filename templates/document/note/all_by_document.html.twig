@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <a class="btn-retour" href="{{ url('document.index') }}">RETOUR</a>
+            <a class="btn-retour" href="{{ url('document.show', {id: document.id})  }}">RETOUR (document)</a>
             <div class="card shadow-lg border-0">
 
                 <h1 class="text-primary mb-3 mt-3" style="font-weight: bold; text-align: center">Avis sur "{{ document.title }}"</h1>

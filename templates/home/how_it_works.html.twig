@@ -53,15 +53,10 @@
                 Merci pour votre patience ❤️
             </p>
 
-            {% if app.user %}
-                <a href="{{ path('home.index') }}" class="btn btn-light btn-lg">
-                    <i class="fas fa-home"></i> Retour à l'accueil
-                </a>
-            {% else %}
-                <a href="{{ path('home.index') }}" class="btn btn-light btn-lg">
-                    <i class="fas fa-home"></i> Retour à l'accueil
-                </a>
-            {% endif %}
+            <a href="{{ path('home.index') }}" class="btn btn-light btn-lg">
+                <i class="fas fa-home"></i> Retour à l'accueil
+            </a>
+
         </div>
     </div>
 {% endblock %}
