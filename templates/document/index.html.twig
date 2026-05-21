@@ -66,7 +66,8 @@
             <button type="submit" class="btn btn-primary">Rechercher</button>
 
             {% if search %}
-                <a href="{{ path('document.index') }}" class="btn btn-outline-secondary">
+                <a href="{{ path('document.index', { view_mode: view_mode|default('table') }) }}"
+                   class="btn btn-outline-secondary">
                     Effacer
                 </a>
             {% endif %}
