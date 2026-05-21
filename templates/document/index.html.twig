@@ -34,9 +34,23 @@
         <a class="user-index-add-a" href="{{ path('document.add.to.fs') }}">Créer un document</a>
     </div>
 
+    {# Switch Tableau / Cards #}
+    <div class="btn-group" role="group" style="float: right;">
+        <button type="button"
+                id="btn-table"
+                class="btn btn-outline-primary {% if view_mode == 'table' %}active{% endif %}">
+            <i class="fas fa-table"></i> Tableau
+        </button>
+        <button type="button"
+                id="btn-cards"
+                class="btn btn-outline-primary {% if view_mode == 'cards' %}active{% endif %}">
+            <i class="fas fa-th-large"></i> Cartes
+        </button>
+    </div>
+
 
     {# Input qui permet de faire une recherche sur les documents #}
-    <div class="mb-4">
+    <div class="mb-4 mt-4">
         <form method="GET" class="d-flex gap-2">
             <input type="text"
                    name="search"
@@ -67,60 +81,107 @@
                 <th>{{ knp_pagination_sortable(documents, 'Date Création', 'd.createdAt') }}</th>
                 <th>{{ knp_pagination_sortable(documents, 'Date modification', 'd.updatedAt') }}</th>
                 <th>{{ knp_pagination_sortable(documents, 'Note', 'avgNote') }}</th>
-                <th>Action</th>
+                <th style="{% if view_mode == 'cards' %}display:none{% endif %}">Action</th>
             </tr>
         </thead>
 
-        {% for document in documents %}
-        <tr>
-            {% if is_granted('ROLE_ADMIN') %}
-                <td>
-                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}"> {{ document[0].id }}</a>
-                </td>
-            {% endif %}
-            <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].title }}</a>
-            </td>
-            <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].user.email }}</a>
-            </td>
-            <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].category.label }}</a>
-            </td>
-            <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].createdAt|date("d/m/Y")  }}</a>
-            </td>
-            <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].updatedAt|date("d/m/Y")  }}</a>
-            </td>
-            <td>
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">
-                    {{ rating.stars(document['avgNote']) }}
-                </a>
-            </td>
-            <td class="user-index-actions-td">
-                <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">Voir</a>
-
-                {% if is_granted('ROLE_ADMIN') or document[0].userId == user.id  %}
-                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.edit', {id:document[0].id}) }}">Editer</a>
-                    <form action="{{ path('document.delete', {id:document[0].id}) }}" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                    </form>
+        {% if view_mode == 'table' %}
+            {% for document in documents %}
+            <tr>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}"> {{ document[0].id }}</a>
+                    </td>
                 {% endif %}
+                <td>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].title }}</a>
+                </td>
+                <td>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].user.email }}</a>
+                </td>
+                <td>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].category.label }}</a>
+                </td>
+                <td>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].createdAt|date("d/m/Y")  }}</a>
+                </td>
+                <td>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">{{ document[0].updatedAt|date("d/m/Y")  }}</a>
+                </td>
+                <td>
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">
+                        {{ rating.stars(document['avgNote']) }}
+                    </a>
+                </td>
+                <td class="user-index-actions-td">
+                    <a class="user-index-list-a text-indigo-600" href="{{ path('document.show', {id:document[0].id}) }}">Voir</a>
 
-            </td>
-        </tr>
-        {% endfor %}
-        {% if documents == null %}
-        <tr>
-            <td>
-                <p><strong>Il n'y a aucun document!</strong></p>
-            </td>
-            <td></td>
-        </tr>
-        {% endif %}
+                    {% if is_granted('ROLE_ADMIN') or document[0].userId == user.id  %}
+                        <a class="user-index-list-a text-indigo-600" href="{{ path('document.edit', {id:document[0].id}) }}">Editer</a>
+                        <form action="{{ path('document.delete', {id:document[0].id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    {% endif %}
+
+                </td>
+            </tr>
+            {% endfor %}
+            {% if documents == null %}
+            <tr>
+                <td>
+                    <p><strong>Il n'y a aucun document!</strong></p>
+                </td>
+                <td></td>
+            </tr>
+            {% endif %}
     </table>
+        {% elseif view_mode == 'cards' %}
+            {#on ferme notre tableau, puis on affiche nos cards #}
+    </table>
+            <div id="view-cards" class="{% if view_mode != 'cards' %}d-none{% endif %} mb-5">
+                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+                    {% for document in documents %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                {# Preview image ou icône #}
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                                    {% if document[0].file is not null %}
+                                        {% set ext = document[0].file|split('.')|last|lower %}
+                                        {% if ext in ['jpg','jpeg','png','webp'] %}
+                                            <img src="{{ asset('uploads/documents/' ~ document[0].file) }}" class="img-fluid h-100" style="object-fit: cover;">
+                                        {% elseif ext == 'pdf' %}
+                                            <i class="fas fa-file-pdf fa-5x text-danger"></i>
+                                        {% else %}
+                                            <i class="fas fa-file fa-5x text-secondary"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-center"><strong>{{ document[0].title }}</strong></h6>
+                                    <div class="d-flex align-items-center flex-column">
+                                        {% if document[0].category %}
+                                            <span class="badge bg-primary-subtle text-primary mb-2">
+                                                {{ document[0].category.label }}
+                                            </span>
+                                        {% endif %}
+                                        <p>
+                                            {{ rating.stars(document['avgNote']) }}
+                                        </p>
+                                        <br/>
+                                        <small>Créé le <strong>{{ document[0].createdAt|date("d/m/Y")  }}</strong></small>
+                                        <small>Mis à jour le <strong>{{ document[0].createdAt|date("d/m/Y")  }}</strong></small>
+                                    </div>
+                                </div>
+
+                                <a class="user-index-list-a text-indigo-600 text-center" href="{{ path('document.show', {id:document[0].id}) }}">Voir</a>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
 
     <div class="pagination_container">
         {{ knp_pagination_render(documents) }}
@@ -157,6 +218,20 @@
                     console.error('Erreur réseau:', error);
                     alert("Erreur réseau ou autre: erreur->"+error);
                 }
+            });
+
+            //JS pour switcher nos affichages sans perdre nos paramètres (cas table->cards)
+            document.getElementById('btn-table')?.addEventListener('click', async () => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("view_mode", "table");
+                window.location.href = url.toString();
+            });
+
+            //JS pour switcher nos affichages sans perdre nos paramètres (cas cards->table)
+            document.getElementById('btn-cards')?.addEventListener('click', async () => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("view_mode", "cards");
+                window.location.href = url.toString();
             });
         </script>
     {% endblock %}

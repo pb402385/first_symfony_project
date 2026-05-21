@@ -51,6 +51,12 @@ final class DocumentController extends AbstractController
         // nombre de résultats par page
         $limit = $request->query->getInt('limit', 10);
 
+        $viewMode = $request->query->get('view_mode','table');
+
+        if($viewMode == 'cards'){
+            $limit = 4;
+        }
+
         $documents = $this->repository->paginateDocumentsWithAvgNoteAndSearchTerm(
             $page,
             $limit,
@@ -65,6 +71,7 @@ final class DocumentController extends AbstractController
             'documents' => $documents,
             'user' => $user,
             'search' => $search,
+            'view_mode' => $viewMode,
         ]);
     }
 
