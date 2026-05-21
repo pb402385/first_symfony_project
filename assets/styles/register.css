@@ -2,20 +2,20 @@
     font-family: Arial, sans-serif;
     background: #f4f7f9;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    min-height: 70vh;
     margin: 0;
-    max-height: 500px;
-    margin-top: 50px;
-    margin-bottom: 50px;
 }
 .register-box {
     background: white;
     padding: 40px;
-    border-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
 }
 input.register {
     width: 100%;
@@ -43,4 +43,26 @@ button.register:hover { background: #059669; }
 .register-box > a.btn-retour {
     position: relative;
     top: -35px;
+}
+
+#register-return-arrow{
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 400px;
+}
+
+.register-box-title{
+    background-color: #0d6efd;
+    color: white;
+}
+
+.register-box-header{
+    background-color: #0d6efd;
+    padding-top: 20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
 }

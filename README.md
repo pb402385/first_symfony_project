@@ -309,8 +309,6 @@ php bin/console app:clean-revoked-tokens
 
 + mini doc pour présenter le projet (juste les fonctionnalités, pas le code)
 
-+ revoir design page register et login (surtout sortir la flêche retour de la card d'authentification)
-
 + Page accueil à finaliser
 - idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
 + si je delete un document qui a des notes, s'assurer que les notes sont bien delete
