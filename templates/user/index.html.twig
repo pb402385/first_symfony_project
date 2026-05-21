@@ -127,9 +127,19 @@
                             <div class="card-body">
                                 <h6 class="card-title text-center"><strong>{{ user.name }}</strong></h6>
                                 <div class="d-flex align-items-center flex-column">
-                                    <p>
-                                        {{ user.country }}
-                                    </p>
+                                    <div class="d-flex align-items-center gap-2">
+                                        {% if user.country %}
+                                            <img src="https://flagcdn.com/w40/{{ user.country|lower }}.png"
+                                                 alt="{{ user.country }}"
+                                                 style="height: 20px; border-radius: 3px;">
+                                            <span>
+                                                {{ user.country|countryName }}
+                                                <small class="text-muted">({{ user.country }})</small>
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">Pays non renseigné</span>
+                                        {% endif %}
+                                    </div>
                                     <br/>
                                     <small>Email: <strong>{{ user.email  }}</strong></small>
                                 </div>
