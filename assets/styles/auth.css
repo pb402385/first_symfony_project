@@ -2,6 +2,7 @@
     font-family: Arial, sans-serif;
     background: #f4f7f9;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 70vh;
@@ -10,7 +11,8 @@
 .login-box {
     background: white;
     padding: 40px;
-    border-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 400px;
@@ -45,4 +47,26 @@ button.login:hover { background: #1e40af; }
 .logout-txt-link {
     font-weight: bold;
     color: darkred;
+}
+
+#login-return-arrow{
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-box-title{
+    background-color: #0d6efd;
+    color: white;
+}
+
+.login-box-header{
+    background-color: #0d6efd;
+    padding-top: 20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
 }
