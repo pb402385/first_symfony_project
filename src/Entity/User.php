@@ -278,11 +278,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // ========================
     // GESTION IMAGE BLOB
     // ========================
+    /*
     public function getImage(): ?string
     {
         if (is_resource($this->image)) {
             return stream_get_contents($this->image);
         }
+        return $this->image;
+    }
+    */
+
+    //On améliore notre fonction getImage() pour pouvoir la lire directement depuis TWIG sans faire le getImage() en amont !!!
+    public function getImage(): ?string
+    {
+        if ($this->image === null) {
+            return null;
+        }
+
+        // Si c'est une ressource (BLOB)
+        if (is_resource($this->image)) {
+            $content = stream_get_contents($this->image);
+            rewind($this->image); // Important : remettre le curseur au début
+            return $content;
+        }
+
         return $this->image;
     }
 

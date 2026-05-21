@@ -40,6 +40,12 @@ final class UserController extends AbstractController
         // nombre de résultats par page
         $limit = $request->query->getInt('limit', 5);
 
+        $viewMode = $request->query->get('view_mode','table');
+
+        if($viewMode == 'cards'){
+            $limit = 4;
+        }
+
         $users = $this->repository->paginateUsersWithSearchTerm(
             $page,
             $limit,
@@ -55,6 +61,7 @@ final class UserController extends AbstractController
             //'maxPage' => $maxPage,
             'page' => $page,
             'search' => $search,
+            'view_mode' => $viewMode,
         ]);
     }
 

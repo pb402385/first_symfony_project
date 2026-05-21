@@ -16,23 +16,39 @@
         </div>
     {% endif %}
 
-    {# Input qui permet de faire une recherche sur les utilisateurs #}
-    <div class="mb-4">
-        <form method="GET" class="d-flex gap-2">
-            <input type="text"
-                   name="search"
-                   value="{{ search }}"
-                   class="form-control"
-                   placeholder="Rechercher par nom ou email ou pays ...">
+    {# Switch Tableau / Cards #}
+    <div class="d-flex flex-column">
+        <div class="btn-group mb-3" role="group" style="width: 200px;">
+            <button type="button"
+                    id="btn-table"
+                    class="btn btn-outline-primary {% if view_mode == 'table' %}active{% endif %}">
+                <i class="fas fa-table"></i> Tableau
+            </button>
+            <button type="button"
+                    id="btn-cards"
+                    class="btn btn-outline-primary {% if view_mode == 'cards' %}active{% endif %}">
+                <i class="fas fa-th-large"></i> Cartes
+            </button>
+        </div>
 
-            <button type="submit" class="btn btn-primary">Rechercher</button>
+        {# Input qui permet de faire une recherche sur les utilisateurs #}
+        <div class="mb-4">
+            <form method="GET" class="d-flex gap-2">
+                <input type="text"
+                       name="search"
+                       value="{{ search }}"
+                       class="form-control"
+                       placeholder="Rechercher par nom ou email ou pays ...">
 
-            {% if search %}
-                <a href="{{ path('user.index') }}" class="btn btn-outline-secondary">
-                    Effacer
-                </a>
-            {% endif %}
-        </form>
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+
+                {% if search %}
+                    <a href="{{ path('user.index') }}" class="btn btn-outline-secondary">
+                        Effacer
+                    </a>
+                {% endif %}
+            </form>
+        </div>
     </div>
 
     <div class="user-list-container">
@@ -45,40 +61,83 @@
                 <th>{{ knp_pagination_sortable(users, 'Nom', 'u.name') }}</th>
                 <th>{{ knp_pagination_sortable(users, 'Email', 'u.email') }}</th>
                 <th>{{ knp_pagination_sortable(users, 'Pays', 'u.country') }}</th>
-                <th>Action</th>
+                <th style="{% if view_mode == 'cards' %} display:none {% endif %}">Action</th>
             </tr>
             </thead>
-            {% for user in users %}
-                <tr>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <td>
-                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}"> {{ user.id }}</a>
-                        </td>
-                    {% endif %}
-                    <td>
-                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ user.name }}</a>
-                    </td>
-                    <td>
-                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ user.email }}</a>
-                    </td>
-                    <td>
-                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}"> {{ user.country }}</a>
-                    </td>
-                    <td class="user-index-actions-td">
-                        <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">Voir</a>
-
-                        {% if is_granted('ROLE_ADMIN') or app.user.id == user.id  %}
-                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.edit', {id:user.id}) }}">Editer</a>
-                            <form action="{{ path('user.delete', {id:user.id}) }}" method="post">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                            </form>
+            {% if view_mode == 'table' %}
+                {% for user in users %}
+                    <tr>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <td>
+                                <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}"> {{ user.id }}</a>
+                            </td>
                         {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
+                        <td>
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ user.name }}</a>
+                        </td>
+                        <td>
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ user.email }}</a>
+                        </td>
+                        <td>
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}"> {{ user.country }}</a>
+                        </td>
+                        <td class="user-index-actions-td">
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">Voir</a>
+
+                            {% if is_granted('ROLE_ADMIN') or app.user.id == user.id  %}
+                                <a class="user-index-list-a text-indigo-600" href="{{ path('user.edit', {id:user.id}) }}">Editer</a>
+                                <form action="{{ path('user.delete', {id:user.id}) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
         </table>
     </div>
+            {% elseif view_mode == 'cards' %}
+            {#on ferme notre tableau, puis on affiche nos cards #}
+        </table>
+    </div>
+        <div id="view-cards" class="{% if view_mode != 'cards' %}d-none{% endif %} mb-5">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+                {% for user in users %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            {# Preview image ou icône #}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                                {% if user.image is not null %}
+                                    <img src="data:{{ user.imageMime|default('image/jpeg') }};base64,{{ user.image|base64_encode }}"
+                                         alt="Photo de {{ user.name }}"
+                                         class="rounded-circle border border-3 border-white shadow-sm"
+                                         style="width: 180px; height: 180px; object-fit: cover; margin: 0 auto;">
+                                {% else %}
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto shadow-sm"
+                                         style="width: 180px; height: 180px; font-size: 4rem;">
+                                        👤
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title text-center"><strong>{{ user.name }}</strong></h6>
+                                <div class="d-flex align-items-center flex-column">
+                                    <p>
+                                        {{ user.country }}
+                                    </p>
+                                    <br/>
+                                    <small>Email: <strong>{{ user.email  }}</strong></small>
+                                </div>
+                            </div>
+
+                            <a class="user-index-list-a text-indigo-600 text-center" href="{{ path('user.show', {id:user.id}) }}">Voir</a>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
 
     {#
     <div class="d-flex">
@@ -93,5 +152,24 @@
     <div class="pagination_container">
         {{ knp_pagination_render(users) }}
     </div>
+
+    {% block javascripts %}
+        {{ parent() }}   {# ← Très important #}
+        <script>
+            //JS pour switcher nos affichages sans perdre nos paramètres (cas table->cards)
+            document.getElementById('btn-table')?.addEventListener('click', async () => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("view_mode", "table");
+                window.location.href = url.toString();
+            });
+
+            //JS pour switcher nos affichages sans perdre nos paramètres (cas cards->table)
+            document.getElementById('btn-cards')?.addEventListener('click', async () => {
+                const url = new URL(window.location.href);
+                url.searchParams.set("view_mode", "cards");
+                window.location.href = url.toString();
+            });
+        </script>
+    {% endblock %}
 
 {% endblock %}
