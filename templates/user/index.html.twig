@@ -84,7 +84,22 @@
                             <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">{{ user.email }}</a>
                         </td>
                         <td>
-                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}"> {{ user.country }}</a>
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">
+                                {# Affichage du pays avec extension drapeau + nom complet du pays #}
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if user.country %}
+                                        <img src="https://flagcdn.com/w40/{{ user.country|lower }}.png"
+                                             alt="{{ user.country }}"
+                                             style="height: 20px; border-radius: 3px;">
+                                        <span>
+                                                {{ user.country|countryName }}
+                                                <small class="text-muted">({{ user.country }})</small>
+                                            </span>
+                                    {% else %}
+                                        Pays non renseigné
+                                    {% endif %}
+                                </div>
+                            </a>
                         </td>
                         <td class="user-index-actions-td">
                             <a class="user-index-list-a text-indigo-600" href="{{ path('user.show', {id:user.id}) }}">Voir</a>
