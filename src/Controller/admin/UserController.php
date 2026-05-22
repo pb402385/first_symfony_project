@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 
 #[Route('/user', name: 'user.')]
 final class UserController extends AbstractController
@@ -227,12 +230,15 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','PUT'])]
-    public function delete(User $user, Request $request, EntityManagerInterface $em): Response
+    public function delete(User $user, Request $request, EntityManagerInterface $em, TokenStorageInterface $tokenStorage): Response
     {
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+
         $userapp = $this->getUser();
+        $isDeletingSelf = $userapp && $userapp->getId() === $user->getId();
+
         if ($userapp) {
 
             // 1. Récupérer l'utilisateur système
@@ -260,6 +266,23 @@ final class UserController extends AbstractController
             if( !$this->isGranted('ROLE_ADMIN') && ((int)$userapp->getUserIdentifier() != $user->getId()) ) {
                 $this->addFlash('danger',"Vous n'avez pas le droit de supprimer ce User!");
                 return $this->redirectToRoute('user.index');
+            }
+
+            //dd($user);
+
+            // si on se supprime sois même c'est différent
+            if ($isDeletingSelf) {
+                // On remplace d'abord le token de sécurité par l'utilisateur système
+                $systemToken = new UsernamePasswordToken($systemUser, 'main', $systemUser->getRoles());
+                $tokenStorage->setToken($systemToken);
+
+                // Maintenant on peut supprimer l'utilisateur en toute sécurité
+                $em->remove($user);
+                $em->flush();
+
+                $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+                // Déconnexion immédiate
+                return $this->redirectToRoute('app_logout');
             }
 
             $em->remove($user);

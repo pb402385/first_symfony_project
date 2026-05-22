@@ -313,7 +313,8 @@ php bin/console app:clean-revoked-tokens
 
 + sur la page ou il y a toutes les notes, si l'user n'a pas deja noté on met un lien pour aller noter
 
-- idéalement l'user peut delete son compte 
++ possibilité d'aller supprimer sa note (on ne peut actuellement que la modifier)
++ l'admin peut supprimer n'importe quelle note pour assurer la charte de comportement
 
 + Faire une mode responsive pour que le site soit utilisable même sur des petites résolution, le mode card va nous simplifier la vie est sera le seul mode autorisé pour les petites résolutions
 

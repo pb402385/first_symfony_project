@@ -22,7 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Document::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Document::class, cascade: ['remove'])]
     private Collection $documents;
 
     #[ORM\Column(length: 255)]
@@ -74,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?UploadedFile $imageFile = null;   // Champ non mappé
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Note::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Note::class, cascade: ['remove'])]
     private Collection $notes;
 
 
