@@ -2,6 +2,7 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\Document;
 use App\Entity\Note;
 use App\Entity\User;
 use App\Form\UserType;
@@ -91,9 +92,14 @@ final class UserController extends AbstractController
 
         // On récupère l'user ainsi que tous les documents associé à l'user
         $userWithDocumentsAndNotes = $this->repository->findUserAndDocumentsAndNotesByUserID($id);
-        $user = $userWithDocumentsAndNotes[0];
 
-        $documents = $user->getDocuments()->toArray();
+        //On doit s'assurer que le document existe !
+        if(!$userWithDocumentsAndNotes){
+            $this->addFlash('danger', "Cet utilisateur n'existe pas (ou plus) !");
+            return $this->redirectToRoute('user.index');
+        }
+
+        $documents = $userWithDocumentsAndNotes->getDocuments()->toArray();
 
         // On récupère également les réactions de l'utilisateurs par rapport à l'ensemble des documents
         $limit = 5; //On récupère ses 5 derniers avis, comme ça on peut savoir quels sont les derniers documents qui ont interressé cet utilisateur
@@ -103,9 +109,9 @@ final class UserController extends AbstractController
 
         return $this->render('user/show_profil.html.twig', [
             'controller_name' => 'UserController',
-            'title' => 'Page de '.$user->getName(),
-            'user' => $user,
-            'image' => $user->getImage(),
+            'title' => 'Page de '.$userWithDocumentsAndNotes->getName(),
+            'user' => $userWithDocumentsAndNotes,
+            'image' => $userWithDocumentsAndNotes->getImage(),
             'documents' => $documents,
             'avis' => $avis,
             'from_document' => $fromDocument,
@@ -228,17 +234,39 @@ final class UserController extends AbstractController
 
         $userapp = $this->getUser();
         if ($userapp) {
+
+            // 1. Récupérer l'utilisateur système
+            $systemUser = $this->repository->findOneBy(['email' => 'noreply@docshare.fr']);
+
+            if (!$systemUser) {
+                $this->addFlash('danger', 'Utilisateur système "noreply@docshare.fr" non trouvé.');
+                return $this->redirectToRoute('user.index');
+            }
+
+            // 2. Réassigner les documents
+            foreach ($user->getDocuments() as $document) {
+                $document->setUser($systemUser);
+            }
+
+            // 3. Réassigner les notes
+            foreach ($user->getNotes() as $note) {
+                $note->setUser($systemUser);
+            }
+
+            //dd($systemUser, $user);
+
             // On est logué, on ne peut modifier l'utilisateur que si l'on est ADMIN ou si il s'agit de notre compte
 
             if( !$this->isGranted('ROLE_ADMIN') && ((int)$userapp->getUserIdentifier() != $user->getId()) ) {
                 $this->addFlash('danger',"Vous n'avez pas le droit de supprimer ce User!");
                 return $this->redirectToRoute('user.index');
             }
+
+            $em->remove($user);
+            $em->flush();
+            $this->addFlash('success',"L'utilisateur a bien été supprimé");
         }
 
-        $em->remove($user);
-        $em->flush();
-        $this->addFlash('success',"L'utilisateur a bien été supprimé");
         return $this->redirectToRoute('user.index');
     }
 }

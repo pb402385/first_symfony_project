@@ -311,11 +311,9 @@ php bin/console app:clean-revoked-tokens
 
 + Page accueil à finaliser ( si non auth inviter à s'inscrire et résumé de ce que l'on peut faire, si auth, inviter a aller dans document ou user)
 
-+ Cascade delete note et document supprimés si delete user
 + sur la page ou il y a toutes les notes, si l'user n'a pas deja noté on met un lien pour aller noter
 
-- idéalement l'user peut delete son compte (voir quelles implications, si on garde les docs ou si on delete tout par cascade
-+ si je delete un document qui a des notes, s'assurer que les notes sont bien delete
+- idéalement l'user peut delete son compte 
 
 + Faire une mode responsive pour que le site soit utilisable même sur des petites résolution, le mode card va nous simplifier la vie est sera le seul mode autorisé pour les petites résolutions
 

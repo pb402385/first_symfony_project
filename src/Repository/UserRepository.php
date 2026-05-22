@@ -90,7 +90,7 @@ class UserRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findUserAndDocumentsAndNotesByUserID($value): array
+    public function findUserAndDocumentsAndNotesByUserID($value): ?User
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.documents', 'd')
@@ -101,7 +101,7 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('id', $value)
             ->orderBy('d.createdAt', 'DESC')     // Optionnel : trier les documents
             ->getQuery()
-            ->getResult();              // Retourne un seul User (ou null)
+            ->getOneOrNullResult();             // Retourne un seul User (ou null)
     }
 
     public function paginateUsersWithSearchTerm(
@@ -134,6 +134,12 @@ class UserRepository extends ServiceEntityRepository
         $qb->orderBy($sort, $direction);
 
         return $this->paginator->paginate($qb, $page, $limit);
+    }
+
+
+    public function findSystemUser(): ?User
+    {
+        return $this->findOneBy(['email' => 'noreply@docshare.fr']);
     }
 
 }
