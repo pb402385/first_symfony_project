@@ -311,12 +311,10 @@ php bin/console app:clean-revoked-tokens
 
 + Page accueil à finaliser ( si non auth inviter à s'inscrire et résumé de ce que l'on peut faire, si auth, inviter a aller dans document ou user)
 
-+ sur la page ou il y a toutes les notes, si l'user n'a pas deja noté on met un lien pour aller noter
-
-+ possibilité d'aller supprimer sa note (on ne peut actuellement que la modifier)
-+ l'admin peut supprimer n'importe quelle note pour assurer la charte de comportement
++ l'admin peut supprimer n'importe quel commentaire pour assurer la charte de comportement
 
 + Faire une mode responsive pour que le site soit utilisable même sur des petites résolution, le mode card va nous simplifier la vie est sera le seul mode autorisé pour les petites résolutions
+
 
 + Maintenant qu'on arrive sur la fin, faire des tests plus robustes de création/modification/suppression sur document/user
 

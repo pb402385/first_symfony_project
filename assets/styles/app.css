@@ -124,3 +124,8 @@ body {
     justify-content: center;
     margin-bottom: 10px;
 }
+
+#bloc_actions_all_avis{
+    display: flex;
+    flex-direction: column;
+}

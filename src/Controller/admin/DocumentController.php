@@ -9,6 +9,7 @@ use App\Form\NoteType;
 use App\Repository\DocumentRepository;
 use App\Service\DocumentReceiptService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -436,7 +437,20 @@ final class DocumentController extends AbstractController
 
         $notes = $noteRepository->findByDocumentWithUser($document);
 
-        //dd($notes);
+        $userHasNote = false;
+        $userHasAvis = false;
+        $noteId = -1;
+        foreach ($notes as $note) {
+            if ($note->getUser() === $user) {
+                $userHasNote = true;
+                $noteId = $note->getId();
+                if ($note->getComment() !== null && $note->getComment() !== '') {
+                    $userHasAvis = true;
+                }
+            }
+        }
+
+        //dd($notes, $user->getUserIdentifier(), $userHasNote);
 
 
         return $this->render('document/note/all_by_document.html.twig', [
@@ -444,7 +458,66 @@ final class DocumentController extends AbstractController
             'notes' => $notes,
             'averageRating' => $stats['average'] ?? 0,
             'totalNotes' => $stats['total'] ?? 0,
+            'userHasNote' => $userHasNote,
+            'noteId' => $noteId,
+            'userHasAvis' => $userHasAvis,
         ]);
+    }
+
+
+
+
+    /*
+     * Supprimer une note et un avis si il y a un avis
+     */
+    #[Route('/note/{id}/delete/{id_note}', name: 'note.delete', requirements: ['id' => '\d+', 'id_notes' => '\d+'], methods: ['POST', 'PUT'])]
+    public function deleteNote(Document $document, #[MapEntity(id: 'id_note')] Note $note, Request $request, EntityManagerInterface $em): Response
+    {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        if ($user) {
+
+            // On est logué, on ne peut modifier le commentaire que si l'on est ADMIN ou si il s'agit de notre note
+            if (!$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $note->getId())) {
+                $this->addFlash('danger', "Vous n'avez pas le droit de supprimer cet avis!");
+                return $this->redirectToRoute('document.index');
+            }
+
+            $em->remove($note);
+            $em->flush();
+            $this->addFlash('success', "L'avis a bien été supprimé");
+        }
+
+        return $this->redirectToRoute('document.avis', ['id' => $document->getId()]);
+    }
+
+
+    #[Route('/note/{id}/delete-commentaire/{id_note}', name: 'note.delete.commentaire', requirements: ['id' => '\d+', 'id_notes' => '\d+'], methods: ['POST', 'PUT'])]
+    public function deleteCommentaire(Document $document, #[MapEntity(id: 'id_note')] Note $note, Request $request, EntityManagerInterface $em): Response
+    {
+        // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        if ($user) {
+
+            // On est logué, on ne peut modifier le commentaire que si l'on est ADMIN ou si il s'agit de notre note
+            if (!$this->isGranted('ROLE_ADMIN') && ((int)$user->getUserIdentifier() != $note->getId())) {
+                $this->addFlash('danger', "Vous n'avez pas le droit de supprimer cette note!");
+                return $this->redirectToRoute('document.index');
+            }
+
+            $note->setComment(null);
+            $em->persist($note);
+            $em->flush();
+            $this->addFlash('success', "Le commentaire a bien été supprimé");
+        }
+
+        return $this->redirectToRoute('document.avis', ['id' => $document->getId()]);
     }
 
 }

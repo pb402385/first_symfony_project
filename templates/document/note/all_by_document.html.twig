@@ -23,6 +23,37 @@
                     </div>
                 {% endif %}
 
+
+                <div id="bloc_actions_all_avis" class="mb-4">
+                    {# Si le document n'a jamais été noté par l'utilisateur #}
+                    {% if userHasNote == false  %}
+                        <a class="user-index-list-a text-indigo-600 text-center mb-4 btn btn-lg w-100" href="{{ path('document.note', {id:document.id}) }}">
+                            <i class="fa-solid fa-feather"></i>
+                            Noter et commenter (optionnel) ce document !
+                        </a>
+                    {% else %}
+                        {# Si le document a déjà été noté par l'utilisateur #}
+                        {% if userHasAvis == true  %}
+                            {# user a un commentaire #}
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('document.note', {id:document.id}) }}">Modifier votre note ou modifier votre commentaire</a>
+                        {% else %}
+                            {# user a juste une note #}
+                            <a class="user-index-list-a text-indigo-600" href="{{ path('document.note', {id:document.id}) }}">Modifier votre note ou ajouter un commentaire</a>
+                        {% endif %}
+
+                        <form action="{{ path('document.note.delete', {id:document.id, id_note:noteId}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                {% if userHasAvis == true  %}
+                                    Supprimer votre note et votre commentaire
+                                {% else %}
+                                    Supprimer votre note
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+
                     <div class="bloc-all-avis">
                         {% if notes is empty %}
                             <div class="alert alert-info text-center py-5">
@@ -58,6 +89,13 @@
                                             <p class="mb-0">{{ note.comment|nl2br }}</p>
                                         {% else %}
                                             <p class="text-muted fst-italic">Aucun commentaire</p>
+                                        {% endif %}
+                                        {# Bouton pour supprimer directement un commentaire #}
+                                        {% if note.id == noteId and userHasAvis == true %}
+                                            <form action="{{ path('document.note.delete.commentaire', {id:document.id, id_note:note.id}) }}" method="post">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="btn btn-danger btn-sm" style="float:right">Supprimer votre commentaire</button>
+                                            </form>
                                         {% endif %}
                                     </div>
                                 </div>
