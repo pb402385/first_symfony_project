@@ -311,8 +311,6 @@ php bin/console app:clean-revoked-tokens
 
 + Page accueil à finaliser ( si non auth inviter à s'inscrire et résumé de ce que l'on peut faire, si auth, inviter a aller dans document ou user)
 
-+ l'admin peut supprimer n'importe quel commentaire pour assurer la charte de comportement
-
 + Faire une mode responsive pour que le site soit utilisable même sur des petites résolution, le mode card va nous simplifier la vie est sera le seul mode autorisé pour les petites résolutions
 
 

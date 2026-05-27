@@ -91,10 +91,16 @@
                                             <p class="text-muted fst-italic">Aucun commentaire</p>
                                         {% endif %}
                                         {# Bouton pour supprimer directement un commentaire #}
-                                        {% if note.id == noteId and userHasAvis == true %}
+                                        {% if is_granted('ROLE_ADMIN') or note.id == noteId and userHasAvis == true %}
                                             <form action="{{ path('document.note.delete.commentaire', {id:document.id, id_note:note.id}) }}" method="post">
                                                 <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn btn-danger btn-sm" style="float:right">Supprimer votre commentaire</button>
+
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                    <button type="submit" class="btn btn-danger btn-sm" style="float:right">Supprimer le commentaire</button>
+                                                {% else %}
+                                                    <button type="submit" class="btn btn-danger btn-sm" style="float:right">Supprimer votre commentaire</button>
+                                                {% endif %}
+
                                             </form>
                                         {% endif %}
                                     </div>
