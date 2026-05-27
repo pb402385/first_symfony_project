@@ -33,6 +33,12 @@
                             {% for i in 1..5 %}
                                 {% if i <= avi.rating %}
                                     <span class="text-warning">★</span>
+                                {% elseif i - avi.rating < 1 and i - avi.rating > 0 %}
+                                    <span class="star half" style="background: linear-gradient(to right,
+                                        #ffd700 {{ (1 - (i - avi.rating)) * 100 }}%,
+                                        #ddd {{ (1 - (i - avi.rating)) * 100 }}%);
+                                        -webkit-background-clip: text;
+                                        -webkit-text-fill-color: transparent;">★</span>
                                 {% else %}
                                     <span class="text-muted">★</span>
                                 {% endif %}
