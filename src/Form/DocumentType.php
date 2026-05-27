@@ -26,7 +26,7 @@ class DocumentType extends AbstractType
                 'choice_label' => 'label',           // Le champ affiché dans le select
                 'label' => 'Catégorie',
                 'placeholder' => 'Sélectionnez une catégorie',
-                'required' => false,                 // ou true selon ton besoin
+                'required' => true,                 // ou true selon ton besoin
                 'attr' => [
                     'class' => 'form-select'
                 ],
