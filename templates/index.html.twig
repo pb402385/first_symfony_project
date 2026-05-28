@@ -25,6 +25,9 @@
                 }, 1000);
 
             </script>
+
+            <!-- Utile pour afficher le diagramme camembert -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
         {% endblock %}
     {% endif %}
 
@@ -40,7 +43,25 @@
         </div>
     {% endif %}
 
-    {# On inclut un contenu pour embellir la page d'accueil #}
-    {% include 'home/content.html.twig' %}
+    {% if app.user is not null %}
+        {% if categoryStats is defined %}
+            {# Import de la macro #}
+            {% import 'component/pie_chart.html.twig' as pie %}
 
+            <div class="container mt-5 mb-5">
+                <div>
+
+                    {# {{ dump(categoryStats) }} #}
+
+                    {{ pie.pieChart(
+                        categoryStats,
+                        'Répartition des documents par catégorie'
+                    ) }}
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        {# On inclut un contenu pour embellir la page d'accueil #}
+        {% include 'home/content.html.twig' %}
+    {% endif %}
 {% endblock %}

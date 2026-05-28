@@ -110,4 +110,24 @@ class DocumentRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function getDocumentsCountByCategory(): array
+    {
+        $result = $this->createQueryBuilder('d')
+            ->select('c.label as categoryName', 'COUNT(d.id) as documentCount')
+            ->leftJoin('d.category', 'c')
+            ->groupBy('c.id')
+            ->orderBy('documentCount', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        /* On formatte le résultat pour le rendre compatible avec chart.js (nécessaire pour l'affichage du camembert) */
+        $stats = [];
+        foreach ($result as $row) {
+            $name = $row['categoryName'] ?? 'Non classé';
+            $stats[$name] = (int) $row['documentCount'];
+        }
+
+        return $stats;
+    }
+
 }

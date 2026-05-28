@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Document;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,21 +11,42 @@ use Symfony\Component\HttpFoundation\Response;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'home.index')]
-    public function index(): Response
+    public function index(EntityManagerInterface $em): Response
     {
+
+        $user = $this->getUser();
+
+        $categoryStats = null;
+        if ($user) {
+            // On est logué, on cherche toutes les catégories et le nombre de documents associés
+            $documentRepository = $em->getRepository(Document::class);
+            $categoryStats = $documentRepository->getDocumentsCountByCategory();
+        }
+
         // Render a Twig template
         return $this->render('index.html.twig', [
             'controller_name' => 'HomeController',
+            'categoryStats' => $categoryStats,
         ]);
 
     }
 
     #[Route('/home', name: 'home.fullpath.index')]
-    public function indexFullPath(): Response
+    public function indexFullPath(EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+
+        $categoryStats = null;
+        if ($user) {
+            // On est logué, on cherche toutes les catégories et le nombre de documents associés
+            $documentRepository = $em->getRepository(Document::class);
+            $categoryStats = $documentRepository->getDocumentsCountByCategory();
+        }
+
         // Render a Twig template
         return $this->render('index.html.twig', [
             'controller_name' => 'HomeController',
+            'categoryStats' => $categoryStats,
         ]);
     }
 
