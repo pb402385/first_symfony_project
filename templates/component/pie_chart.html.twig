@@ -1,7 +1,7 @@
 {% macro pieChart(data, title = 'Répartition des documents par catégorie') %}
     <div class="card shadow-sm">
         <div class="card-header bg-white">
-            <h5 class="mb-2 mt-2 text-center"><strong>{{ title }}</strong></h5>
+            <h5 class="mb-0">{{ title }}</h5>
         </div>
         <div class="card-body">
             <canvas id="categoryPieChart" height="320"></canvas>
@@ -9,27 +9,28 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('categoryPieChart');
+        // Utilisation de turbo:load au lieu de DOMContentLoaded
+        document.addEventListener('turbo:load', function() {
+            const canvas = document.getElementById('categoryPieChart');
+            if (!canvas) return;
 
-            new Chart(ctx, {
+            // Destruction de l'ancien chart s'il existe (important avec Turbo)
+            if (canvas.chartInstance) {
+                canvas.chartInstance.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+
+            canvas.chartInstance = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: [
-                        {% for key, value in data %}
-                        '{{ key|escape('js') }}'{% if not loop.last %},{% endif %}
-                        {% endfor %}
-                    ],
+                    labels: Object.keys({{ data|json_encode|raw }}),
                     datasets: [{
-                        data: [
-                            {% for key, value in data %}
-                            {{ value }}{% if not loop.last %},{% endif %}
-                            {% endfor %}
-                        ],
+                        data: Object.values({{ data|json_encode|raw }}),
                         backgroundColor: [
                             '#3b82f6', '#10b981', '#f59e0b', '#ef4444',
                             '#8b5cf6', '#ec4899', '#14b8a6', '#f97316',
-                            '#6366f1', '#eab308', '#22d3ee'
+                            '#6366f1', '#eab308'
                         ],
                         borderWidth: 2,
                         borderColor: '#ffffff'
@@ -41,17 +42,7 @@
                     plugins: {
                         legend: {
                             position: 'right',
-                            labels: {
-                                padding: 15,
-                                font: { size: 13 }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ' : ' + context.raw + ' document(s)';
-                                }
-                            }
+                            labels: { padding: 15, font: { size: 13 } }
                         }
                     }
                 }
