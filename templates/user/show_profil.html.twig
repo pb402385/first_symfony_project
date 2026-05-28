@@ -11,6 +11,8 @@
                 {# on a deux cas, soit on affiche l'user depuis l'index des users, soit depuis le document d'un utilisateur #}
                 {% if from_document %}
                     <a class="btn-retour" href="{{ url('document.show', {id:from_document})  }}">RETOUR (document) </a>
+                {% elseif from_profile %}
+                    <a class="btn-retour" href="{{ url('home.index')  }}">RETOUR (home) </a>
                 {% else %}
                     <a class="btn-retour" href="{{ url('user.index') }}">RETOUR (all users) </a>
                 {% endif %}

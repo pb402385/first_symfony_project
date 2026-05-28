@@ -88,6 +88,7 @@ final class UserController extends AbstractController
     public function show(int $id, Request $request, EntityManagerInterface $em): Response
     {
 
+        $fromProfile = $request->query->get('fromProfile','');
         $fromDocument = $request->query->get('fromDocument','');
 
         // On vérifie que l'utilisateur a bien un token valide pour accéder à la page
@@ -118,6 +119,7 @@ final class UserController extends AbstractController
             'documents' => $documents,
             'avis' => $avis,
             'from_document' => $fromDocument,
+            'from_profile' => $fromProfile,
         ]);
     }
 
