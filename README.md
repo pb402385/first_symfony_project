@@ -155,7 +155,7 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
 ### Presentation de l'application
 <a id="presentation"></a>
 
-<div align="center">
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
   Lors de notre première visite, on arrive sur la page d'accueil
 </div>
 <br/>
@@ -164,8 +164,8 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/Home.jpg" alt="home.jpg" />
 </div>
 
-<div align="center">
-  On est invité soit à **se connecter** si l'on dispose déjà d'un compte, sinon à **s'inscrire**.Comme il s'agit de notre première connexion on se dirige sur la page d'inscription.
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  On est invité soit à <b>se connecter</b> si l'on dispose déjà d'un compte, sinon à <b>s'inscrire</b>.Comme il s'agit de notre première connexion on se dirige sur la page d'inscription.
 </div>
 <br/>
 
@@ -173,7 +173,7 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/Register.jpg" alt="register.jpg" />
 </div>
 
-<div align="center">
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
   Une fois notre formulaire envoyé, on reçoit un message de confirmation qui nous invite à nous rendre sur notre email afin de vérifier celui-ci pour finaliser notre inscription.
 </div>
 <br/>
@@ -182,8 +182,8 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/Register-ok.jpg" alt="register-ok.jpg" />
 </div>
 
-<div align="center">
-  Sur l'email de **confirmation de l'email**, on nous invite à **cliquer sur un lien** qui nous permettra de **vérifier qu'il s'agit bien d'un email valide**. 
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Sur l'email de <b>confirmation de l'emai</b>, on nous invite à <b>cliquer sur un lien</b> qui nous permettra de <b>vérifier qu'il s'agit bien d'un email valide</b>. 
 </div>
 <br/>
 
@@ -191,8 +191,8 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/Register-activation-mail.jpg" alt="register-activation-mail.jpg" />
 </div>
 
-<div align="center">
-  Notre **inscription est valide** et l'on peut désormais se **connecter** à notre application
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Notre <b>inscription est valide</b> et l'on peut désormais se <b>connecter</b> à notre application
 </div>
 <br/>
 
@@ -200,8 +200,8 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/Register-activation-mail-ok.jpg" alt="register-activation-mail-ok.jpg" />
 </div>
 
-<div align="center">
-  **Une fois connecté**, on arrive sur la page d'accueil avec un message de confirmation et l'on peut désormais accéder à notre profil ou celui des autres utilisateurs ainsi qu'aux documents déposés par les utilisateurs
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  <b>Une fois connecté</b>, on arrive sur la page d'accueil avec un message de confirmation et l'on peut désormais accéder à notre profil ou celui des autres utilisateurs ainsi qu'aux documents déposés par les utilisateurs
 </div>
 <br/>
 
@@ -209,8 +209,8 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/login-ok.jpg" alt="login-ok.jpg" />
 </div>
 
-<div align="center">
-  De plus notre page d'accueil nous affiche désormais un **diagramme camembert** pour nous representer le **nombre de documents par catégorie**
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  De plus notre page d'accueil nous affiche désormais un <b>diagramme camembert</b> pour nous representer le <b>nombre de documents par catégorie</b>
 </div>
 <br/>
 
@@ -218,8 +218,8 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/Home-si-connecte.jpg" alt="Home-si-connecte.jpg" />
 </div>
 
-<div align="center">
-  Commençons par accéder à notre profil (*tel qu'il apparait pour un nouvel utilisateur qui vient tout juste de s'inscrire*)
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Commençons par accéder à notre profil (<i>tel qu'il apparait pour un nouvel utilisateur qui vient tout juste de s'inscrire</i>)
 </div>
 <br/>
 
@@ -227,8 +227,8 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
     <img src="/public/documentation_screenshots/Profil-base.jpg" alt="Profil-base.jpg" />
 </div>
 
-<div align="center">
-  Maintenant regardons à quoi ressemble le **profil d'un utilisateur** qui a déjà déposé des document ainsi que noté et commenté des documents d'autres utilisateurs.
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Maintenant regardons à quoi ressemble le <b>profil d'un utilisateur</b> qui a déjà déposé des document ainsi que noté et commenté des documents d'autres utilisateurs.
 </div>
 <br/>
 
@@ -238,8 +238,8 @@ Tout d'abord la partie des informations qui le concerne
 </div>
 
 
-<div align="center">
-  Ensuite la partie concernant les **derniers documents qu'il a déposé**
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Ensuite la partie concernant les <b>derniers documents qu'il a déposé</b>
 </div>
 <br/>
 
@@ -247,8 +247,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/user-profile-exemple-p2.jpg" alt="user-profile-exemple-p2.jpg" />
 </div>
 
-<div align="center">
-  Enfin la partie concernant les **derniers avis (notes/commentaires) qu'il a déposé**
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Enfin la partie concernant les <b>derniers avis (notes/commentaires) qu'il a déposé</b>
 </div>
 <br/>
 
@@ -256,8 +256,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/user-profile-exemple-p3.jpg" alt="user-profile-exemple-p3.jpg" />
 </div>
 
-<div align="center">
-  On peut également **consulter les profils des autres utilisateurs** en cliquant sur le bouton Utilisateurs du menu du header (*On a deux affichages disponibles, par **CARDS** ou dans un **tableau** ainsi que la possibilité de faire des recherches par nom, email ou pays*)
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  On peut également <b>consulter les profils des autres utilisateurs</b> en cliquant sur le bouton Utilisateurs du menu du header (<i>On a deux affichages disponibles, par <b>CARDS</b> ou dans un <b>tableau</b> ainsi que la possibilité de faire des recherches par nom, email ou pays</i>)
 </div>
 <br/>
 
@@ -265,8 +265,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/Users-cards.jpg" alt="Users-cards.jpg" />
 </div>
 
-<div align="center">
-  En ce qui concerne la partie Documents de l'application, on arrive sur une **page qui référence tous les documents déposés par les utilisateurs** que l'on peut afficher comme pour les utilisateurs, soit par cards, soit dans un tableau (*on peut les filtrer par titre ou catégories ainsi que par le nom ou l'email de l'utilisateur qui les a déposé sur l'application et comme pour la partie utilisateur, les afficher par **CARDS** ou dans un **tableau**.*)
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  En ce qui concerne la partie Documents de l'application, on arrive sur une <b>page qui référence tous les documents déposés par les utilisateurs</b> que l'on peut afficher comme pour les utilisateurs, soit par cards, soit dans un tableau (<i>on peut les filtrer par titre ou catégories ainsi que par le nom ou l'email de l'utilisateur qui les a déposé sur l'application et comme pour la partie utilisateur, les afficher par <b>CARDS</b> ou dans un <b>tableau</b>.</i>)
 </div>
 <br/>
 
@@ -274,8 +274,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/Documents-cards.jpg" alt="Documents-cards.jpg" />
 </div>
 
-<div align="center">
-  Le bouton créer un document permet d'**ajouter un document à l'application**, une fois le document ajouté, on reçoit un **email pour nous notifier** de la bonne réception du document et l'on **génère un PDF qui certifie notre dépôt** (*une sorte de preuve de dépôt du document*)
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Le bouton créer un document permet d'<b>ajouter un document à l'application</b>, une fois le document ajouté, on reçoit un <b>email pour nous notifier</b> de la bonne réception du document et l'on <b>génère un PDF qui certifie notre dépôt</b> (<i>une sorte de preuve de dépôt du document</i>)
 </div>
 <br/>
 
@@ -287,8 +287,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/PDF-depot-document.jpg" alt="Mail-depot-document.jpg" />
 </div>
 
-<div align="center">
-  Nos document sont ensuite **injectés dans le file system dans le dossier public/upload/documents** pour le document et dans le dossier public/upload/documents/receipts pour la preuve de dépôt du dit document
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Nos document sont ensuite <b>injectés dans le file system dans le dossier public/upload/documents</b> pour le document et dans le dossier public/upload/documents/receipts pour la preuve de dépôt du dit document
 </div>
 <br/>
 
@@ -296,8 +296,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/Gestion-du-FS.jpg" alt="Gestion-du-FS.jpg" />
 </div>
 
-<div align="center">
-  Voici la page qui nous permet d'**afficher le contenu d'un document** (on peut y voir l'image ou la visualisation du PDF ainsi que les diverses informations du document comme son titre, son résumé, sa catégorie, sa date de création, son auteur et sa note ) et l'on peut également le **télécharger**
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Voici la page qui nous permet d'<b>afficher le contenu d'un document</b> (on peut y voir l'image ou la visualisation du PDF ainsi que les diverses informations du document comme son titre, son résumé, sa catégorie, sa date de création, son auteur et sa note ) et l'on peut également le <b>télécharger</b>
 </div>
 <br/>
 
@@ -305,8 +305,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/Document-show-b.jpg" alt="Document-show-b.jpg" />
 </div>
 
-<div align="center">
-  Un document peut être **noté et commenté** par un utilisateur (*un utiliateur ne peut noter et commenter qu'une seule fois par document*) et l'on peut consulter les notes ainsi que tous les commentaires du dit document sur cette page
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Un document peut être <b>noté et commenté</b> par un utilisateur (<i>un utiliateur ne peut noter et commenter qu'une seule fois par document</i>) et l'on peut consulter les notes ainsi que tous les commentaires du dit document sur cette page
 </div>
 <br/>
 
@@ -314,8 +314,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/Document-all-avis.jpg" alt="Document-all-avis.jpg" />
 </div>
 
-<div align="center">
-  Enfin il reste une page qui permet de **contacter le support technique** (*accessible via le footer du site*)
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Enfin il reste une page qui permet de <b>contacter le support technique</b> (<i>accessible via le footer du site</i>)
 </div>
 <br/>
 
@@ -323,8 +323,8 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/Contact.jpg" alt="Contact.jpg" />
 </div>
 
-<div align="center">
-  Une fois le formulaire soumis **un email est envoyé au support technique**
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
+  Une fois le formulaire soumis <b>un email est envoyé au support technique</b>
 </div>
 <br/>
 
@@ -332,7 +332,7 @@ Tout d'abord la partie des informations qui le concerne
     <img src="/public/documentation_screenshots/Mail-exemple-de-contact-support.jpg" alt="Mail-exemple-de-contact-support.jpg" />
 </div>
 
-<div align="center">
+<div align="center" style="padding-top: 25px;padding-bottom: 5px;">
   Le tour général de la présentation de l'application est terminé!
 </div>
 <br/>
