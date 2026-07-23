@@ -186,7 +186,7 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
 
 <br/><br/><br/>
 <div align="center">
-  Sur l'email de <b>confirmation de l'emai</b>, on nous invite à <b>cliquer sur un lien</b> qui nous permettra de <b>vérifier qu'il s'agit bien d'un email valide</b>. 
+  Sur l'email de <b>confirmation de l'email</b>, on nous invite à <b>cliquer sur un lien</b> qui nous permettra de <b>vérifier qu'il s'agit bien d'un email valide</b>. 
 </div>
 <br/><br/>
 
@@ -211,7 +211,7 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
 <br/><br/>
 
 <div align="center">
-    <img src="/public/documentation_screenshots/login-ok.jpg" alt="login-ok.jpg" />
+    <img src="/public/documentation_screenshots/Login-ok.jpg" alt="login-ok.jpg" />
 </div>
 
 <br/><br/><br/>
@@ -236,7 +236,7 @@ Si vous voulez ajouter des catégories de document, connectez vous avec l'admin 
 
 <br/><br/><br/>
 <div align="center">
-  Maintenant regardons à quoi ressemble le <b>profil d'un utilisateur</b> qui a déjà déposé des document ainsi que noté et commenté des documents d'autres utilisateurs.
+  Maintenant regardons à quoi ressemble le <b>profil d'un utilisateur</b> qui a déjà déposé des documents ainsi que noté et commenté des documents d'autres utilisateurs.
 </div>
 <br/><br/>
 
@@ -278,7 +278,7 @@ Tout d'abord la partie des informations qui le concerne
 
 <br/><br/><br/>
 <div align="center">
-  En ce qui concerne la partie Documents de l'application, on arrive sur une <b>page qui référence tous les documents déposés par les utilisateurs</b> que l'on peut afficher comme pour les utilisateurs, soit par cards, soit dans un tableau (<i>on peut les filtrer par titre ou catégories ainsi que par le nom ou l'email de l'utilisateur qui les a déposé sur l'application et comme pour la partie utilisateur, les afficher par <b>CARDS</b> ou dans un <b>tableau</b>.</i>)
+  En ce qui concerne la <b>partie Documents</b> de l'application, on arrive sur une <b>page qui référence tous les documents déposés par les utilisateurs</b> que l'on peut afficher comme pour les utilisateurs, soit par cards, soit dans un tableau (<i>on peut les filtrer par titre ou catégorie ainsi que par le nom ou l'email de l'utilisateur qui les a déposé sur l'application et comme pour la partie utilisateur, les afficher par <b>CARDS</b> ou dans un <b>tableau</b>.</i>)
 </div>
 <br/><br/>
 
@@ -364,20 +364,22 @@ Tout d'abord la partie des informations qui le concerne
 #### Presentation des tables de la base de données
 <a id="database"></a>
 
-Tout d'abord j'aimerai juste présenter les tables de la base de données
+Tout d'abord j'aimerai juste **présenter les tables de la base de données**
+
 Nous avons 4 tables importantes:
-La table user qui contient nos utilisateurs
-La table catégorie qui contient la liste de nos catégories
-La table document qui contient nos documents
-La table note qui contient nos notes
+- La table **user** qui contient nos utilisateurs
+- La table **catégorie** qui contient la liste de nos catégories
+- La table **document** qui contient nos documents
+- La table **note** qui contient nos notes
 
-Un utilisateur peut avoir n documents
-Un utilisateur peut avoir une note par document
-Un document doit avoir une catégorie
+Contraintes des tables:
+- Un utilisateur peut avoir n documents
+- Un utilisateur peut avoir une note/avis par document
+- Un document doit avoir une catégorie
 
-les tables doctrine_migration_versions (la table de base de données par défaut utilisée par Doctrine Migrations) et messenger_messages (elle sert de file d'attente native pour stocker les messages asynchrones avant leur traitement par un worker) sont crées automatiquement par symfony php
+les tables **doctrine_migration_versions** (la table de base de données par défaut utilisée par Doctrine Migrations) et messenger_messages (elle sert de file d'attente native pour stocker les messages asynchrones avant leur traitement par un worker) sont **crées automatiquement par symfony php**
 
-Enfin il reste une table revoked_token que j'ai crée car j'ai anticipé des besoins futurs et je génère un token JWT qui pourra me servir dans le futur à détecter une connexion valide pour que mon application puisse consommer des services REST dont l'origine ne serait pas le site web, cette table révoke le token, on a une commande que l'on peut executer afin de cleaner les tokens. Idéalement à terme il faudrait y mettre un CRON (tâche récurrente) qui s'executerait tous les jours mais j'ai laissé cette partie pour plus tard car actuellement le JWT token ne m'est d'aucune utilité car symfony gère son propre système de token sur le site web.
+Enfin il reste une table **revoked_token** que j'ai crée car j'ai anticipé des besoins futurs et je génère un token JWT qui pourra me servir dans le futur à détecter une connexion valide pour que mon application puisse consommer des services REST dont l'origine ne serait pas le site web, **cette table révoke le token**, on a une **commande que l'on peut executer afin de cleaner les tokens**. Idéalement à terme il faudrait y mettre un CRON (tâche récurrente) qui s'executerait tous les jours mais j'ai laissé cette partie pour plus tard car actuellement le JWT token ne m'est d'aucune utilité car symfony gère son propre système de token pour le site web, cette partie sera donc utile si plus tard on souhaite passer par des web services externes et se connecter à notre API.
 
 <div align="center">
     <img src="/public/documentation_screenshots/Database.jpg" alt="Database.jpg" />
@@ -393,44 +395,45 @@ Enfin il reste une table revoked_token que j'ai crée car j'ai anticipé des bes
 
 En ce qui concerne l'architecture, voici une courte explication des principaux dossiers:
 
-assets/js/AuthManager.js -> fichier Auth manager qui va m'aider à gérer la session JWT
-assets/css -> CSS de l'application
+**assets/js/AuthManager.js →** fichier Auth manager qui va m'aider à **gérer la session JWT**
 
-bin -> Dossier contenant Mailpit (un outil de test d'emails et de serveur SMTP local)
+**assets/css →** **CSS** de l'application
 
-config -> Contient le cœur de la configuration de votre projet. Il stocke la configuration de chaque paquet (bundle) installé, contient également nos deux clés (privée et publique) dans le dossier jwt nécessaires au token JWT, contient également nos packages qui nous permettent de gérer la configuration principale
+**bin →** Dossier contenant **Mailpit** (un outil de test d'emails et de serveur SMTP local)
 
-migrations -> Contient les migrations nécessaires pour la mise en place de la base de donnée ainsi que le dossier backup_sql (utile pour mettre en place un jeux de données de test)
+**config →** Contient le cœur de la configuration de votre projet. Il stocke la configuration de chaque paquet (**bundle**) installé, contient également nos deux clés (privée et publique) dans le dossier jwt nécessaires au token JWT, contient également nos **packages** qui nous permettent de **gérer la configuration principale**
 
-public -> Contient les images du sites et de la documentation ainsi que qu'un dossier upload qui est notre file system des documents et preuves de dépôt du projet. Contient également adminer.php qui nous permet de visualiser/ajouter nos données SQL (on peut également utiliser XAMPP pour visualiser/ajouter des données manuellement) 
+**migrations →** Contient les **migrations nécessaires pour la mise en place de la base de donnée** ainsi que le dossier **backup_sql** (utile pour mettre en place un jeux de données de test)
 
-src/Command -> ce dossier nous permet d'executer des commandes via la console sur notre projet (Actuellement il contient notre commande qui permet d'effacer nos tokens revokés).Pour executer la commande:
+**public →** Contient les **images du sites** et de la documentation ainsi que qu'un dossier upload qui est notre file system des documents et preuves de dépôt du projet. Contient également **adminer.php** qui nous permet de visualiser/ajouter nos données SQL (on peut également utiliser XAMPP pour visualiser/ajouter des données manuellement) 
+
+src/Command → ce dossier nous permet d'**executer des commandes via la console** sur notre projet (Actuellement il contient notre commande qui permet d'effacer nos tokens revokés).Pour executer la commande:
 ```bash
 php bin/console app:clean-revoked-tokens
 ```
 
-src/Controller -> C'est l'emplacement par défaut où résident les classes de contrôleurs dans l'application. Ces classes gèrent les requêtes HTTP et retournent les réponses.
+**src/Controller →** C'est l'emplacement par défaut où résident les classes de contrôleurs dans l'application. Ces classes **gèrent les requêtes HTTP et retournent les réponses**.
 
-src/DTO -> C'est ici que l'on stocke les Data Transfer Objects (Objets de Transfert de Données). Ces objets servent à découpler la structure de vos données internes (Entités Doctrine) de la structure exposée ou attendue par l'extérieur (API, formulaires).
+**src/DTO →** C'est ici que l'on stocke les **Data Transfer Objects** (Objets de Transfert de Données). Ces objets servent à découpler la structure de vos données internes (Entités Doctrine) de la structure exposée ou attendue par l'extérieur (API, formulaires).
 
-src/Entity -> Contient les classes qui représentent nos données persistantes (tables de la base de données) via l'ORM Doctrine. C'est le modèle de données de l'application qui contient nos entités dans lequel on définit nos clés primaires, nos contraintes ainsi que nos relations relations (OneToOne, OneToMany, ManyToMany, ...).
+**src/Entity →** Contient les classes qui représentent nos données persistantes (tables de la base de données) via l'ORM Doctrine. C'est le **modèle de données de l'application qui contient nos entités** dans lequel on définit nos clés primaires, nos contraintes ainsi que nos relations relations (OneToOne, OneToMany, ManyToMany, ...).
 
-src/Form -> Contient les classes de types de formulaire (Form Types) qui définissent la structure, les champs et la validation de vos formulaires.
+**src/Form →** Contient les classes de types de formulaire (Form Types) qui définissent **la structure, les champs et la validation de vos formulaires**.
 
-src/Repository -> Ccontient les classes responsables de la récupération des données depuis la base de données pour une entité spécifique. Chaque repository étend ServiceEntityRepository, ce qui permet de l'injecter directement comme un service. On a 1 fichier par table qui nous permettent de gérer nos requêtes SQL.
+**src/Repository →** Ccontient les classes responsables de la **récupération des données depuis la base de données pour une entité spécifique**. Chaque repository étend ServiceEntityRepository, ce qui permet de l'injecter directement comme un service. On a 1 fichier par table qui nous permettent de gérer nos requêtes SQL.
 
-src/Security ->  regroupe les classes personnalisées liées à l'authentification et à l'autorisation dans une application Symfony. Bien que la configuration principale se trouve dans config/packages/security.yaml, ce dossier contient la logique métier spécifique que la configuration ne peut pas couvrir. On y gère actuellement du code lié à l'authentification.
+**src/Security →**  regroupe les classes personnalisées liées à **l'authentification et à l'autorisation dans une application Symfony**. Bien que la configuration principale se trouve dans config/packages/security.yaml, ce dossier contient la logique métier spécifique que la configuration ne peut pas couvrir. On y gère actuellement du code lié à l'authentification.
 
-src/Service -> C'est ici que réside la logique métier, actuellement on a principalement deux services utilisés, le premier (MailService.php) concerne les envois d'emails et le second (DocumentReceiptService.php) nous permet de générer un PDF qui nous sert de preuve d reception d'un document
+**src/Service →** C'est ici que réside la **logique métier**, actuellement on a principalement deux services utilisés, le premier (MailService.php) concerne les envois d'emails et le second (DocumentReceiptService.php) nous permet de générer un PDF qui nous sert de preuve d reception d'un document
 
-src/Twig -> contient les classes qui étendent les fonctionnalités du moteur de template Twig dans Symfony. Il peut être utilisé pour créer des filtres, des fonctions, des tests personnalisés et des composants réutilisables disponibles dans toutes nos vues. Actuellement on a deux classes, la première Base64Extension.php nous permet d’utiliser la fonction base64_encode directement dans les templates Twig, ce qui est pratique pour générer des URLs data:base64 et la seconde CountryExtension.php qui nous permet de récupérer le nom du pays ainsi que son icône de drapeau en fonction du code du pays (en, fr, ...)
+**src/Twig →** contient les **classes qui étendent les fonctionnalités du moteur de template Twig dans Symfony**. Il peut être utilisé pour créer des filtres, des fonctions, des tests personnalisés et des composants réutilisables disponibles dans toutes nos vues. Actuellement on a deux classes, la première Base64Extension.php nous permet d’utiliser la fonction base64_encode directement dans les templates Twig, ce qui est pratique pour générer des URLs data:base64 et la seconde CountryExtension.php qui nous permet de récupérer le nom du pays ainsi que son icône de drapeau en fonction du code du pays (en, fr, ...)
 
 
-src/Validator -> Ce dossier est dédié à la création de règles de validation métier personnalisées qui ne sont pas couvertes par les contraintes standards de Symfony. Actuellement il nous permet de bannir des mots dans les email, par exemple j'interdis le terme "yopmail" dans les emails lors de la création du compte
+**src/Validator →** Ce dossier est dédié à la **création de règles de validation métier personnalisées** qui ne sont pas couvertes par les contraintes standards de Symfony. Actuellement il nous permet de bannir des mots dans les email, par exemple j'interdis le terme "yopmail" dans les emails lors de la création du compte
 
-templates -> Ce dossier contient tous nos templates Twig dans lequel on peut injecter nos données (contient un dossier component qui sont des templates que j'utilise dans d'autres templates). Concernant les templates on a ici les templates de nos pages web mais également de nos emails et de nos PDF générés par notre application.
+**templates →** Ce dossier contient tous nos **templates Twig dans lesquels on peut injecter nos données** (contient un dossier component qui sont des templates que j'utilise dans d'autres templates). Concernant les templates on a ici les templates de nos pages web mais également de nos emails et de nos PDF générés par notre application.
 
-.env -> C'est le point central de configuration des variables d'environnement. Il permet de définir des paramètres sensibles (mots de passe, clés API) et des configurations spécifiques à chaque environnement (dev, prod, test) sans les coder en dur. En cas de developpement local, il faudra y référencer l'addresse de la base de données dans DATABASE_URL ainsi que le DSN du mailer dans MAILER_DSN
+**.env →** C'est le **point central de configuration des variables d'environnement**. Il permet de définir des paramètres sensibles (mots de passe, clés API) et des configurations spécifiques à chaque environnement (dev, prod, test) sans les coder en dur. En cas de developpement local, il faudra y référencer l'addresse de la base de données dans DATABASE_URL ainsi que le DSN du mailer dans MAILER_DSN
 
 <div align="center">
     <img src="/public/documentation_screenshots/architecture.jpg" alt="architecture.jpg" />
