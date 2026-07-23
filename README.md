@@ -36,6 +36,7 @@
         <li><a href="#architecture">Presentation de l'architecture de l'application</a></li>
       </ul>
     </li>
+    <li><a href="#todo">Points à améliorer</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Remerciements</a></li>
@@ -46,17 +47,23 @@
 ## A propos du projet
 <a id="a-propos-du-projet"></a>
 
-Ce site a pour objectif de relier un communauté d'utilisateurs qui pourront une fois inscrits et logués, déposer des documents de type PNG/JPG/PDF.
+Ce site a pour **objectif** de relier un communauté d'utilisateurs qui pourront une fois inscrits et logués, **déposer des documents** de type PNG/JPG/PDF.
 
 Les documents appartiennent à une catégorie.
 
-Les utilisateurs pourront ensuite rechercher ces documents et mettre une note et optionnellement un avis pour chaque document consulté.
+Les utilisateurs pourront ensuite **rechercher ces documents** et **mettre une note** et optionnellement un avis pour chaque document consulté.
+
+<ins>Disclaimer:</ins> *C'est le premier projet que je fais en php symfony, je l'ai fait principalement pour disposer d'un template dont je pourrais m'inspirer si je suis amené à faire d'autres sites en php symfony.*
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Démo vidéo
 <a id="demo-video"></a>
 
-Voici une démonstration du rendu final de l'application (Cliquez sur l'image pour regarder la vidéo):
+<div align="center">
+  Voici une démonstration du rendu final de l'application (Cliquez sur l'image pour regarder la vidéo):
+</div>
+<br/>
+
 
 [![Miniature de la vidéo](https://img.youtube.com/vi/amGpBCkkSVQ/hqdefault.jpg)](https://youtu.be/amGpBCkkSVQ)
 
@@ -119,13 +126,12 @@ php bin/console doctrine:migrations:migrate --allow-no-migration
 php bin/console doctrine:migrations:execute --up DoctrineMigrations\Version20260519112421
 ```
 
-Uploader le backup de la base de données pour initializer les données (cela crée quelques comptes, un compte admin, quelques documents présents dans le projet à titre d'exemples)
-Récupérer le backup dans migrations/backup_sql et executez le dans votre SQL
-TODO
+Uploader le backup de la base de données pour initializer les données (cela crée quelques comptes, un compte admin, quelques documents présents dans le projet à titre d'exemples), le backup se situe dans *migrations/backup_sql* et se nomme symfony.sql et executez le dans votre SQL.
+→ Tous les users crées par défaut ont pour mot de passe **test**
 
--> Tous les users crées par défaut ont pour mot de passe **test**
+**Ne pas oublier de lancer mailpit.exe** qui se situe dans le dossier */bin* via un CMD comme dans l'exemple suivant (cela permet au mails d'être envoyés en local et c'est nécessaire pour le bon déroulement de l'inscription sur l'application, **sinon utiliser votre propre SMTP**, par exemple, moi j'ai utilisé le SMTP de google en plaçant sa config dans .env exemple: #MAILER_DSN=gmail+smtp://email@gmail.com:APP_ID@default)
 
-Ne pas oublier de lancer mailpit.exe qui se situe dans le dossier /bin via un CMD comme dans l'exemple suivant (cela permet au mails d'être envoyés en local et c'est nécessaire pour le bon déroulement de l'inscription sur l'application, on peut sinon utiliser le SMTP de google en plaçant sa config dans .env exemple: #MAILER_DSN=gmail+smtp://email@gmail.com:APP_ID@default)
+Voici ce que vous verrez après le lancement de mailpit.exe
 ```bash
 C:\Users\pb402\Desktop\php_test\my_project\bin (main -> origin)
 λ mailpit.exe
@@ -140,7 +146,7 @@ time="2026/06/28 17:16:24" level=info msg="[http] accessible via http://localhos
 symfony server:start
 ```
 
-Vous pouvez normalement ouvrir votre server sur l'adresse suivante: localhost:8000
+Vous pouvez normalement ouvrir votre server sur l'adresse suivante: https://localhost:8000/
 
 Si vous voulez ajouter des catégories de document, connectez vous avec l'admin (login: admin@docshare.fr mdp: test) et allez à l'url suivante: https://localhost:8000/admin/category
 
@@ -356,15 +362,14 @@ templates -> Ce dossier contient tous nos templates Twig dans lequel on peut inj
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Points à améliorer
+<a id="todo"></a>
 
-TODO
-php video
-php qrcode
-
-page aksis
-On ne peut pas s'éviter soi même
-
-
+Voici quelques point à améliorer dès que j'aurai un peu de temps:
+- Tester le backup SQL sur une fresh install du projet et vérifier que tout fonctionne correctement
+- Faire le CSS responsive du site
+- Le diagramme camembert ne s'affiche pas après l'inscription ou la connexion, il faut actuellement raffraichir la page d'accueil pour qu'il apparaisse (mini bug à corriger)
+- Partie catégorie, la page pour les ajouter existe mais elle est cachée et accessible que par l'administrateur donc idéalement rajouter un bouton pour pouvoir facilement ajouter ou supprimer une catégorie mais attention car la catégorie est obligatoire pour un document donc la suppression de catégorie impliquera de réaliser une opération sur tous les documents de la dite catégorie! 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
