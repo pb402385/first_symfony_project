@@ -244,10 +244,10 @@ final class UserController extends AbstractController
         if ($userapp) {
 
             // 1. Récupérer l'utilisateur système
-            $systemUser = $this->repository->findOneBy(['email' => 'noreply@docshare.fr']);
+            $systemUser = $this->repository->findOneBy(['email' => 'admin@docshare.fr']);
 
             if (!$systemUser) {
-                $this->addFlash('danger', 'Utilisateur système "noreply@docshare.fr" non trouvé.');
+                $this->addFlash('danger', 'Utilisateur système "admin@docshare.fr" non trouvé.');
                 return $this->redirectToRoute('user.index');
             }
 
