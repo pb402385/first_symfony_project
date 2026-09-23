@@ -65,7 +65,7 @@ Les utilisateurs pourront ensuite **rechercher ces documents** et **mettre une n
 <br/>
 
 
-[![Miniature de la vidéo]([https://youtu.be/sT9kygs6U00](https://youtu.be/sT9kygs6U00))
+[![Miniature de la vidéo]([https://youtu.be/sT9kygs6U00](https://youtu.be/sT9kygs6U00))]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
